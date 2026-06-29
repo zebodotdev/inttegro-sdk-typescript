@@ -1,0 +1,328 @@
+/**
+ * Tests for Orders resource
+ */
+
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { Orders } from '../resources/orders';
+import { HttpClient } from '../http-client';
+import {
+  mockCreateOrderResponse,
+  mockLookupOrderResponse,
+  mockPayOrderResponse,
+  mockConfirmPaymentResponse,
+  mockRequestConfirmationResponse,
+} from './mocks';
+
+describe('Orders', () => {
+  let orders: Orders;
+  let httpClient: HttpClient;
+
+  beforeEach(() => {
+    httpClient = new HttpClient({
+      apiKey: 'test_key',
+    });
+    orders = new Orders(httpClient);
+  });
+
+  describe('create', () => {
+    it('should create an order with customer data', async () => {
+      const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockCreateOrderResponse);
+
+      const result = await orders.create({
+        customer_data: {
+          name: 'John Doe',
+          email_address: 'john@example.com',
+          phone_number: '0559714200',
+        },
+        line_items: [
+          {
+            type: 'product',
+            product: {
+              type: 'physical',
+              quantity: 1,
+              name: 'Test Product',
+              price: { currency: 'ghs', value: 20000 },
+            },
+          },
+        ],
+        billing_details: {
+          email_address: 'john@example.com',
+          phone_number: '0559714200',
+          name: 'John Doe',
+          address: {
+            name: 'John Doe',
+            phone_number: '0559714200',
+            line1: '123 Main St',
+            town: 'Accra',
+            region: 'Greater Accra',
+            country: 'GH',
+          },
+        },
+      });
+
+      expect(result).toEqual(mockCreateOrderResponse);
+      expect(postSpy).toHaveBeenCalledWith('/orders/new', expect.any(Object));
+    });
+
+    it('should create an order with customer ID', async () => {
+      const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockCreateOrderResponse);
+
+      const result = await orders.create({
+        customer_id: 'cu_123',
+        line_items: [
+          {
+            type: 'product',
+            product: {
+              type: 'physical',
+              quantity: 1,
+              name: 'Test Product',
+              price: { currency: 'ghs', value: 20000 },
+            },
+          },
+        ],
+        billing_details: {
+          email_address: 'john@example.com',
+          phone_number: '0559714200',
+          name: 'John Doe',
+          address: {
+            name: 'John Doe',
+            phone_number: '0559714200',
+            line1: '123 Main St',
+            town: 'Accra',
+            region: 'Greater Accra',
+            country: 'GH',
+          },
+        },
+      });
+
+      expect(result).toEqual(mockCreateOrderResponse);
+      expect(postSpy).toHaveBeenCalledWith('/orders/new', expect.any(Object));
+    });
+
+    it('should throw validation error when required fields are missing', async () => {
+      await expect(
+        orders.create({
+          customer_data: {
+            name: 'John Doe',
+            email_address: 'john@example.com',
+            phone_number: '0559714200',
+          },
+        } as any)
+      ).rejects.toThrow('Validation failed');
+    });
+
+    it('should throw validation error when neither customer_data nor customer_id provided', async () => {
+      await expect(
+        orders.create({
+          line_items: [
+            {
+              type: 'product',
+              product: {
+                type: 'physical',
+                quantity: 1,
+                name: 'Test Product',
+                price: { currency: 'ghs', value: 20000 },
+              },
+            },
+          ],
+          billing_details: {
+            email_address: 'john@example.com',
+            phone_number: '0559714200',
+            name: 'John Doe',
+            address: {
+              name: 'John Doe',
+              phone_number: '0559714200',
+              line1: '123 Main St',
+              town: 'Accra',
+              region: 'Greater Accra',
+              country: 'GH',
+            },
+          },
+        } as any)
+      ).rejects.toThrow('Validation failed');
+    });
+  });
+
+  describe('lookup', () => {
+    it('should lookup an order by ID', async () => {
+      const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockLookupOrderResponse);
+
+      const result = await orders.lookup({
+        order_id: 'or_123',
+      });
+
+      expect(result).toEqual(mockLookupOrderResponse);
+      expect(postSpy).toHaveBeenCalledWith('/orders/lookup', { order_id: 'or_123' });
+    });
+
+    it('should throw validation error when order_id is missing', async () => {
+      await expect(orders.lookup({} as any)).rejects.toThrow('Validation failed');
+    });
+  });
+
+  describe('pay', () => {
+    it('should pay for an order with payment method data', async () => {
+      const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockPayOrderResponse);
+
+      const result = await orders.pay({
+        order_id: 'or_123',
+        payment_method_data: {
+          type: 'mobile_money',
+          mobile_money: {
+            network: 'mtn',
+            account_number: '0544998605',
+          },
+        },
+      });
+
+      expect(result).toEqual(mockPayOrderResponse);
+      expect(postSpy).toHaveBeenCalledWith('/orders/pay', expect.any(Object));
+    });
+
+    it('should pay for an order with saved payment method', async () => {
+      const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockPayOrderResponse);
+
+      const result = await orders.pay({
+        order_id: 'or_123',
+      });
+
+      expect(result).toEqual(mockPayOrderResponse);
+      expect(postSpy).toHaveBeenCalledWith('/orders/pay', { order_id: 'or_123' });
+    });
+
+    it('should throw validation error when order_id is missing', async () => {
+      await expect(orders.pay({} as any)).rejects.toThrow('Validation failed');
+    });
+  });
+
+  describe('confirmPayment', () => {
+    it('should confirm payment with token', async () => {
+      const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockConfirmPaymentResponse);
+
+      const result = await orders.confirmPayment({
+        order_id: 'or_123',
+        token: '123456',
+      });
+
+      expect(result).toEqual(mockConfirmPaymentResponse);
+      expect(postSpy).toHaveBeenCalledWith('/orders/confirm_payment', {
+        order_id: 'or_123',
+        token: '123456',
+      });
+    });
+
+    it('should throw validation error when required fields are missing', async () => {
+      await expect(orders.confirmPayment({ order_id: 'or_123' } as any)).rejects.toThrow(
+        'Validation failed'
+      );
+    });
+  });
+
+  describe('requestConfirmation', () => {
+    it('should request confirmation', async () => {
+      const postSpy = vi
+        .spyOn(httpClient, 'post')
+        .mockResolvedValue(mockRequestConfirmationResponse);
+
+      const result = await orders.requestConfirmation({
+        order_id: 'or_123',
+      });
+
+      expect(result).toEqual(mockRequestConfirmationResponse);
+      expect(postSpy).toHaveBeenCalledWith('/orders/request_confirmation', {
+        order_id: 'or_123',
+      });
+    });
+
+    it('should throw validation error when order_id is missing', async () => {
+      await expect(orders.requestConfirmation({} as any)).rejects.toThrow('Validation failed');
+    });
+  });
+
+  describe('finalize', () => {
+    it('should finalize an order', async () => {
+      const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockLookupOrderResponse);
+
+      const result = await orders.finalize({ order_id: 'or_123' });
+      expect(result).toEqual(mockLookupOrderResponse);
+      expect(postSpy).toHaveBeenCalledWith('/orders/finalize', { order_id: 'or_123' });
+    });
+  });
+
+  describe('sendInvoice', () => {
+    it('should send an invoice link', async () => {
+      const response = {
+        order: mockLookupOrderResponse.order,
+        delivery: {
+          document_kind: 'invoice',
+          document_url: 'https://pages.zebo.dev/invoices/or_123',
+          sent_channels: ['sms'],
+        },
+      };
+      const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(response);
+
+      const result = await orders.sendInvoice({ order_id: 'or_123' });
+      expect(result).toEqual(response);
+      expect(postSpy).toHaveBeenCalledWith('/orders/send_invoice', { order_id: 'or_123' });
+    });
+
+    it('should throw validation error when order_id is missing', async () => {
+      await expect(orders.sendInvoice({} as any)).rejects.toThrow('Validation failed');
+    });
+  });
+
+  describe('sendReceipt', () => {
+    it('should send a receipt link', async () => {
+      const response = {
+        order: mockLookupOrderResponse.order,
+        delivery: {
+          document_kind: 'receipt',
+          document_url: 'https://pages.zebo.dev/invoices/or_123/receipt',
+          sent_channels: ['email'],
+        },
+      };
+      const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(response);
+
+      const result = await orders.sendReceipt({ order_id: 'or_123' });
+      expect(result).toEqual(response);
+      expect(postSpy).toHaveBeenCalledWith('/orders/send_receipt', { order_id: 'or_123' });
+    });
+
+    it('should throw validation error when order_id is missing', async () => {
+      await expect(orders.sendReceipt({} as any)).rejects.toThrow('Validation failed');
+    });
+  });
+
+  describe('complete', () => {
+    it('should complete an order', async () => {
+      const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockLookupOrderResponse);
+
+      const result = await orders.complete({ order_id: 'or_123', paid_out_of_band: true });
+      expect(result).toEqual(mockLookupOrderResponse);
+      expect(postSpy).toHaveBeenCalledWith('/orders/complete', {
+        order_id: 'or_123',
+        paid_out_of_band: true,
+      });
+    });
+  });
+
+  describe('cancel', () => {
+    it('should cancel an order', async () => {
+      const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockLookupOrderResponse);
+
+      const result = await orders.cancel({ order_id: 'or_123' });
+      expect(result).toEqual(mockLookupOrderResponse);
+      expect(postSpy).toHaveBeenCalledWith('/orders/cancel', { order_id: 'or_123' });
+    });
+  });
+
+  describe('refund', () => {
+    it('should refund an order', async () => {
+      const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockLookupOrderResponse);
+
+      const result = await orders.refund({ order_id: 'or_123' });
+      expect(result).toEqual(mockLookupOrderResponse);
+      expect(postSpy).toHaveBeenCalledWith('/orders/refund', { order_id: 'or_123' });
+    });
+  });
+});
