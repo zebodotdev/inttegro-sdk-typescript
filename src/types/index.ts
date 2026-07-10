@@ -49,5 +49,5 @@ export * from './balances';
 // Specifications
 export * from './spec';
 
-// Platform/app/session/key
-export * from './platform';
+// Apps
+export * from './apps';

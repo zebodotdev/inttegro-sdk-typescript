@@ -14,7 +14,6 @@ import { Products } from './resources/products';
 import { Prices } from './resources/prices';
 import { Otp } from './resources/otp';
 import { Orders } from './resources/orders';
-import { Platform } from './resources/platform';
 import { PaymentMethods } from './resources/payment-methods';
 import { Payouts } from './resources/payouts';
 import { BalanceTransactions } from './resources/balance-transactions';
@@ -23,6 +22,7 @@ import { Schedules } from './resources/schedules';
 import { Broadcasts } from './resources/broadcasts';
 import { MessageTemplates } from './resources/message-templates';
 import { UploadRequests } from './resources/upload-requests';
+import { Apps } from './resources/apps';
 
 /**
  * Main Commerce SDK client
@@ -69,8 +69,8 @@ export class CommerceClient {
   public readonly products: Products;
   /** Prices resource */
   public readonly prices: Prices;
-  /** Platform resource */
-  public readonly platform: Platform;
+  /** Apps resource for managing the authenticated application */
+  public readonly apps: Apps;
   /** Payment methods resource */
   public readonly paymentMethods: PaymentMethods;
   /** Payouts resource */
@@ -108,7 +108,7 @@ export class CommerceClient {
     this.customers = new Customers(this.httpClient);
     this.products = new Products(this.httpClient);
     this.prices = new Prices(this.httpClient);
-    this.platform = new Platform(this.httpClient);
+    this.apps = new Apps(this.httpClient);
     this.paymentMethods = new PaymentMethods(this.httpClient);
     this.payouts = new Payouts(this.httpClient);
     this.balanceTransactions = new BalanceTransactions(this.httpClient);

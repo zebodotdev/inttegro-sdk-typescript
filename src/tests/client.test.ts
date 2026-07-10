@@ -14,6 +14,7 @@ describe('CommerceClient', () => {
 
       expect(client).toBeDefined();
       expect(client.orders).toBeDefined();
+      expect(client.apps).toBeDefined();
     });
 
     it('should throw error when API key is missing', () => {
