@@ -17,12 +17,7 @@ export function generateIdempotencyKey(): string {
   }
   randB &= (1n << 62n) - 1n;
 
-  const value =
-    (timestamp << 80n) |
-    (0x7n << 76n) |
-    (randA << 64n) |
-    (0x2n << 62n) |
-    randB;
+  const value = (timestamp << 80n) | (0x7n << 76n) | (randA << 64n) | (0x2n << 62n) | randB;
   const hex = value.toString(16).padStart(32, '0');
   return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
 }

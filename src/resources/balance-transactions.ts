@@ -1,8 +1,5 @@
 import { HttpClient } from '../http-client';
-import {
-  PageBalanceTransactionsRequest,
-  PageBalanceTransactionsResponse,
-} from '../types';
+import { PageBalanceTransactionsRequest, PageBalanceTransactionsResponse } from '../types';
 
 export class BalanceTransactions {
   constructor(private httpClient: HttpClient) {}
@@ -10,6 +7,9 @@ export class BalanceTransactions {
   async page(
     request: PageBalanceTransactionsRequest = {}
   ): Promise<PageBalanceTransactionsResponse> {
-    return this.httpClient.post<PageBalanceTransactionsResponse>('/balance_transactions/page', request);
+    return this.httpClient.post<PageBalanceTransactionsResponse>(
+      '/balance_transactions/page',
+      request
+    );
   }
 }

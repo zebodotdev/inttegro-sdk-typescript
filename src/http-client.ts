@@ -255,11 +255,7 @@ export class HttpClient {
   /**
    * Make a raw request and return the Response for binary or multipart flows.
    */
-  async raw(
-    pathOrUrl: string,
-    options: RequestInit = {},
-    authenticated = true
-  ): Promise<Response> {
+  async raw(pathOrUrl: string, options: RequestInit = {}, authenticated = true): Promise<Response> {
     const url = pathOrUrl.startsWith('http') ? pathOrUrl : `${this.config.baseUrl}${pathOrUrl}`;
     const requestOptionsWithIdempotency = authenticated
       ? this.withIdempotency(pathOrUrl, options, { body: false, header: true })
@@ -420,7 +416,9 @@ function addRequestMetaIdempotencyKey(body: string): string {
     const record = payload as Record<string, unknown>;
     delete record.idempotency_key;
     const requestMeta =
-      record.request_meta && typeof record.request_meta === 'object' && !Array.isArray(record.request_meta)
+      record.request_meta &&
+      typeof record.request_meta === 'object' &&
+      !Array.isArray(record.request_meta)
         ? { ...(record.request_meta as Record<string, unknown>) }
         : {};
     if (typeof requestMeta.idempotency_key === 'string' && requestMeta.idempotency_key.trim()) {
@@ -451,7 +449,9 @@ function normalizeHeaders(headers: RequestInit['headers'] | undefined): Record<s
 
 function findHeader(headers: Record<string, string>, name: string): string | undefined {
   const lowerName = name.toLowerCase();
-  const match = Object.entries(headers).find(([key, value]) => key.toLowerCase() === lowerName && value.trim());
+  const match = Object.entries(headers).find(
+    ([key, value]) => key.toLowerCase() === lowerName && value.trim()
+  );
   return match?.[1];
 }
 
@@ -467,5 +467,13 @@ function isIdempotentMutationPath(pathOrUrl: string): boolean {
   const parts = path.split('/').filter(Boolean);
   const action = parts[parts.length - 1];
   if (!action) return false;
-  return !new Set(['lookup', 'page', 'settings', 'countries', 'contents', 'balances', 'render_preview']).has(action);
+  return !new Set([
+    'lookup',
+    'page',
+    'settings',
+    'countries',
+    'contents',
+    'balances',
+    'render_preview',
+  ]).has(action);
 }

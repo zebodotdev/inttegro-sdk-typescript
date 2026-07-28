@@ -10,8 +10,7 @@ describe('Utils', () => {
   describe('generateIdempotencyKey', () => {
     it('should generate a valid UUIDv7', () => {
       const key = generateIdempotencyKey();
-      const uuidRegex =
-        /^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
       expect(key).toMatch(uuidRegex);
     });

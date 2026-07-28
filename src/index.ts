@@ -8,7 +8,12 @@
 export { CommerceClient } from './client';
 
 // Configuration
-export type { CommerceConfig, RetryConfig, RequestInterceptor, ResponseInterceptor } from './config';
+export type {
+  CommerceConfig,
+  RetryConfig,
+  RequestInterceptor,
+  ResponseInterceptor,
+} from './config';
 
 // Error classes
 export {

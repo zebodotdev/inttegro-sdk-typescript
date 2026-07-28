@@ -366,7 +366,10 @@ export class Orders {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['order_id']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<RequestConfirmationResponse>('/orders/request_confirmation', request);
+    return this.httpClient.post<RequestConfirmationResponse>(
+      '/orders/request_confirmation',
+      request
+    );
   }
 
   /**
@@ -414,9 +417,7 @@ export class Orders {
    *
    * @throws {ApiError} If order not found, customer has no contact method, or delivery fails
    */
-  async sendInvoice(
-    request: OrderDocumentDeliveryRequest
-  ): Promise<OrderDocumentDeliveryResponse> {
+  async sendInvoice(request: OrderDocumentDeliveryRequest): Promise<OrderDocumentDeliveryResponse> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['order_id']);
     throwIfValidationErrors(errors);
 
@@ -435,9 +436,7 @@ export class Orders {
    *
    * @throws {ApiError} If order not found, unpaid, customer has no contact method, or delivery fails
    */
-  async sendReceipt(
-    request: OrderDocumentDeliveryRequest
-  ): Promise<OrderDocumentDeliveryResponse> {
+  async sendReceipt(request: OrderDocumentDeliveryRequest): Promise<OrderDocumentDeliveryResponse> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['order_id']);
     throwIfValidationErrors(errors);
 

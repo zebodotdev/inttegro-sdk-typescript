@@ -12,10 +12,10 @@ import { throwIfValidationErrors, validateRequired } from '../utils/validation';
 export class Payouts {
   constructor(private httpClient: HttpClient) {}
 
-  async setDestinations(
-    request: SetPayoutDestinationsRequest
-  ): Promise<PayoutSettingsResponse> {
-    const errors = validateRequired(request as unknown as Record<string, unknown>, ['destinations']);
+  async setDestinations(request: SetPayoutDestinationsRequest): Promise<PayoutSettingsResponse> {
+    const errors = validateRequired(request as unknown as Record<string, unknown>, [
+      'destinations',
+    ]);
     throwIfValidationErrors(errors);
 
     return this.httpClient.post<PayoutSettingsResponse>('/payouts/set_destinations', request);

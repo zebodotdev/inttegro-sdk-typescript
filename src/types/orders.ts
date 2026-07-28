@@ -1,4 +1,11 @@
-import { Currency, CustomData, MoneyAmount, PaymentMethodType, ProductType, RequestMeta } from './common';
+import {
+  Currency,
+  CustomData,
+  MoneyAmount,
+  PaymentMethodType,
+  ProductType,
+  RequestMeta,
+} from './common';
 import { BalanceTransaction } from './balance-transactions';
 import {
   PaymentMethodBankAccount,
@@ -312,12 +319,24 @@ export interface RefundOrderRequest {
 /**
  * Order status
  */
-export type OrderStatus = 'preparing' | 'requires_payment' | 'completed' | 'canceled' | 'expired' | string;
+export type OrderStatus =
+  | 'preparing'
+  | 'requires_payment'
+  | 'completed'
+  | 'canceled'
+  | 'expired'
+  | string;
 
 /**
  * Payment status
  */
-export type PaymentStatus = 'requires_action' | 'processing' | 'succeeded' | 'failed' | 'cancelled' | string;
+export type PaymentStatus =
+  | 'requires_action'
+  | 'processing'
+  | 'succeeded'
+  | 'failed'
+  | 'cancelled'
+  | string;
 export type PaymentResponseStatus =
   | 'pending'
   | 'requires_confirmation'
@@ -539,8 +558,7 @@ export interface ConfirmPaymentResponse {
 /**
  * Request confirmation response
  */
-export interface RequestConfirmationResponse {
-}
+export interface RequestConfirmationResponse {}
 
 /** Finalize order response */
 export interface FinalizeOrderResponse {

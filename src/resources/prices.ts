@@ -1,5 +1,10 @@
 import { HttpClient } from '../http-client';
-import { CreatePriceRequest, LookupPriceRequest, PriceResponse, UpdatePriceRequest } from '../types';
+import {
+  CreatePriceRequest,
+  LookupPriceRequest,
+  PriceResponse,
+  UpdatePriceRequest,
+} from '../types';
 import { throwIfValidationErrors, validateRequired } from '../utils/validation';
 
 /**
@@ -9,7 +14,10 @@ export class Prices {
   constructor(private httpClient: HttpClient) {}
 
   async create(request: CreatePriceRequest): Promise<PriceResponse> {
-    const errors = validateRequired(request as unknown as Record<string, unknown>, ['currency', 'amount']);
+    const errors = validateRequired(request as unknown as Record<string, unknown>, [
+      'currency',
+      'amount',
+    ]);
     throwIfValidationErrors(errors);
 
     return this.httpClient.post<PriceResponse>('/prices/create', request);

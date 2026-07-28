@@ -40,7 +40,10 @@ describe('Products', () => {
     await products.page({ page_number: 1, page_size: 20 });
 
     expect(postSpy).toHaveBeenCalledWith('/products/lookup', { product_id: 'prod_123' });
-    expect(postSpy).toHaveBeenCalledWith('/products/update', { product_id: 'prod_123', name: 'New Name' });
+    expect(postSpy).toHaveBeenCalledWith('/products/update', {
+      product_id: 'prod_123',
+      name: 'New Name',
+    });
     expect(postSpy).toHaveBeenCalledWith('/products/publish', { product_id: 'prod_123' });
     expect(postSpy).toHaveBeenCalledWith('/products/unpublish', { product_id: 'prod_123' });
     expect(postSpy).toHaveBeenCalledWith('/products/archive', { product_id: 'prod_123' });

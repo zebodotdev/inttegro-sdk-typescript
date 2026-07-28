@@ -24,7 +24,10 @@ export class PaymentMethods {
     ]);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<TokenizePaymentMethodResponse>('/payment_methods/tokenize', request);
+    return this.httpClient.post<TokenizePaymentMethodResponse>(
+      '/payment_methods/tokenize',
+      request
+    );
   }
 
   async verify(request: VerifyPaymentMethodRequest): Promise<VerifyPaymentMethodResponse> {

@@ -65,4 +65,3 @@ export const DEFAULT_CONFIG: Required<Omit<CommerceConfig, 'apiKey'>> = {
   requestInterceptors: [],
   responseInterceptors: [],
 };
-

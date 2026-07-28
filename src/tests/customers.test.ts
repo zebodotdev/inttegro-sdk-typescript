@@ -30,7 +30,9 @@ describe('Customers', () => {
   });
 
   it('should page customers', async () => {
-    const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue({ page: { number: 1, size: 1 } });
+    const postSpy = vi
+      .spyOn(httpClient, 'post')
+      .mockResolvedValue({ page: { number: 1, size: 1 } });
 
     const result = await customers.page({ page_number: 1, page_size: 50 });
 
