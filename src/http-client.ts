@@ -438,7 +438,7 @@ function addRequestMetaIdempotencyKey(body: string): string {
   }
 }
 
-function normalizeHeaders(headers: HeadersInit | undefined): Record<string, string> {
+function normalizeHeaders(headers: RequestInit['headers'] | undefined): Record<string, string> {
   if (!headers) return {};
   if (typeof Headers !== 'undefined' && headers instanceof Headers) {
     return Object.fromEntries(headers.entries());
@@ -446,7 +446,7 @@ function normalizeHeaders(headers: HeadersInit | undefined): Record<string, stri
   if (Array.isArray(headers)) {
     return Object.fromEntries(headers);
   }
-  return { ...headers };
+  return { ...(headers as Record<string, string>) };
 }
 
 function findHeader(headers: Record<string, string>, name: string): string | undefined {

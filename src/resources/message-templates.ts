@@ -1,5 +1,4 @@
 import { HttpClient } from '../http-client';
-import { generateIdempotencyKey } from '../utils/idempotency';
 import {
   MessageTemplateActionRequest,
   MessageTemplateCreateRequest,
@@ -71,5 +70,5 @@ export class MessageTemplates {
 }
 
 function idempotencyHeaders(key?: string): Record<string, string> {
-  return { 'Idempotency-Key': key || generateIdempotencyKey() };
+  return key ? { 'Idempotency-Key': key } : {};
 }

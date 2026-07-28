@@ -17,6 +17,26 @@ export interface IDDocumentTypeSpec {
   description?: string;
 }
 
+export interface BankBranchSpec {
+  id?: string;
+  name?: string;
+  sort_code?: string;
+}
+
+export interface BankSpec {
+  id?: string;
+  name?: string;
+  swift_code?: string;
+  sort_code_prefix?: string;
+  branches?: BankBranchSpec[];
+}
+
+export interface CountryBankSpec {
+  bank_account_type?: string;
+  code_scheme?: string;
+  items?: BankSpec[];
+}
+
 export interface CountrySpecification {
   country_code?: string;
   country_name?: string;
@@ -27,6 +47,7 @@ export interface CountrySpecification {
   legal_entity_types?: LegalEntityTypeSpec[];
   financial_account_types?: FinancialAccountTypeSpec[];
   id_document_types?: IDDocumentTypeSpec[];
+  banks?: CountryBankSpec;
 }
 
 export interface GetCountrySpecificationsResponse {

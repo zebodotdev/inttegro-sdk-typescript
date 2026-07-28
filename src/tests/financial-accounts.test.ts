@@ -6,6 +6,16 @@ import { mockFinancialAccountResponse } from './mocks';
 describe('FinancialAccounts', () => {
   let fa: FinancialAccounts;
   let httpClient: HttpClient;
+  const owner = {
+    name: 'Akua Mensah',
+    address: {
+      name: 'Akua Mensah',
+      line_1: '1 Independence Avenue',
+      city: 'Accra',
+      region: 'Greater Accra',
+      country: 'GH',
+    },
+  };
 
   beforeEach(() => {
     httpClient = new HttpClient({ apiKey: 'test' });
@@ -20,6 +30,7 @@ describe('FinancialAccounts', () => {
       type: 'wallet',
       reference: 'REF-2024-001',
       currency: 'ghs',
+      owner,
       wallet: {
         type: 'mobile_money',
         mobile_money: { account_number: '0241234567', network: 'mtn' },
@@ -56,6 +67,7 @@ describe('FinancialAccounts', () => {
       type: 'wallet',
       reference: 'REF-2024-001',
       currency: 'ghs',
+      owner,
       wallet: {
         type: 'mobile_money',
         mobile_money: { account_number: '0241234567', network: 'mtn' },
