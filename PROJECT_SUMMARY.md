@@ -109,7 +109,7 @@ This TypeScript SDK for the Zebo Commerce API has been successfully built with p
 
 1. **GitHub Actions** (`.github/workflows/`)
    - `ci.yml` - Continuous integration
-     - Tests on Node 18.x, 20.x, 21.x
+     - Tests on Node 24.x or higher
      - Type checking
      - Linting
      - Code coverage
@@ -223,7 +223,7 @@ All endpoints support both variants as specified in the requirements.
 - **Package Name**: `@zebo/commerce-sdk`
 - **Version**: `0.1.0`
 - **License**: MIT
-- **Node Version**: >=18.0.0
+- **Node Version**: >=24
 - **Module Formats**: CommonJS, ESM
 - **Type Definitions**: Included
 
@@ -258,4 +258,3 @@ This SDK is **production-ready** and includes everything needed for a profession
 - ✅ Ready for NPM publication
 
 The SDK follows best practices for modern TypeScript libraries and provides an excellent developer experience with full IntelliSense support, detailed error messages, and comprehensive documentation.
-

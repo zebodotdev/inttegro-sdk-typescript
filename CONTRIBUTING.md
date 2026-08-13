@@ -10,7 +10,7 @@ By participating in this project, you agree to maintain a respectful and inclusi
 
 ### Prerequisites
 
-- Node.js 18.x or higher
+- Node.js 24.x or higher
 - npm, yarn, or pnpm
 
 ### Setup Development Environment
@@ -285,4 +285,3 @@ By contributing to this project, you agree that your contributions will be licen
 ## Thank You!
 
 Thank you for contributing to the Zebo Commerce SDK! Your contributions help make this project better for everyone.
-
