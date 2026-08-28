@@ -194,7 +194,7 @@ export const mockErrorResponse = {
     message: 'Invalid payment method',
     code: 'invalid_payment_method',
     type: 'invalid_request_parameter',
-    url: 'https://commerce.zebo.dev/e/invalid_payment_method',
+    url: 'https://studio.zebo.dev/e/invalid_payment_method',
     detail: 'Payment method not supported for this currency.',
     fix_code: 'change_request_parameters',
     cause: 'validation_failure',
