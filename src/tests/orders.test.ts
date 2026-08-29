@@ -255,7 +255,7 @@ describe('Orders', () => {
         order: mockLookupOrderResponse.order,
         delivery: {
           document_kind: 'invoice',
-          document_url: 'https://pages.zebo.dev/invoices/or_123',
+          document_url: 'https://pages.inttegro.com/invoices/or_123',
           sent_channels: ['sms'],
         },
       };
@@ -277,7 +277,7 @@ describe('Orders', () => {
         order: mockLookupOrderResponse.order,
         delivery: {
           document_kind: 'receipt',
-          document_url: 'https://pages.zebo.dev/invoices/or_123/receipt',
+          document_url: 'https://pages.inttegro.com/invoices/or_123/receipt',
           sent_channels: ['email'],
         },
       };
