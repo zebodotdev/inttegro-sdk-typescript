@@ -19,7 +19,7 @@ describe('HttpClient idempotency', () => {
       })
     );
 
-    const client = new HttpClient({ apiKey: 'sk_test', baseUrl: 'https://api.zebo.dev' });
+    const client = new HttpClient({ apiKey: 'sk_test', baseUrl: 'https://api.inttegro.com' });
     await client.post('/orders/new', { number: 'ORDER-1', idempotency_key: 'legacy' });
 
     const body = JSON.parse(calls[0].body as string);
@@ -37,7 +37,7 @@ describe('HttpClient idempotency', () => {
       })
     );
 
-    const client = new HttpClient({ apiKey: 'sk_test', baseUrl: 'https://api.zebo.dev' });
+    const client = new HttpClient({ apiKey: 'sk_test', baseUrl: 'https://api.inttegro.com' });
     await client.post('/orders/lookup', { order_id: 'or_123', idempotency_key: 'legacy' });
 
     const body = JSON.parse(calls[0].body as string);
@@ -55,7 +55,7 @@ describe('HttpClient idempotency', () => {
       })
     );
 
-    const client = new HttpClient({ apiKey: 'sk_test', baseUrl: 'https://api.zebo.dev' });
+    const client = new HttpClient({ apiKey: 'sk_test', baseUrl: 'https://api.inttegro.com' });
     await client.postForm('/files/create', new FormData());
 
     const headers = calls[0].headers as Record<string, string>;
@@ -72,7 +72,7 @@ describe('HttpClient idempotency', () => {
       })
     );
 
-    const httpClient = new HttpClient({ apiKey: 'sk_test', baseUrl: 'https://api.zebo.dev' });
+    const httpClient = new HttpClient({ apiKey: 'sk_test', baseUrl: 'https://api.inttegro.com' });
     const messageTemplates = new MessageTemplates(httpClient);
 
     await messageTemplates.create({

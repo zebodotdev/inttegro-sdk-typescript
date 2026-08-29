@@ -35,7 +35,7 @@ export type ResponseInterceptor = (response: Response) => Promise<Response> | Re
 export interface CommerceConfig {
   /** API key for authentication (required) */
   apiKey: string;
-  /** Base URL for the API (default: https://api.zebo.dev) */
+  /** Base URL for the API (default: https://api.inttegro.com) */
   baseUrl?: string;
   /** Request timeout in milliseconds (default: 30000) */
   timeout?: number;
@@ -53,7 +53,7 @@ export interface CommerceConfig {
  * Default configuration values
  */
 export const DEFAULT_CONFIG: Required<Omit<CommerceConfig, 'apiKey'>> = {
-  baseUrl: 'https://api.zebo.dev',
+  baseUrl: 'https://api.inttegro.com',
   timeout: 30000,
   retry: {
     maxRetries: 3,

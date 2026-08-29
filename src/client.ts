@@ -33,7 +33,7 @@ import { Apps } from './resources/apps';
  *
  * const commerce = new CommerceClient({
  *   apiKey: 'your-api-key',
- *   baseUrl: 'https://api.zebo.dev', // optional
+ *   baseUrl: 'https://api.inttegro.com', // optional
  *   timeout: 30000, // optional
  *   debug: false, // optional
  * });
