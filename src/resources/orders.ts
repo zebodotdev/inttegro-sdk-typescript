@@ -35,7 +35,7 @@
  * });
  * ```
  *
- * @see https://studio.zebo.dev/orders for detailed guides
+ * @see https://studio.inttegro.com/orders for detailed guides
  */
 
 import { HttpClient } from '../http-client';
@@ -157,8 +157,8 @@ export class Orders {
    * });
    * ```
    *
-   * @see https://studio.zebo.dev/accept-a-payment for payment flow guide
-   * @see https://studio.zebo.dev/order-lifecycle for order states
+   * @see https://studio.inttegro.com/accept-a-payment for payment flow guide
+   * @see https://studio.inttegro.com/order-lifecycle for order states
    */
   async create(request: CreateOrderRequest): Promise<CreateOrderResponse> {
     // Validate required fields
@@ -204,7 +204,7 @@ export class Orders {
    * console.log(`Payment status: ${order.payment?.status}`);
    * ```
    *
-   * @see https://studio.zebo.dev/orders for API reference
+   * @see https://studio.inttegro.com/orders for API reference
    */
   async lookup(request: LookupOrderRequest): Promise<LookupOrderResponse> {
     // Validate required fields
@@ -281,8 +281,8 @@ export class Orders {
    * });
    * ```
    *
-   * @see https://studio.zebo.dev/accept-a-payment for payment flow guide
-   * @see https://studio.zebo.dev/charge-repeat-customers for saved payment methods
+   * @see https://studio.inttegro.com/accept-a-payment for payment flow guide
+   * @see https://studio.inttegro.com/charge-repeat-customers for saved payment methods
    */
   async pay(request: PayOrder): Promise<PayOrderResponse> {
     // Validate required fields
@@ -320,7 +320,7 @@ export class Orders {
    * }
    * ```
    *
-   * @see https://studio.zebo.dev/accept-a-payment for complete payment flow
+   * @see https://studio.inttegro.com/accept-a-payment for complete payment flow
    */
   async confirmPayment(request: ConfirmPaymentRequest): Promise<ConfirmPaymentResponse> {
     // Validate required fields
@@ -357,7 +357,7 @@ export class Orders {
    * console.log('New OTP sent to customer');
    * ```
    *
-   * @see https://studio.zebo.dev/accept-a-payment for payment confirmation flow
+   * @see https://studio.inttegro.com/accept-a-payment for payment confirmation flow
    */
   async requestConfirmation(
     request: RequestConfirmationRequest
@@ -396,7 +396,7 @@ export class Orders {
    * console.log(`Order finalized at: ${result.order.sealed_at}`);
    * ```
    *
-   * @see https://studio.zebo.dev/order-lifecycle for order states
+   * @see https://studio.inttegro.com/order-lifecycle for order states
    */
   async finalize(request: FinalizeOrderRequest): Promise<FinalizeOrderResponse> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['order_id']);
@@ -477,7 +477,7 @@ export class Orders {
    * });
    * ```
    *
-   * @see https://studio.zebo.dev/order-lifecycle for order states
+   * @see https://studio.inttegro.com/order-lifecycle for order states
    */
   async complete(request: CompleteOrderRequest): Promise<CompleteOrderResponse> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['order_id']);
@@ -509,7 +509,7 @@ export class Orders {
    * console.log(`Order ${result.order.id} has been cancelled`);
    * ```
    *
-   * @see https://studio.zebo.dev/order-lifecycle for order states
+   * @see https://studio.inttegro.com/order-lifecycle for order states
    */
   async cancel(request: CancelOrderRequest): Promise<CancelOrderResponse> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['order_id']);
@@ -540,7 +540,7 @@ export class Orders {
    * console.log(`Order refunded. Refund ID: ${result.order.payment?.refund?.id}`);
    * ```
    *
-   * @see https://studio.zebo.dev/retry-a-payment for payment retry guide
+   * @see https://studio.inttegro.com/retry-a-payment for payment retry guide
    */
   async refund(request: RefundOrderRequest): Promise<RefundOrderResponse> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['order_id']);
@@ -595,8 +595,8 @@ export class Orders {
    * });
    * ```
    *
-   * @see https://studio.zebo.dev/pagination for pagination guide
-   * @see https://studio.zebo.dev/orders for API reference
+   * @see https://studio.inttegro.com/pagination for pagination guide
+   * @see https://studio.inttegro.com/orders for API reference
    */
   async page(request: PageOrdersRequest = {}): Promise<PageOrdersResponse> {
     return this.httpClient.post<PageOrdersResponse>('/orders/page', request);

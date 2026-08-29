@@ -19,7 +19,7 @@ describe('Errors', () => {
         400,
         'test_code',
         'test_type',
-        'https://studio.zebo.dev/e/test_code',
+        'https://studio.inttegro.com/e/test_code',
         'More details',
         'change_request_parameters',
         'validation_failure'
@@ -29,7 +29,7 @@ describe('Errors', () => {
       expect(error.statusCode).toBe(400);
       expect(error.code).toBe('test_code');
       expect(error.type).toBe('test_type');
-      expect(error.url).toBe('https://studio.zebo.dev/e/test_code');
+      expect(error.url).toBe('https://studio.inttegro.com/e/test_code');
       expect(error.detail).toBe('More details');
       expect(error.fixCode).toBe('change_request_parameters');
       expect(error.cause).toBe('validation_failure');
@@ -42,7 +42,7 @@ describe('Errors', () => {
           message: 'Invalid payment method',
           code: 'invalid_payment_method',
           type: 'invalid_request_parameter',
-          url: 'https://studio.zebo.dev/e/invalid_payment_method',
+          url: 'https://studio.inttegro.com/e/invalid_payment_method',
           detail: 'Payment method not supported for this currency.',
           fix_code: 'change_request_parameters',
           cause: 'validation_failure',

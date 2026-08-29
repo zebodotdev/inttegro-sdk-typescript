@@ -77,7 +77,7 @@ export const mockOrder: Order = {
  */
 export const mockCreateOrderResponse: CreateOrderResponse = {
   order: mockOrder,
-  redirect_url: 'https://payment.zebo.dev/checkout/test_123',
+  redirect_url: 'https://payment.inttegro.com/checkout/test_123',
 };
 
 /**
@@ -194,7 +194,7 @@ export const mockErrorResponse = {
     message: 'Invalid payment method',
     code: 'invalid_payment_method',
     type: 'invalid_request_parameter',
-    url: 'https://studio.zebo.dev/e/invalid_payment_method',
+    url: 'https://studio.inttegro.com/e/invalid_payment_method',
     detail: 'Payment method not supported for this currency.',
     fix_code: 'change_request_parameters',
     cause: 'validation_failure',
