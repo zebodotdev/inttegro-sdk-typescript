@@ -19,11 +19,13 @@ export type {
   Shipping,
   ShippingDetails,
   OrderPayoutSettings,
+  InvoiceSettings,
   PayoutConfiguration as OrderPayoutConfiguration,
   CreateOrderWithCustomerRequest,
   CreateOrderWithCustomerIdRequest,
   CreateOrderRequest,
   LookupOrderRequest,
+  UpdateOrderRequest,
   PayOrderRequest,
   PayOrderWithMethodRequest,
   PayOrder,
@@ -48,6 +50,7 @@ export type {
   Order,
   CreateOrderResponse,
   LookupOrderResponse,
+  UpdateOrderResponse,
   PayOrderResponse,
   ConfirmPaymentResponse,
   RequestConfirmationResponse,
@@ -101,3 +104,12 @@ export * from './spec';
 
 // Apps
 export * from './apps';
+
+// Keys
+export * from './keys';
+
+// Purchase intents
+export * from './purchase-intents';
+
+// File references
+export * from './file-references';

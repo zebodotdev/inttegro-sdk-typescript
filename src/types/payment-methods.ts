@@ -53,13 +53,34 @@ export interface PaymentMethodData {
   mobile_money: MobileMoneyDetails;
 }
 
+export interface PaymentMethodOwnerAddress {
+  city?: string | null;
+  country?: string;
+  line_1?: string | null;
+  line1?: string | null;
+  line_2?: string | null;
+  line2?: string | null;
+  name?: string | null;
+  phone_number?: string | null;
+  post_code?: string | null;
+  region?: string | null;
+}
+
+export interface PaymentMethodOwner {
+  name?: string;
+  address?: PaymentMethodOwnerAddress | null;
+}
+
 export interface PaymentMethodObject {
   id: string;
+  active?: boolean;
+  archived_at?: string | null;
   customer_id: string;
   type: PaymentMethodType;
   mobile_money?: PaymentMethodMobileMoney | null;
   bank_account?: PaymentMethodBankAccount | null;
   card?: PaymentMethodCard | null;
+  owner?: PaymentMethodOwner | null;
   verification?: PaymentMethodVerification | null;
   custom_data?: Record<string, string>;
   expires_on?: string | null;
@@ -116,6 +137,36 @@ export interface LookupPaymentMethodRequest {
 }
 
 export interface LookupPaymentMethodResponse {
+  payment_method?: PaymentMethodObject;
+}
+
+export interface PagePaymentMethodsRequest {
+  customer_id?: string;
+  page_number?: number;
+  page_size?: number;
+}
+
+export interface PagePaymentMethodsResponse {
+  page?: {
+    number?: number;
+    size?: number;
+    payment_methods?: PaymentMethodObject[];
+  };
+}
+
+export interface UpdatePaymentMethodRequest {
+  payment_method_id: string;
+  custom_data?: Record<string, string | null>;
+  active?: boolean;
+  archived?: boolean;
+  owner?: PaymentMethodOwner;
+}
+
+export interface PaymentMethodActionRequest {
+  payment_method_id: string;
+}
+
+export interface PaymentMethodResponse {
   payment_method?: PaymentMethodObject;
 }
 

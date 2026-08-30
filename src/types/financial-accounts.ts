@@ -135,3 +135,11 @@ export interface ToggleFinancialAccountRequest {
   account_id: string;
   unset_as_payout_destination?: boolean;
 }
+
+export interface ReconnectFinancialAccountRequest {
+  account_id: string;
+}
+
+export interface ReconnectFinancialAccountResponse {
+  account?: FinancialAccount;
+}

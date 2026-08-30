@@ -17,6 +17,16 @@ export interface UpdatePriceRequest {
   about?: string;
 }
 
+export interface PriceActionRequest {
+  price_id: string;
+}
+
+export interface PagePricesRequest {
+  page_number?: number;
+  page_size?: number;
+  product_id?: string;
+}
+
 export interface PriceNominal {
   currency: string;
   value: number;
@@ -36,4 +46,12 @@ export interface Price {
 
 export interface PriceResponse {
   price?: Price;
+}
+
+export interface PagePricesResponse {
+  page?: {
+    number?: number;
+    size?: number;
+    prices?: Price[];
+  };
 }

@@ -2,6 +2,9 @@ import { HttpClient } from '../http-client';
 import {
   CreatePriceRequest,
   LookupPriceRequest,
+  PagePricesRequest,
+  PagePricesResponse,
+  PriceActionRequest,
   PriceResponse,
   UpdatePriceRequest,
 } from '../types';
@@ -35,5 +38,23 @@ export class Prices {
     throwIfValidationErrors(errors);
 
     return this.httpClient.post<PriceResponse>('/prices/update', request);
+  }
+
+  async page(request: PagePricesRequest = {}): Promise<PagePricesResponse> {
+    return this.httpClient.post<PagePricesResponse>('/prices/page', request);
+  }
+
+  async activate(request: PriceActionRequest): Promise<PriceResponse> {
+    const errors = validateRequired(request as unknown as Record<string, unknown>, ['price_id']);
+    throwIfValidationErrors(errors);
+
+    return this.httpClient.post<PriceResponse>('/prices/activate', request);
+  }
+
+  async deactivate(request: PriceActionRequest): Promise<PriceResponse> {
+    const errors = validateRequired(request as unknown as Record<string, unknown>, ['price_id']);
+    throwIfValidationErrors(errors);
+
+    return this.httpClient.post<PriceResponse>('/prices/deactivate', request);
   }
 }

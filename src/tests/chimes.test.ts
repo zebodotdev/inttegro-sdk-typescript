@@ -69,6 +69,41 @@ describe('Chimes', () => {
     expect(postSpy).toHaveBeenCalledWith('/chimes/lookup', { chime_id: 'ch_123' });
   });
 
+  it('should page chimes', async () => {
+    const mockResponse = { page: { number: 1, size: 20, chimes: [] } };
+    const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockResponse);
+
+    const result = await chimes.page({ page_number: 1, page_size: 20 });
+
+    expect(result).toEqual(mockResponse);
+    expect(postSpy).toHaveBeenCalledWith('/chimes/page', {
+      page_number: 1,
+      page_size: 20,
+    });
+  });
+
+  it('should broadcast a chime', async () => {
+    const mockResponse = { broadcast: { id: 'brc_123' } };
+    const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockResponse);
+
+    const request = {
+      recipients: [{ transport: 'sms' as const, phone: { number: '+233544998605' } }],
+      sender: 'YourBrand',
+      message_template: 'Hello',
+    };
+
+    const result = await chimes.broadcast(request);
+
+    expect(result).toEqual(mockResponse);
+    expect(postSpy).toHaveBeenCalledWith('/chimes/broadcast', request);
+  });
+
+  it('should validate missing fields on broadcast', async () => {
+    await expect(chimes.broadcast({ recipients: [], sender: '' } as any)).rejects.toThrow(
+      'Validation failed'
+    );
+  });
+
   it('should schedule a chime', async () => {
     const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockScheduleResponse);
 

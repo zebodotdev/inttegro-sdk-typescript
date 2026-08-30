@@ -32,6 +32,17 @@ export interface PayoutSettingsResponse {
   settings?: PayoutSettings;
 }
 
+export interface SchedulePayoutRequest {
+  destination_id: string;
+  execute_after?: string;
+  max_amount: number;
+  reference: string;
+}
+
+export interface LookupPayoutRequest {
+  payout_id: string;
+}
+
 export interface PagePayoutsRequest {
   page_number?: number;
   page_size?: number;
@@ -49,14 +60,24 @@ export interface Payout {
   application_id?: string;
   destination_id?: string;
   amount?: MoneyAmount;
+  balance_transactions?: string[];
   status?: string;
   initiated_by?: string;
   execute_after?: string;
   scheduled_at?: string;
+  scheduled_by?: string;
   canceled_at?: string;
+  custom_data?: Record<string, string>;
+  error?: PayoutError | null;
+  executed_by?: string;
+  failed_at?: string | null;
   max_amount?: MoneyAmount;
   latest_attempt_id?: string;
   latest_error?: PayoutError;
+  reference?: string;
+  schedule_id?: string;
+  sent_at?: string | null;
+  source_id?: string;
   initiated_at?: string;
   executed_at?: string;
   expected_at?: string;
@@ -70,6 +91,10 @@ export interface PagePayoutsResponse {
     size?: number;
     payouts?: Payout[];
   };
+}
+
+export interface PayoutResponse {
+  payout?: Payout;
 }
 
 export interface CancelPayoutRequest {

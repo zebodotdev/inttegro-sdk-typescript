@@ -23,6 +23,9 @@ import { Broadcasts } from './resources/broadcasts';
 import { MessageTemplates } from './resources/message-templates';
 import { UploadRequests } from './resources/upload-requests';
 import { Apps } from './resources/apps';
+import { Keys } from './resources/keys';
+import { PurchaseIntents } from './resources/purchase-intents';
+import { FileReferences } from './resources/file-references';
 
 /**
  * Main Commerce SDK client
@@ -83,6 +86,12 @@ export class CommerceClient {
   public readonly spec: Spec;
   /** Upload requests resource */
   public readonly uploadRequests: UploadRequests;
+  /** Secret keys resource */
+  public readonly keys: Keys;
+  /** Purchase intents resource */
+  public readonly purchaseIntents: PurchaseIntents;
+  /** File references resource */
+  public readonly fileReferences: FileReferences;
 
   /**
    * Create a new Commerce SDK client
@@ -115,6 +124,9 @@ export class CommerceClient {
     this.balances = new Balances(this.httpClient);
     this.spec = new Spec(this.httpClient);
     this.uploadRequests = new UploadRequests(this.httpClient);
+    this.keys = new Keys(this.httpClient);
+    this.purchaseIntents = new PurchaseIntents(this.httpClient);
+    this.fileReferences = new FileReferences(this.httpClient);
   }
 
   /**

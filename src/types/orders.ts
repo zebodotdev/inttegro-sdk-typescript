@@ -143,6 +143,20 @@ export interface OrderPayoutSettings {
 }
 
 /**
+ * Order-level invoice rendering settings
+ */
+export interface InvoiceSettings {
+  /** Optional invoice number */
+  number?: string;
+  /** Optional invoice memo */
+  memo?: string;
+  /** Optional invoice footer */
+  footer?: string;
+  /** Invoice-specific custom metadata */
+  custom_data?: CustomData;
+}
+
+/**
  * Payout configuration for a payment or balance transaction
  */
 export interface PayoutConfiguration {
@@ -162,11 +176,13 @@ interface BaseCreateOrderRequest {
   /** Line items (products or fees) */
   line_items: LineItem[];
   /** Billing details */
-  billing_details: BillingDetails;
+  billing_details?: BillingDetails;
   /** Shipping information (required for physical products) */
   shipping?: Shipping;
   /** Custom order number */
   number?: string;
+  /** Optional receipt number for downstream reconciliation */
+  receipt_number?: string;
   /** Statement descriptor for payment */
   statement_descriptor?: string;
   /** Static prefix, 2-10 characters, used to build statement descriptor as prefix*order_id. Mutually exclusive with statement_descriptor. */
@@ -182,6 +198,10 @@ interface BaseCreateOrderRequest {
     redirect_url?: string;
     cancel_url?: string;
   };
+  /** Invoice rendering metadata */
+  invoice_settings?: InvoiceSettings;
+  /** Order-level custom metadata */
+  custom_data?: CustomData;
   /** Order-specific payout settings */
   payout_settings?: OrderPayoutSettings;
 }
@@ -221,6 +241,36 @@ export type CreateOrderRequest = CreateOrderWithCustomerRequest | CreateOrderWit
 export interface LookupOrderRequest {
   /** Order ID to lookup */
   order_id: string;
+}
+
+/**
+ * Update order request
+ */
+export interface UpdateOrderRequest {
+  /** Order ID to update */
+  order_id: string;
+  /** Clear the currently attached payment method */
+  clear_payment_method?: boolean;
+  /** Replacement order-level custom metadata */
+  custom_data?: CustomData;
+  /** Invoice rendering metadata */
+  invoice_settings?: InvoiceSettings;
+  /** Explicit seal decision */
+  finalize?: boolean;
+  /** Full replacement for the order's line items */
+  line_items?: LineItem[];
+  /** Replacement order number */
+  number?: string;
+  /** Replacement receipt number */
+  receipt_number?: string;
+  /** Inline payment method details to tokenize and attach */
+  payment_method_data?: PaymentMethodData;
+  /** Saved payment method ID to attach */
+  payment_method_id?: string;
+  /** Replacement payment statement descriptor */
+  statement_descriptor?: string;
+  /** Replacement payment statement descriptor prefix */
+  statement_descriptor_prefix?: string;
 }
 
 /**
@@ -470,6 +520,10 @@ export interface Order {
   status: OrderStatus | 'paid' | 'refunded';
   /** Order number */
   number?: string;
+  /** Receipt number */
+  receipt_number?: string;
+  /** Invoice rendering metadata */
+  invoice_settings?: InvoiceSettings;
   /** Customer summary */
   customer?: {
     id: string;
@@ -489,6 +543,8 @@ export interface Order {
   subtotal?: MoneyAmount;
   tax?: MoneyAmount;
   currency?: Currency;
+  /** Order-level custom metadata */
+  custom_data?: CustomData | null;
   /** Items (legacy) */
   line_items?: LineItem[];
   /** Grouped items (current spec) */
@@ -533,6 +589,14 @@ export interface CreateOrderResponse {
  */
 export interface LookupOrderResponse {
   /** Order details */
+  order: Order;
+}
+
+/**
+ * Update order response
+ */
+export interface UpdateOrderResponse {
+  /** Updated order */
   order: Order;
 }
 

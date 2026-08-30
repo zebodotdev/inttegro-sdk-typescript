@@ -44,6 +44,8 @@ import {
   CreateOrderResponse,
   LookupOrderRequest,
   LookupOrderResponse,
+  UpdateOrderRequest,
+  UpdateOrderResponse,
   PayOrder,
   PayOrderResponse,
   ConfirmPaymentRequest,
@@ -161,23 +163,24 @@ export class Orders {
    * @see https://studio.inttegro.com/order-lifecycle for order states
    */
   async create(request: CreateOrderRequest): Promise<CreateOrderResponse> {
-    // Validate required fields
-    const errors = validateRequired(request as unknown as Record<string, unknown>, [
-      'line_items',
-      'billing_details',
-    ]);
+    validateCreateOrderRequest(request);
 
-    // Validate that either customer_data or customer_id is provided
-    if (!request.customer_data && !('customer_id' in request && request.customer_id)) {
-      errors.push({
-        field: 'customer_data/customer_id',
-        message: 'Either customer_data or customer_id must be provided',
-      });
-    }
+    return this.httpClient.post<CreateOrderResponse>('/orders/create', request);
+  }
 
-    throwIfValidationErrors(errors);
+  /**
+   * Create a new order through the legacy compatibility route.
+   *
+   * Prefer `create`, which uses the canonical `/orders/create` endpoint.
+   */
+  async new(request: CreateOrderRequest): Promise<CreateOrderResponse> {
+    validateCreateOrderRequest(request);
 
     return this.httpClient.post<CreateOrderResponse>('/orders/new', request);
+  }
+
+  async createAlias(request: CreateOrderRequest): Promise<CreateOrderResponse> {
+    return this.new(request);
   }
 
   /**
@@ -212,6 +215,16 @@ export class Orders {
     throwIfValidationErrors(errors);
 
     return this.httpClient.post<LookupOrderResponse>('/orders/lookup', request);
+  }
+
+  /**
+   * Update mutable order metadata, line items, invoice settings, or attached payment method.
+   */
+  async update(request: UpdateOrderRequest): Promise<UpdateOrderResponse> {
+    const errors = validateRequired(request as unknown as Record<string, unknown>, ['order_id']);
+    throwIfValidationErrors(errors);
+
+    return this.httpClient.post<UpdateOrderResponse>('/orders/update', request);
   }
 
   /**
@@ -601,4 +614,17 @@ export class Orders {
   async page(request: PageOrdersRequest = {}): Promise<PageOrdersResponse> {
     return this.httpClient.post<PageOrdersResponse>('/orders/page', request);
   }
+}
+
+function validateCreateOrderRequest(request: CreateOrderRequest): void {
+  const errors = validateRequired(request as unknown as Record<string, unknown>, ['line_items']);
+
+  if (!request.customer_data && !('customer_id' in request && request.customer_id)) {
+    errors.push({
+      field: 'customer_data/customer_id',
+      message: 'Either customer_data or customer_id must be provided',
+    });
+  }
+
+  throwIfValidationErrors(errors);
 }

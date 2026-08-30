@@ -61,7 +61,7 @@ describe('Orders', () => {
       });
 
       expect(result).toEqual(mockCreateOrderResponse);
-      expect(postSpy).toHaveBeenCalledWith('/orders/new', expect.any(Object));
+      expect(postSpy).toHaveBeenCalledWith('/orders/create', expect.any(Object));
     });
 
     it('should create an order with customer ID', async () => {
@@ -93,6 +93,28 @@ describe('Orders', () => {
             country: 'GH',
           },
         },
+      });
+
+      expect(result).toEqual(mockCreateOrderResponse);
+      expect(postSpy).toHaveBeenCalledWith('/orders/create', expect.any(Object));
+    });
+
+    it('should create an order through the legacy alias', async () => {
+      const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockCreateOrderResponse);
+
+      const result = await orders.new({
+        customer_id: 'cu_123',
+        line_items: [
+          {
+            type: 'product',
+            product: {
+              type: 'physical',
+              quantity: 1,
+              name: 'Test Product',
+              price: { currency: 'ghs', value: 20000 },
+            },
+          },
+        ],
       });
 
       expect(result).toEqual(mockCreateOrderResponse);
@@ -157,6 +179,27 @@ describe('Orders', () => {
 
     it('should throw validation error when order_id is missing', async () => {
       await expect(orders.lookup({} as any)).rejects.toThrow('Validation failed');
+    });
+  });
+
+  describe('update', () => {
+    it('should update an order', async () => {
+      const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockLookupOrderResponse);
+
+      const result = await orders.update({
+        order_id: 'or_123',
+        number: 'ORDER-123-REV2',
+      });
+
+      expect(result).toEqual(mockLookupOrderResponse);
+      expect(postSpy).toHaveBeenCalledWith('/orders/update', {
+        order_id: 'or_123',
+        number: 'ORDER-123-REV2',
+      });
+    });
+
+    it('should throw validation error when order_id is missing on update', async () => {
+      await expect(orders.update({} as any)).rejects.toThrow('Validation failed');
     });
   });
 

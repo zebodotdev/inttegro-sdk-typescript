@@ -1,8 +1,10 @@
 import { CustomData, RequestMeta } from './common';
+import type { MessageTemplateReference } from './message-templates';
 import { ScheduledChime } from './schedules';
 
 export type ChimeTransport = 'sms' | 'email' | 'whatsapp' | string;
 export type ChimeRecipientType = 'phone' | 'email';
+export type ChimeRecipientTransport = 'sms' | 'email' | string;
 
 export interface ChimeRecipientPhone {
   number: string;
@@ -13,7 +15,9 @@ export interface ChimeRecipientEmail {
 }
 
 export interface ChimeRecipient {
-  type: ChimeRecipientType;
+  type?: ChimeRecipientType;
+  transport?: ChimeRecipientTransport;
+  customer_id?: string;
   name?: string;
   phone?: ChimeRecipientPhone;
   email?: ChimeRecipientEmail;
@@ -104,4 +108,45 @@ export interface ChimeResponse {
 
 export interface ScheduleChimeResponse {
   scheduled_chime?: ScheduledChime;
+}
+
+export type BroadcastChimeMessageTemplate = string | MessageTemplateReference;
+
+export interface BroadcastChimeRequest {
+  idempotency_key?: string;
+  message_template?: BroadcastChimeMessageTemplate;
+  email?: ChimeEmailMessage;
+  purpose?: string;
+  recipients: ChimeRecipient[];
+  sender: string;
+  request_meta?: RequestMeta;
+}
+
+export interface BroadcastChimeResponse {
+  broadcast?: {
+    id?: string;
+    customer_ids?: string[];
+    recipients?: string[];
+    content?: string;
+    email?: ChimeEmailMessage;
+    sender_id?: string;
+    purpose?: string | null;
+    send_after?: string;
+    created_at?: string;
+  };
+}
+
+export interface PageChimesRequest {
+  customer_id?: string;
+  page_number?: number;
+  page_size?: number;
+  recipient?: string;
+}
+
+export interface PageChimesResponse {
+  page?: {
+    number?: number;
+    size?: number;
+    chimes?: Chime[];
+  };
 }

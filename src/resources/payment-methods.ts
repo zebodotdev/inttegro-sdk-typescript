@@ -7,8 +7,13 @@ import {
   GetPaymentMethodSettingsResponse,
   LookupPaymentMethodRequest,
   LookupPaymentMethodResponse,
+  PagePaymentMethodsRequest,
+  PagePaymentMethodsResponse,
+  PaymentMethodActionRequest,
+  PaymentMethodResponse,
   TokenizePaymentMethodRequest,
   TokenizePaymentMethodResponse,
+  UpdatePaymentMethodRequest,
   VerifyPaymentMethodRequest,
   VerifyPaymentMethodResponse,
 } from '../types';
@@ -63,6 +68,39 @@ export class PaymentMethods {
     return this.httpClient.post<LookupPaymentMethodResponse>('/payment_methods/lookup', request);
   }
 
+  async page(request: PagePaymentMethodsRequest = {}): Promise<PagePaymentMethodsResponse> {
+    return this.httpClient.post<PagePaymentMethodsResponse>('/payment_methods/page', request);
+  }
+
+  async update(request: UpdatePaymentMethodRequest): Promise<PaymentMethodResponse> {
+    const errors = validateRequired(request as unknown as Record<string, unknown>, [
+      'payment_method_id',
+    ]);
+    throwIfValidationErrors(errors);
+
+    return this.httpClient.post<PaymentMethodResponse>('/payment_methods/update', request);
+  }
+
+  async activate(request: PaymentMethodActionRequest): Promise<PaymentMethodResponse> {
+    return this.postAction('/payment_methods/activate', request);
+  }
+
+  async disactivate(request: PaymentMethodActionRequest): Promise<PaymentMethodResponse> {
+    return this.postAction('/payment_methods/disactivate', request);
+  }
+
+  async deactivate(request: PaymentMethodActionRequest): Promise<PaymentMethodResponse> {
+    return this.disactivate(request);
+  }
+
+  async archive(request: PaymentMethodActionRequest): Promise<PaymentMethodResponse> {
+    return this.postAction('/payment_methods/archive', request);
+  }
+
+  async unarchive(request: PaymentMethodActionRequest): Promise<PaymentMethodResponse> {
+    return this.postAction('/payment_methods/unarchive', request);
+  }
+
   async delete(request: DeletePaymentMethodRequest): Promise<DeletePaymentMethodResponse> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, [
       'payment_method_id',
@@ -74,5 +112,17 @@ export class PaymentMethods {
 
   async settings(): Promise<GetPaymentMethodSettingsResponse> {
     return this.httpClient.post<GetPaymentMethodSettingsResponse>('/payment_methods/settings', {});
+  }
+
+  private async postAction(
+    path: string,
+    request: PaymentMethodActionRequest
+  ): Promise<PaymentMethodResponse> {
+    const errors = validateRequired(request as unknown as Record<string, unknown>, [
+      'payment_method_id',
+    ]);
+    throwIfValidationErrors(errors);
+
+    return this.httpClient.post<PaymentMethodResponse>(path, request);
   }
 }

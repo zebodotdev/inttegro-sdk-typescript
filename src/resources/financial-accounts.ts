@@ -8,6 +8,8 @@ import {
   LookupFinancialAccountResponse,
   PageFinancialAccountsRequest,
   PageFinancialAccountsResponse,
+  ReconnectFinancialAccountRequest,
+  ReconnectFinancialAccountResponse,
   ToggleFinancialAccountRequest,
   UpdateFinancialAccountRequest,
   VerifyFinancialAccountRequest,
@@ -124,6 +126,18 @@ export class FinancialAccounts {
 
     return this.httpClient.post<CreateFinancialAccountResponse>(
       '/financial_accounts/disconnect',
+      request
+    );
+  }
+
+  async reconnect(
+    request: ReconnectFinancialAccountRequest
+  ): Promise<ReconnectFinancialAccountResponse> {
+    const errors = validateRequired(request as unknown as Record<string, unknown>, ['account_id']);
+    throwIfValidationErrors(errors);
+
+    return this.httpClient.post<ReconnectFinancialAccountResponse>(
+      '/financial_accounts/reconnect',
       request
     );
   }

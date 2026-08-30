@@ -1,7 +1,11 @@
 import { HttpClient } from '../http-client';
 import {
+  BroadcastChimeRequest,
+  BroadcastChimeResponse,
   ChimeResponse,
   LookupChimeRequest,
+  PageChimesRequest,
+  PageChimesResponse,
   SendChimeRequest,
   ScheduleChimeRequest,
   ScheduleChimeResponse,
@@ -28,6 +32,23 @@ export class Chimes {
     throwIfValidationErrors(errors);
 
     return this.httpClient.post<ChimeResponse>('/chimes/lookup', request);
+  }
+
+  async page(request: PageChimesRequest = {}): Promise<PageChimesResponse> {
+    return this.httpClient.post<PageChimesResponse>('/chimes/page', request);
+  }
+
+  async broadcast(request: BroadcastChimeRequest): Promise<BroadcastChimeResponse> {
+    const errors = validateRequired(request as unknown as Record<string, unknown>, [
+      'recipients',
+      'sender',
+    ]);
+    if (!request.recipients || request.recipients.length === 0) {
+      errors.push({ field: 'recipients', message: 'recipients is required' });
+    }
+    throwIfValidationErrors(errors);
+
+    return this.httpClient.post<BroadcastChimeResponse>('/chimes/broadcast', request);
   }
 
   async schedule(request: ScheduleChimeRequest): Promise<ScheduleChimeResponse> {

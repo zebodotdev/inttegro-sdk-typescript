@@ -475,5 +475,6 @@ function isIdempotentMutationPath(pathOrUrl: string): boolean {
     'contents',
     'balances',
     'render_preview',
+    'usage',
   ]).has(action);
 }

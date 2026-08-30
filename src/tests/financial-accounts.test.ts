@@ -54,7 +54,7 @@ describe('FinancialAccounts', () => {
     expect(postSpy).toHaveBeenCalledWith('/financial_accounts/lookup', { account_id: 'fa_123' });
   });
 
-  it('should call archive/page/verify/connect', async () => {
+  it('should call archive/page/verify/connect/reconnect', async () => {
     const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockFinancialAccountResponse);
 
     await fa.archive({ account_id: 'fa_123' });
@@ -62,6 +62,7 @@ describe('FinancialAccounts', () => {
     await fa.verify({ account_id: 'fa_123' });
     await fa.disablePush({ account_id: 'fa_123', unset_as_payout_destination: true });
     await fa.disconnect({ account_id: 'fa_123', unset_as_payout_destination: true });
+    await fa.reconnect({ account_id: 'fa_123' });
     await fa.connect({
       label: 'My Wallet',
       type: 'wallet',
@@ -84,6 +85,9 @@ describe('FinancialAccounts', () => {
     expect(postSpy).toHaveBeenCalledWith('/financial_accounts/disconnect', {
       account_id: 'fa_123',
       unset_as_payout_destination: true,
+    });
+    expect(postSpy).toHaveBeenCalledWith('/financial_accounts/reconnect', {
+      account_id: 'fa_123',
     });
     expect(postSpy).toHaveBeenCalledWith('/financial_accounts/connect', expect.any(Object));
   });
