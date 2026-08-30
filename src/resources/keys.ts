@@ -54,8 +54,5 @@ export class Keys {
 }
 
 function validateSecretKeyIdentifier(request: LookupSecretKeyRequest): ValidationError[] {
-  const hasIdentifier = Boolean(request.secret_key_id || request.key_id || request.id);
-  if (hasIdentifier) return [];
-
-  return validateRequired({ secret_key_id: undefined }, ['secret_key_id']);
+  return validateRequired({ secret_key_id: request.secret_key_id }, ['secret_key_id']);
 }

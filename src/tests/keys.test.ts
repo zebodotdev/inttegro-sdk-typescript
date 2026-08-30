@@ -48,6 +48,7 @@ describe('Keys', () => {
   });
 
   it('should validate secret key identifiers', async () => {
+    // @ts-expect-error Exercise runtime validation for untyped JavaScript callers.
     await expect(keys.lookup({})).rejects.toThrow('Validation failed');
   });
 });
