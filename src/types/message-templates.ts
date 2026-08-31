@@ -1,5 +1,5 @@
-export type MessageTemplateChannel = 'sms' | 'email' | string;
-export type MessageTemplateStatus = 'draft' | 'published' | 'archived' | string;
+export type MessageTemplateChannel = 'sms' | 'email';
+export type MessageTemplateStatus = 'draft' | 'published' | 'archived';
 export type MessageTemplateVariableType =
   | 'array'
   | 'boolean'
@@ -10,8 +10,7 @@ export type MessageTemplateVariableType =
   | 'number'
   | 'phone'
   | 'string'
-  | 'url'
-  | string;
+  | 'url';
 
 export interface MessageTemplateVariable {
   name: string;

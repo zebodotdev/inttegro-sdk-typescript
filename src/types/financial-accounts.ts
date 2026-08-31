@@ -1,6 +1,6 @@
-export type FinancialAccountType = 'wallet' | 'bank_account' | 'dosh_account' | string;
-export type WalletType = 'mobile_money' | string;
-export type BankAccountType = 'ghana_bank_account' | string;
+export type FinancialAccountType = 'wallet' | 'bank_account' | 'dosh_account';
+export type WalletType = 'mobile_money';
+export type BankAccountType = 'ghana_bank_account';
 
 export interface WalletConfig {
   type: WalletType;

@@ -1,6 +1,6 @@
 import { PaymentMethodType, RequestMeta } from './common';
 
-export type MobileMoneyNetwork = 'mtn' | 'vodafone' | 'airteltigo' | 'airtel' | 'telecel' | string;
+export type MobileMoneyNetwork = 'airtel' | 'mtn' | 'telecel' | 'vodafone';
 
 export interface MobileMoneyDetails {
   account_number: string;

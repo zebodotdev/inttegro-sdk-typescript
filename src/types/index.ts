@@ -4,6 +4,7 @@
 
 // Common types
 export * from './common';
+export * from './api-enums';
 
 // Customer types
 export * from './customer';

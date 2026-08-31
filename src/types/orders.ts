@@ -12,10 +12,12 @@ import {
   PaymentMethodCard,
   PaymentMethodData,
   PaymentMethodMobileMoney,
+  MobileMoneyNetwork,
   PaymentMethodVerification,
 } from './payment-methods';
 import { Address, CustomerData } from './customer';
-import { BankAccountConfig } from './financial-accounts';
+import { BankAccountConfig, FinancialAccountType, WalletType } from './financial-accounts';
+import type { PaymentAttemptStatus, PaymentConfirmationChannel } from './api-enums';
 
 /**
  * Product line item
@@ -126,12 +128,12 @@ export interface OrderPayoutSettings {
     financial_account_id?: string;
     /** Inline financial account details for payout destination */
     financial_account_data?: {
-      type: 'wallet' | 'bank_account' | 'dosh_account' | string;
+      type: FinancialAccountType;
       wallet?: {
-        type: 'mobile_money' | string;
+        type: WalletType;
         mobile_money?: {
           account_number: string;
-          network: string;
+          network: MobileMoneyNetwork;
         };
       } | null;
       bank_account?: BankAccountConfig | null;
@@ -372,28 +374,31 @@ export interface RefundOrderRequest {
 export type OrderStatus =
   | 'preparing'
   | 'requires_payment'
+  | 'paid'
   | 'completed'
   | 'canceled'
   | 'expired'
-  | string;
+  | 'unknown';
 
 /**
  * Payment status
  */
 export type PaymentStatus =
+  | 'initiated'
   | 'requires_action'
-  | 'processing'
-  | 'succeeded'
+  | 'overdue'
+  | 'executed'
+  | 'paid'
+  | 'canceled'
+  | 'expired'
   | 'failed'
-  | 'cancelled'
-  | string;
+  | 'unknown';
 export type PaymentResponseStatus =
   | 'pending'
   | 'requires_confirmation'
   | 'processing'
   | 'succeeded'
-  | 'failed'
-  | string;
+  | 'failed';
 
 /**
  * Checkout settings
@@ -425,10 +430,10 @@ export interface PaymentMethod {
  * Latest payment attempt details
  */
 export interface PaymentAttempt {
-  payment_method_type?: PaymentMethodType | string;
+  payment_method_type?: PaymentMethodType;
   payment_method_id?: string;
   reference?: string;
-  status?: string;
+  status?: PaymentAttemptStatus;
   initiated_at?: string;
   succeeded_at?: string;
 }
@@ -452,7 +457,7 @@ export interface Payment {
   failed_at?: string;
 }
 
-export type PaymentNextActionType = 'confirm_payment' | 'execute' | 'redirect' | 'none';
+export type PaymentNextActionType = 'confirm_payment' | 'execute' | 'redirect' | 'authorize' | 'none';
 
 export interface PaymentNextAction {
   type: PaymentNextActionType;
@@ -462,7 +467,7 @@ export interface PaymentNextAction {
     request?: {
       id: string;
       recipient: string;
-      sent_via: string;
+      sent_via: PaymentConfirmationChannel;
       token_size: number;
       sender_id: string;
     };

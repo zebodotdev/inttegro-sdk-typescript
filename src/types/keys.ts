@@ -1,6 +1,6 @@
-export type SecretKeyTokenType = 'bearer' | string;
-export type SecretKeyStatus = 'active' | 'revoked' | 'expired' | string;
-export type SecretKeyAuthResult = 'succeeded' | 'failed' | string;
+export type SecretKeyTokenType = 'bearer';
+export type SecretKeyStatus = 'active' | 'revoked' | 'expired';
+export type SecretKeyAuthResult = 'succeeded' | 'failed';
 
 export interface GenerateSecretKeyRequest {
   label?: string;

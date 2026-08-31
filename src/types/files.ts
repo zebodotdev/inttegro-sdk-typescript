@@ -20,11 +20,11 @@ export interface FilePageRequest {
   page_number?: number;
   page_size?: number;
   purpose?: string;
-  status?: string;
+  status?: FileStatus;
 }
 
 export interface FileContentsRequest {
-  disposition?: 'attachment' | 'inline' | string;
+  disposition?: FileDisposition;
   file_id: string;
 }
 
@@ -52,7 +52,7 @@ export interface FileLinkPageRequest {
   file_id?: string;
   page_number?: number;
   page_size?: number;
-  status?: string;
+  status?: FileLinkStatus;
 }
 
 export interface FileLinkRevokeRequest {
@@ -90,7 +90,7 @@ export interface UploadRequestPageRequest {
   page_size?: number;
   purpose?: string;
   resource?: Record<string, unknown>;
-  status?: string;
+  status?: UploadRequestStatus;
 }
 
 export interface UploadRequestCancelRequest {
@@ -107,3 +107,9 @@ export interface UploadRequestFulfillRequest {
 export type UploadRequestResponse = Record<string, unknown>;
 export type UploadRequestPageResponse = Record<string, unknown>;
 export type UploadRequestFulfillResponse = Record<string, unknown>;
+import type {
+  FileDisposition,
+  FileLinkStatus,
+  FileStatus,
+  UploadRequestStatus,
+} from './api-enums';

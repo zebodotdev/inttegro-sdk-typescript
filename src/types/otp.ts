@@ -1,4 +1,5 @@
 import { RequestMeta } from './common';
+import type { OTPAlphabetType, OTPStatus, OTPTransmissionStatus } from './api-enums';
 
 export interface InitiateOtpRequest {
   recipient: string;
@@ -9,7 +10,7 @@ export interface InitiateOtpRequest {
   preferred_gateway?: 'twilio' | 'vonage' | 'africas-talking' | 'termii' | string;
   purpose?: string;
   token_alphabet?: string;
-  token_alphabet_type?: 'numeric' | 'alpha' | 'alphanumeric' | string;
+  token_alphabet_type?: OTPAlphabetType;
   token_size?: number;
   validity_duration_in_minutes?: number;
 }
@@ -34,13 +35,13 @@ export interface OtpTransmission {
   recipient?: string;
   sender_id?: string;
   sent_via?: string;
-  status?: string;
+  status?: OTPTransmissionStatus;
   sent_at?: string;
 }
 
 export interface OtpTransaction {
   id?: string;
-  status?: 'pending' | 'verified' | 'expired' | 'canceled' | string;
+  status?: OTPStatus;
   full_message?: string;
   initiated_at?: string;
   expires_at?: string;
@@ -51,7 +52,7 @@ export interface OtpTransaction {
 
 export interface OtpCanceledTransaction {
   id?: string;
-  status?: string;
+  status?: OTPStatus;
   full_message?: string;
   recipient?: string;
   sender?: string;

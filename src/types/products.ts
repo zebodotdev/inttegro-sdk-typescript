@@ -1,4 +1,5 @@
 import { CustomData, ProductType } from './common';
+import type { ProductShipmentInputType, ProductShipmentType } from './api-enums';
 
 export interface ProductCategory {
   id?: string;
@@ -41,9 +42,13 @@ export interface ProductShipmentDimensions {
 }
 
 export interface ProductShipment {
-  type?: 'delivery' | 'download' | 'stream';
+  type?: ProductShipmentType;
   carrier?: string;
   dimensions?: ProductShipmentDimensions;
+}
+
+export interface ProductShipmentInput extends Omit<ProductShipment, 'type'> {
+  type?: ProductShipmentInputType;
 }
 
 export interface ProductMediaItem {
@@ -60,7 +65,7 @@ export interface CreateProductRequest {
   about?: string;
   tax_code?: string;
   category?: ProductCategory;
-  shipment?: ProductShipment;
+  shipment?: ProductShipmentInput;
   media?: ProductMediaItem[];
   attributes?: Record<string, string>;
   custom_data?: CustomData;
@@ -79,7 +84,7 @@ export interface UpdateProductRequest {
   tax_code?: string;
   category?: ProductCategory;
   price?: ProductPrice;
-  shipment?: ProductShipment;
+  shipment?: ProductShipmentInput;
   media?: ProductMediaItem[];
   attributes?: Record<string, string>;
   custom_data?: CustomData;

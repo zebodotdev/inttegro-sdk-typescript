@@ -1,4 +1,5 @@
 import { MoneyAmount } from './common';
+import type { PayoutStatus } from './api-enums';
 
 export interface PayoutScheduleSpec {
   t_plus?: string;
@@ -61,7 +62,7 @@ export interface Payout {
   destination_id?: string;
   amount?: MoneyAmount;
   balance_transactions?: string[];
-  status?: string;
+  status?: PayoutStatus;
   initiated_by?: string;
   execute_after?: string;
   scheduled_at?: string;

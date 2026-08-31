@@ -1,14 +1,13 @@
 import type { MoneyAmount } from './common';
 import type { Product, ProductPriceSummary } from './products';
 
-export type PurchaseIntentStatus = 'active' | 'inactive' | string;
+export type PurchaseIntentStatus = 'active' | 'expired' | 'inactive' | 'used';
 export type PurchaseIntentActivityType =
   | 'viewed'
   | 'expired_viewed'
   | 'payment_started'
   | 'order_created'
-  | 'payment_failed'
-  | string;
+  | 'payment_failed';
 
 export interface PurchaseIntentProductSelector {
   id: string;

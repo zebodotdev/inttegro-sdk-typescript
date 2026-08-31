@@ -2,9 +2,9 @@ import { CustomData, RequestMeta } from './common';
 import type { MessageTemplateReference } from './message-templates';
 import { ScheduledChime } from './schedules';
 
-export type ChimeTransport = 'sms' | 'email' | 'whatsapp' | string;
+export type ChimeTransport = 'sms' | 'email';
 export type ChimeRecipientType = 'phone' | 'email';
-export type ChimeRecipientTransport = 'sms' | 'email' | string;
+export type ChimeRecipientTransport = 'sms' | 'email';
 
 export interface ChimeRecipientPhone {
   number: string;

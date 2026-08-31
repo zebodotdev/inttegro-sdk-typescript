@@ -30,12 +30,12 @@ export type LineItemType = 'product' | 'fee' | 'shipping';
 /**
  * Mobile money network (extensible)
  */
-export type MobileMoneyIssuer = 'mtn' | 'vodafone' | 'airteltigo' | string;
+export type MobileMoneyIssuer = 'airtel' | 'mtn' | 'telecel' | 'vodafone';
 
 /**
  * Payment method type (extensible)
  */
-export type PaymentMethodType = 'mobile_money' | 'bank_account' | 'card' | 'motito' | string;
+export type PaymentMethodType = 'mobile_money' | 'bank_account' | 'card' | 'motito';
 
 /**
  * Custom data object for key-value pairs
