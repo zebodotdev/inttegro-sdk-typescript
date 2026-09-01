@@ -88,6 +88,16 @@ TypeScript-specific features:
 
 See the [API reference](https://studio.inttegro.com/api-reference) for request fields and lifecycle rules, [errors](https://studio.inttegro.com/errors) for recovery guidance, and [idempotency](https://studio.inttegro.com/idempotency) for safe retries.
 
+## Verify a release
+
+The GitHub release for each version is the canonical record. It contains the exact npm tarball, its file list, SHA-256 checksums, and a Sigstore attestation tied to the source commit and release workflow. The npm package also includes the TypeScript source and source maps.
+
+```bash
+sha256sum --check SHA256SUMS
+gh attestation verify inttegro-typescript-sdk-2.0.0.tgz \
+  --repo zebodotdev/inttegro-sdk-typescript
+```
+
 ## Develop
 
 ```bash
