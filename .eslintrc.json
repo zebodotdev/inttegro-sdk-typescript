@@ -11,6 +11,13 @@
   },
   "rules": {
     "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/no-empty-object-type": [
+      "error",
+      {
+        "allowInterfaces": "with-single-extends",
+        "allowWithName": "^RequestConfirmationResponse$"
+      }
+    ],
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-unused-vars": [
       "error",
@@ -24,4 +31,3 @@
     "es6": true
   }
 }
-
