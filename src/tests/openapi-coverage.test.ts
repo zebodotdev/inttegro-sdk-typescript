@@ -9,6 +9,7 @@ const EXTERNALLY_SUPPLIED_CAPABILITY_URL_PATHS = new Set([
   '/file_links/open',
   '/upload_requests/upload',
 ]);
+const PLATFORM_MANAGED_PATHS = new Set(['/sessions/new']);
 
 interface OpenAPIDocument {
   paths?: Record<string, Record<string, unknown>>;
@@ -31,7 +32,10 @@ describe('OpenAPI coverage', () => {
 
     const sdkPaths = collectSdkResourcePaths();
     const missingPaths = openApiPaths.filter(
-      (path) => !sdkPaths.has(path) && !EXTERNALLY_SUPPLIED_CAPABILITY_URL_PATHS.has(path)
+      (path) =>
+        !sdkPaths.has(path) &&
+        !EXTERNALLY_SUPPLIED_CAPABILITY_URL_PATHS.has(path) &&
+        !PLATFORM_MANAGED_PATHS.has(path)
     );
 
     expect(
@@ -39,7 +43,7 @@ describe('OpenAPI coverage', () => {
       [
         `TypeScript SDK is missing explicit coverage for ${missingPaths.length} OpenAPI path(s) from ${specPath}:`,
         ...missingPaths.map((path) => `  - ${path}`),
-        'Add a resource method with an explicit path literal, or document a true externally supplied capability URL exception.',
+        'Add a resource method with an explicit path literal, or document a true non-SDK path exception.',
       ].join('\n')
     ).toEqual([]);
   });

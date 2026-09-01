@@ -19,6 +19,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Checkout OpenAPI contract
+        uses: actions/checkout@v4
+        with:
+          repository: zebodotdev/openapi
+          ref: master
+          path: openapi
+
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
@@ -35,6 +42,8 @@ jobs:
         run: npm run lint
 
       - name: Run tests
+        env:
+          INTTEGRO_OPENAPI_SPEC: openapi/commerce.yml
         run: npm run test:coverage
 
       - name: Upload coverage to Codecov
