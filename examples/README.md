@@ -1,6 +1,6 @@
-# Zebo Commerce SDK Examples
+# Inttegro TypeScript SDK Examples
 
-This directory contains practical examples demonstrating various features of the Zebo Commerce SDK.
+This directory contains practical examples demonstrating various features of the Inttegro SDK.
 
 ## Running the Examples
 
@@ -18,7 +18,7 @@ Before running any example, make sure you have:
 
 3. Set your API key as an environment variable:
    ```bash
-   export ZEBO_API_KEY=your-api-key
+   export INTTEGRO_API_KEY=your-api-key
    ```
 
 Then run any example using ts-node or tsx:
@@ -38,7 +38,7 @@ npx ts-node examples/basic-order.ts
 **File:** `basic-order.ts`
 
 Demonstrates how to:
-- Initialize the Commerce SDK client
+- Initialize the Inttegro SDK client
 - Create an order with a new customer
 - Add products and fees as line items
 - Specify billing and shipping addresses
@@ -102,12 +102,12 @@ npx tsx examples/error-handling.ts
 
 All examples support the following environment variables:
 
-- `ZEBO_API_KEY` - Your Zebo API key (required)
+- `INTTEGRO_API_KEY` - Your Inttegro API key (required)
 - `ORDER_ID` - Pre-existing order ID for confirmation examples (optional)
 
 ## Example Use Cases
 
-### E-commerce Checkout
+### E-inttegro Checkout
 
 Combine `basic-order.ts` and `mobile-money-payment.ts` to implement a complete checkout flow:
 
@@ -121,7 +121,7 @@ Combine `basic-order.ts` and `mobile-money-payment.ts` to implement a complete c
 Use saved payment methods with existing customers:
 
 ```typescript
-const order = await commerce.orders.create({
+const order = await inttegro.orders.create({
   customer_id: 'cu_existing_123',
   payment_method_id: 'pm_saved_456',
   payout_settings: {
@@ -142,7 +142,7 @@ Poll order status for real-time updates:
 ```typescript
 async function trackOrder(orderId: string) {
   const interval = setInterval(async () => {
-    const order = await commerce.orders.lookup({ order_id: orderId });
+    const order = await inttegro.orders.lookup({ order_id: orderId });
     
     console.log('Status:', order.order.payment_status);
     
@@ -174,4 +174,4 @@ If you encounter any issues with these examples, please:
 1. Check the main [README](../README.md) for setup instructions
 2. Verify your API key is valid and has appropriate permissions
 3. Review the [API documentation](https://studio.inttegro.com)
-4. Open an issue on [GitHub](https://github.com/zebo/commerce-sdk-typescript/issues)
+4. Open an issue on [GitHub](https://github.com/zebodotdev/inttegro-sdk-typescript/issues)

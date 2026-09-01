@@ -3,17 +3,17 @@
  */
 
 import {
-  CommerceConfig,
+  InttegroConfig,
   DEFAULT_CONFIG,
   RequestInterceptor,
   ResponseInterceptor,
   RetryConfig,
 } from './config';
 import {
-  CommerceAPIError,
-  CommerceAuthenticationError,
-  CommerceNetworkError,
-  CommerceRateLimitError,
+  InttegroAPIError,
+  InttegroAuthenticationError,
+  InttegroNetworkError,
+  InttegroRateLimitError,
   APIErrorResponse,
 } from './errors';
 import { Logger } from './utils/logger';
@@ -21,13 +21,13 @@ import { withRetry, isRetryableHttpError } from './utils/retry';
 import { generateIdempotencyKey } from './utils/idempotency';
 
 /**
- * HTTP client for making requests to the Zebo Commerce API
+ * HTTP client for making requests to the Inttegro API
  */
 export class HttpClient {
-  private config: Required<CommerceConfig>;
+  private config: Required<InttegroConfig>;
   private logger: Logger;
 
-  constructor(config: CommerceConfig) {
+  constructor(config: InttegroConfig) {
     this.config = {
       ...DEFAULT_CONFIG,
       ...config,
@@ -42,7 +42,7 @@ export class HttpClient {
   /**
    * Update configuration
    */
-  updateConfig(config: Partial<CommerceConfig>): void {
+  updateConfig(config: Partial<InttegroConfig>): void {
     this.config = {
       ...this.config,
       ...config,
@@ -86,14 +86,14 @@ export class HttpClient {
       clearTimeout(timeoutId);
 
       if (error instanceof Error && error.name === 'AbortError') {
-        throw new CommerceNetworkError(
+        throw new InttegroNetworkError(
           `Request timeout after ${this.config.timeout}ms`,
           error,
           true
         );
       }
 
-      throw new CommerceNetworkError(
+      throw new InttegroNetworkError(
         'Network request failed',
         error instanceof Error ? error : undefined
       );
@@ -156,7 +156,7 @@ export class HttpClient {
 
     // Handle authentication errors
     if (response.status === 401) {
-      throw new CommerceAuthenticationError(
+      throw new InttegroAuthenticationError(
         payload.message || payload.detail || errorData.message || 'Authentication failed',
         response.status,
         payload.code || errorData.code,
@@ -172,7 +172,7 @@ export class HttpClient {
     // Handle rate limiting
     if (response.status === 429) {
       const retryAfter = response.headers.get('retry-after');
-      throw new CommerceRateLimitError(
+      throw new InttegroRateLimitError(
         payload.message || payload.detail || errorData.message || 'Rate limit exceeded',
         response.status,
         retryAfter ? parseInt(retryAfter, 10) : undefined,
@@ -187,7 +187,7 @@ export class HttpClient {
     }
 
     // Handle other errors
-    throw CommerceAPIError.fromResponse(response.status, errorData);
+    throw InttegroAPIError.fromResponse(response.status, errorData);
   }
 
   /**
@@ -201,7 +201,7 @@ export class HttpClient {
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${this.config.apiKey}`,
-      'User-Agent': 'zebo-commerce-sdk-typescript/0.1.0',
+      'User-Agent': 'inttegro-sdk-typescript/2.0.0',
       ...(requestOptionsWithIdempotency.headers as Record<string, string>),
     };
 
@@ -262,7 +262,7 @@ export class HttpClient {
       : options;
     const headers: Record<string, string> = {
       Accept: 'application/json',
-      'User-Agent': 'zebo-commerce-sdk-typescript/0.1.0',
+      'User-Agent': 'inttegro-sdk-typescript/2.0.0',
       ...(authenticated ? { Authorization: `Bearer ${this.config.apiKey}` } : {}),
       ...(requestOptionsWithIdempotency.headers as Record<string, string>),
     };

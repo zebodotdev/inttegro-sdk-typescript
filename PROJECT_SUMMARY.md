@@ -1,15 +1,15 @@
-# Zebo Commerce SDK - Project Summary
+# Inttegro TypeScript SDK - Project Summary
 
 ## ✅ Implementation Complete
 
-This TypeScript SDK for the Zebo Commerce API has been successfully built with production-grade quality.
+This TypeScript SDK for the Inttegro API has been successfully built with production-grade quality.
 
 ## 📦 What's Included
 
 ### Core SDK Components
 
 1. **Main Client** (`src/client.ts`)
-   - `CommerceClient` class - Main SDK entry point
+   - `InttegroClient` class - Main SDK entry point
    - Configuration management
    - Request/response interceptor support
 
@@ -35,11 +35,11 @@ This TypeScript SDK for the Zebo Commerce API has been successfully built with p
    - Full TypeScript IntelliSense support
 
 5. **Error Handling** (`src/errors.ts`)
-   - `CommerceAPIError` - Base error class
-   - `CommerceValidationError` - 4xx validation errors
-   - `CommerceNetworkError` - Network/timeout errors
-   - `CommerceAuthenticationError` - 401 errors
-   - `CommerceRateLimitError` - 429 rate limiting
+   - `InttegroAPIError` - Base error class
+   - `InttegroValidationError` - 4xx validation errors
+   - `InttegroNetworkError` - Network/timeout errors
+   - `InttegroAuthenticationError` - 401 errors
+   - `InttegroRateLimitError` - 429 rate limiting
 
 6. **Utilities** (`src/utils/`)
    - `idempotency.ts` - UUID generation for idempotency keys
@@ -120,7 +120,8 @@ This TypeScript SDK for the Zebo Commerce API has been successfully built with p
 ### Installation
 
 ```bash
-cd /Users/kofi/code/zebo/commerce/sdk-typescript
+git clone https://github.com/zebodotdev/inttegro-sdk-typescript.git
+cd inttegro-sdk-typescript
 npm install
 ```
 
@@ -140,7 +141,7 @@ npm test
 
 ```bash
 # Set your API key
-export ZEBO_API_KEY=your-api-key
+export INTTEGRO_API_KEY=your-api-key
 
 # Run an example
 npx tsx examples/basic-order.ts
@@ -220,8 +221,8 @@ All endpoints support both variants as specified in the requirements.
 
 ## 📦 Package Information
 
-- **Package Name**: `@zebo/commerce-sdk`
-- **Version**: `0.1.0`
+- **Package Name**: `@inttegro/typescript-sdk`
+- **Version**: `2.0.0`
 - **License**: MIT
 - **Node Version**: >=24
 - **Module Formats**: CommonJS, ESM

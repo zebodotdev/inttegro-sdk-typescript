@@ -1,15 +1,15 @@
 /**
- * Zebo Commerce SDK for TypeScript/JavaScript
+ * Inttegro SDK for TypeScript/JavaScript
  *
  * @packageDocumentation
  */
 
 // Main client
-export { CommerceClient } from './client';
+export { InttegroClient } from './client';
 
 // Configuration
 export type {
-  CommerceConfig,
+  InttegroConfig,
   RetryConfig,
   RequestInterceptor,
   ResponseInterceptor,
@@ -17,11 +17,11 @@ export type {
 
 // Error classes
 export {
-  CommerceAPIError,
-  CommerceValidationError,
-  CommerceNetworkError,
-  CommerceAuthenticationError,
-  CommerceRateLimitError,
+  InttegroAPIError,
+  InttegroValidationError,
+  InttegroNetworkError,
+  InttegroAuthenticationError,
+  InttegroRateLimitError,
 } from './errors';
 export type { APIErrorResponse } from './errors';
 

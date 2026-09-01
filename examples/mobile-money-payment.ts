@@ -4,19 +4,19 @@
  * This example demonstrates how to create an order and pay with mobile money.
  */
 
-import { CommerceClient } from '../src';
+import { InttegroClient } from '../src';
 
 async function main() {
   // Initialize the SDK
-  const commerce = new CommerceClient({
-    apiKey: process.env.ZEBO_API_KEY || 'your-api-key',
+  const inttegro = new InttegroClient({
+    apiKey: process.env.INTTEGRO_API_KEY || 'your-api-key',
     debug: true,
   });
 
   try {
     // Step 1: Create an order
     console.log('Creating order...');
-    const order = await commerce.orders.create({
+    const order = await inttegro.orders.create({
       customer_data: {
         name: 'Jane Smith',
         email_address: 'jane@example.com',
@@ -55,7 +55,7 @@ async function main() {
 
     // Step 2: Pay with mobile money
     console.log('\nProcessing mobile money payment...');
-    const payment = await commerce.orders.pay({
+    const payment = await inttegro.orders.pay({
       order_id: order.order.id,
       payment_method_data: {
         type: 'mobile_money',
@@ -81,7 +81,7 @@ async function main() {
 
       // Example (with mock OTP):
       // const otp = await promptUserForOTP();
-      // const confirmation = await commerce.orders.confirmPayment({
+      // const confirmation = await inttegro.orders.confirmPayment({
       //   order_id: order.order.id,
       //   token: otp,
       // });
@@ -94,7 +94,7 @@ async function main() {
     }
 
     // Step 3: Check final order status
-    const finalOrder = await commerce.orders.lookup({
+    const finalOrder = await inttegro.orders.lookup({
       order_id: order.order.id,
     });
 

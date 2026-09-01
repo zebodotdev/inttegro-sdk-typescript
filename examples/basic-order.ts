@@ -4,18 +4,18 @@
  * This example demonstrates how to create a simple order with a new customer.
  */
 
-import { CommerceClient } from '../src';
+import { InttegroClient } from '../src';
 
 async function main() {
   // Initialize the SDK
-  const commerce = new CommerceClient({
-    apiKey: process.env.ZEBO_API_KEY || 'your-api-key',
+  const inttegro = new InttegroClient({
+    apiKey: process.env.INTTEGRO_API_KEY || 'your-api-key',
     debug: true, // Enable debug logging
   });
 
   try {
     // Create a new order
-    const result = await commerce.orders.create({
+    const result = await inttegro.orders.create({
       customer_data: {
         name: 'John Doe',
         email_address: 'john@example.com',
@@ -99,7 +99,7 @@ async function main() {
     }
 
     // Lookup the order to verify
-    const orderDetails = await commerce.orders.lookup({
+    const orderDetails = await inttegro.orders.lookup({
       order_id: result.order.id,
     });
 

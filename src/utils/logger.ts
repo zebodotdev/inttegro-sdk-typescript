@@ -15,19 +15,19 @@ export class Logger {
 
   debug(message: string, ...args: unknown[]): void {
     if (this.enabled) {
-      console.log(`[Zebo Commerce SDK] ${message}`, ...args);
+      console.log(`[Inttegro SDK] ${message}`, ...args);
     }
   }
 
   error(message: string, ...args: unknown[]): void {
     if (this.enabled) {
-      console.error(`[Zebo Commerce SDK] ${message}`, ...args);
+      console.error(`[Inttegro SDK] ${message}`, ...args);
     }
   }
 
   warn(message: string, ...args: unknown[]): void {
     if (this.enabled) {
-      console.warn(`[Zebo Commerce SDK] ${message}`, ...args);
+      console.warn(`[Inttegro SDK] ${message}`, ...args);
     }
   }
 }

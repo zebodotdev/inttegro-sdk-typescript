@@ -11,6 +11,8 @@ import {
   RequestConfirmationResponse,
   ChimeResponse,
   CreateFinancialAccountResponse,
+  OrderPaymentStatuses,
+  OrderStatuses,
 } from '../types';
 
 /**
@@ -19,8 +21,8 @@ import {
 export const mockOrder: Order = {
   id: 'or_test_123456789',
   number: 'ORD-001',
-  status: 'processing',
-  payment_status: 'pending',
+  status: OrderStatuses.Preparing,
+  payment_status: OrderPaymentStatuses.Initiated,
   customer_id: 'cu_test_123',
   line_items: [
     {
@@ -86,7 +88,7 @@ export const mockCreateOrderResponse: CreateOrderResponse = {
 export const mockLookupOrderResponse: LookupOrderResponse = {
   order: {
     ...mockOrder,
-    payment_status: 'succeeded',
+    payment_status: OrderPaymentStatuses.Paid,
     paid_at: '2024-01-01T00:05:00Z',
   },
 };
@@ -108,7 +110,7 @@ export const mockPayOrderResponse: PayOrderResponse = {
 export const mockConfirmPaymentResponse: ConfirmPaymentResponse = {
   order: {
     ...mockOrder,
-    payment_status: 'succeeded',
+    payment_status: OrderPaymentStatuses.Paid,
     paid_at: '2024-01-01T00:05:00Z',
   },
 };

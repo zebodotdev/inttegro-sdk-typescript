@@ -18,7 +18,7 @@ describe('OpenAPI coverage', () => {
   it('has explicit SDK coverage for every public OpenAPI path', () => {
     const specPath = resolve(
       process.cwd(),
-      process.env.COMMERCE_OPENAPI_SPEC || '../../openapi/commerce.yml'
+      process.env.INTTEGRO_OPENAPI_SPEC || '../../openapi/commerce.yml'
     );
 
     expect(existsSync(specPath), `OpenAPI spec was not found at ${specPath}`).toBe(true);

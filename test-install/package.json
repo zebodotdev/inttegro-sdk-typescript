@@ -13,6 +13,6 @@
     "node": ">=24"
   },
   "dependencies": {
-    "@preciousewusi/commerce-sdk-typescript": "^0.1.0"
+    "@inttegro/typescript-sdk": "file:.."
   }
 }

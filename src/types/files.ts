@@ -107,9 +107,4 @@ export interface UploadRequestFulfillRequest {
 export type UploadRequestResponse = Record<string, unknown>;
 export type UploadRequestPageResponse = Record<string, unknown>;
 export type UploadRequestFulfillResponse = Record<string, unknown>;
-import type {
-  FileDisposition,
-  FileLinkStatus,
-  FileStatus,
-  UploadRequestStatus,
-} from './api-enums';
+import type { FileDisposition, FileLinkStatus, FileStatus, UploadRequestStatus } from './api-enums';

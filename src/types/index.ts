@@ -1,5 +1,5 @@
 /**
- * Type definitions for the Zebo Commerce SDK
+ * Type definitions for the Inttegro SDK
  */
 
 // Common types

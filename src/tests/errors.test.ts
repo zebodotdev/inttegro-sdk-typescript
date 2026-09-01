@@ -4,17 +4,17 @@
 
 import { describe, it, expect } from 'vitest';
 import {
-  CommerceAPIError,
-  CommerceValidationError,
-  CommerceNetworkError,
-  CommerceAuthenticationError,
-  CommerceRateLimitError,
+  InttegroAPIError,
+  InttegroValidationError,
+  InttegroNetworkError,
+  InttegroAuthenticationError,
+  InttegroRateLimitError,
 } from '../errors';
 
 describe('Errors', () => {
-  describe('CommerceAPIError', () => {
+  describe('InttegroAPIError', () => {
     it('should create an error with all parameters', () => {
-      const error = new CommerceAPIError(
+      const error = new InttegroAPIError(
         'Test error',
         400,
         'test_code',
@@ -33,11 +33,11 @@ describe('Errors', () => {
       expect(error.detail).toBe('More details');
       expect(error.fixCode).toBe('change_request_parameters');
       expect(error.cause).toBe('validation_failure');
-      expect(error.name).toBe('CommerceAPIError');
+      expect(error.name).toBe('InttegroAPIError');
     });
 
     it('should create error from response - validation error', () => {
-      const error = CommerceAPIError.fromResponse(400, {
+      const error = InttegroAPIError.fromResponse(400, {
         error: {
           message: 'Invalid payment method',
           code: 'invalid_payment_method',
@@ -49,71 +49,71 @@ describe('Errors', () => {
         },
       });
 
-      expect(error).toBeInstanceOf(CommerceValidationError);
+      expect(error).toBeInstanceOf(InttegroValidationError);
       expect(error.message).toBe('Invalid payment method');
       expect(error.code).toBe('invalid_payment_method');
       expect(error.statusCode).toBe(400);
     });
 
     it('should create error from response - server error', () => {
-      const error = CommerceAPIError.fromResponse(500, {
+      const error = InttegroAPIError.fromResponse(500, {
         message: 'Internal server error',
       });
 
-      expect(error).toBeInstanceOf(CommerceAPIError);
+      expect(error).toBeInstanceOf(InttegroAPIError);
       expect(error.message).toBe('Internal server error');
       expect(error.statusCode).toBe(500);
     });
   });
 
-  describe('CommerceValidationError', () => {
+  describe('InttegroValidationError', () => {
     it('should create a validation error', () => {
-      const error = new CommerceValidationError('Validation failed', 422);
+      const error = new InttegroValidationError('Validation failed', 422);
 
       expect(error.message).toBe('Validation failed');
       expect(error.statusCode).toBe(422);
-      expect(error.name).toBe('CommerceValidationError');
+      expect(error.name).toBe('InttegroValidationError');
     });
   });
 
-  describe('CommerceNetworkError', () => {
+  describe('InttegroNetworkError', () => {
     it('should create a network error', () => {
       const cause = new Error('Connection failed');
-      const error = new CommerceNetworkError('Network error', cause);
+      const error = new InttegroNetworkError('Network error', cause);
 
       expect(error.message).toBe('Network error');
       expect(error.cause).toBe(cause);
       expect(error.isTimeout).toBe(false);
-      expect(error.name).toBe('CommerceNetworkError');
+      expect(error.name).toBe('InttegroNetworkError');
     });
 
     it('should create a timeout error', () => {
-      const error = new CommerceNetworkError('Request timeout', undefined, true);
+      const error = new InttegroNetworkError('Request timeout', undefined, true);
 
       expect(error.message).toBe('Request timeout');
       expect(error.isTimeout).toBe(true);
     });
   });
 
-  describe('CommerceAuthenticationError', () => {
+  describe('InttegroAuthenticationError', () => {
     it('should create an authentication error', () => {
-      const error = new CommerceAuthenticationError('Invalid API key');
+      const error = new InttegroAuthenticationError('Invalid API key');
 
       expect(error.message).toBe('Invalid API key');
       expect(error.statusCode).toBe(401);
       expect(error.type).toBe('authentication_error');
-      expect(error.name).toBe('CommerceAuthenticationError');
+      expect(error.name).toBe('InttegroAuthenticationError');
     });
   });
 
-  describe('CommerceRateLimitError', () => {
+  describe('InttegroRateLimitError', () => {
     it('should create a rate limit error', () => {
-      const error = new CommerceRateLimitError('Rate limit exceeded', 429, 60);
+      const error = new InttegroRateLimitError('Rate limit exceeded', 429, 60);
 
       expect(error.message).toBe('Rate limit exceeded');
       expect(error.statusCode).toBe(429);
       expect(error.retryAfter).toBe(60);
-      expect(error.name).toBe('CommerceRateLimitError');
+      expect(error.name).toBe('InttegroRateLimitError');
     });
   });
 });

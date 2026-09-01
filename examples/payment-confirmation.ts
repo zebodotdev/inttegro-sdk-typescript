@@ -5,7 +5,7 @@
  * OTP verification and resending confirmation codes.
  */
 
-import { CommerceClient } from '../src';
+import { InttegroClient } from '../src';
 import * as readline from 'readline';
 
 // Helper function to prompt for user input
@@ -25,8 +25,8 @@ function prompt(question: string): Promise<string> {
 
 async function main() {
   // Initialize the SDK
-  const commerce = new CommerceClient({
-    apiKey: process.env.ZEBO_API_KEY || 'your-api-key',
+  const inttegro = new InttegroClient({
+    apiKey: process.env.INTTEGRO_API_KEY || 'your-api-key',
     debug: true,
   });
 
@@ -39,7 +39,7 @@ async function main() {
 
     // Step 1: Request confirmation code
     console.log('\nRequesting confirmation code...');
-    const requestResult = await commerce.orders.requestConfirmation({
+    const requestResult = await inttegro.orders.requestConfirmation({
       order_id: orderId,
     });
 
@@ -51,7 +51,7 @@ async function main() {
 
     // Step 3: Confirm payment with OTP
     console.log('\nConfirming payment...');
-    const confirmResult = await commerce.orders.confirmPayment({
+    const confirmResult = await inttegro.orders.confirmPayment({
       order_id: orderId,
       token: otp.trim(),
     });
@@ -74,7 +74,7 @@ async function main() {
       const resend = await prompt('\nWould you like to resend the confirmation code? (y/n): ');
 
       if (resend.toLowerCase() === 'y') {
-        const resendResult = await commerce.orders.requestConfirmation({
+        const resendResult = await inttegro.orders.requestConfirmation({
           order_id: orderId,
         });
         console.log('✅', resendResult.message);

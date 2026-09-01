@@ -1,8 +1,8 @@
 /**
- * Main Commerce SDK client
+ * Main Inttegro SDK client
  */
 
-import { CommerceConfig, RequestInterceptor, ResponseInterceptor } from './config';
+import { InttegroConfig, RequestInterceptor, ResponseInterceptor } from './config';
 import { HttpClient } from './http-client';
 import { Chimes } from './resources/chimes';
 import { Balances } from './resources/balances';
@@ -28,13 +28,13 @@ import { PurchaseIntents } from './resources/purchase-intents';
 import { FileReferences } from './resources/file-references';
 
 /**
- * Main Commerce SDK client
+ * Main Inttegro SDK client
  *
  * @example
  * ```typescript
- * import { CommerceClient } from '@zebo/commerce-sdk';
+ * import { InttegroClient } from '@inttegro/typescript-sdk';
  *
- * const commerce = new CommerceClient({
+ * const inttegro = new InttegroClient({
  *   apiKey: 'your-api-key',
  *   baseUrl: 'https://api.inttegro.com', // optional
  *   timeout: 30000, // optional
@@ -42,10 +42,10 @@ import { FileReferences } from './resources/file-references';
  * });
  *
  * // Use the orders resource
- * const order = await commerce.orders.create({ ... });
+ * const order = await inttegro.orders.create({ ... });
  * ```
  */
-export class CommerceClient {
+export class InttegroClient {
   private httpClient: HttpClient;
 
   /** Orders resource for managing orders */
@@ -94,12 +94,12 @@ export class CommerceClient {
   public readonly fileReferences: FileReferences;
 
   /**
-   * Create a new Commerce SDK client
+   * Create a new Inttegro SDK client
    *
    * @param config - Configuration options
    * @throws {Error} If API key is not provided
    */
-  constructor(config: CommerceConfig) {
+  constructor(config: InttegroConfig) {
     if (!config.apiKey) {
       throw new Error('API key is required. Please provide an apiKey in the config.');
     }
@@ -136,13 +136,13 @@ export class CommerceClient {
    *
    * @example
    * ```typescript
-   * commerce.updateConfig({
+   * inttegro.updateConfig({
    *   timeout: 60000,
    *   debug: true,
    * });
    * ```
    */
-  updateConfig(config: Partial<CommerceConfig>): void {
+  updateConfig(config: Partial<InttegroConfig>): void {
     this.httpClient.updateConfig(config);
   }
 
@@ -155,7 +155,7 @@ export class CommerceClient {
    *
    * @example
    * ```typescript
-   * commerce.addRequestInterceptor(async (url, options) => {
+   * inttegro.addRequestInterceptor(async (url, options) => {
    *   // Add custom header
    *   options.headers = {
    *     ...options.headers,
@@ -178,7 +178,7 @@ export class CommerceClient {
    *
    * @example
    * ```typescript
-   * commerce.addResponseInterceptor(async (response) => {
+   * inttegro.addResponseInterceptor(async (response) => {
    *   // Log response status
    *   console.log('Response status:', response.status);
    *   return response;

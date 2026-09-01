@@ -5,18 +5,18 @@
  */
 
 import {
-  CommerceClient,
-  CommerceAPIError,
-  CommerceValidationError,
-  CommerceNetworkError,
-  CommerceAuthenticationError,
-  CommerceRateLimitError,
+  InttegroClient,
+  InttegroAPIError,
+  InttegroValidationError,
+  InttegroNetworkError,
+  InttegroAuthenticationError,
+  InttegroRateLimitError,
 } from '../src';
 
 async function main() {
   // Initialize with potentially invalid API key
-  const commerce = new CommerceClient({
-    apiKey: process.env.ZEBO_API_KEY || 'invalid-key',
+  const inttegro = new InttegroClient({
+    apiKey: process.env.INTTEGRO_API_KEY || 'invalid-key',
     timeout: 5000, // Short timeout for testing
     debug: true,
   });
@@ -24,12 +24,12 @@ async function main() {
   // Example 1: Handling validation errors
   console.log('Example 1: Validation Error');
   try {
-    await commerce.orders.create({
+    await inttegro.orders.create({
       // Missing required fields - will throw validation error
       line_items: [],
     } as any);
   } catch (error) {
-    if (error instanceof CommerceValidationError) {
+    if (error instanceof InttegroValidationError) {
       console.error('❌ Validation Error:');
       console.error('  Message:', error.message);
       console.error('  Status Code:', error.statusCode);
@@ -46,16 +46,16 @@ async function main() {
   // Example 2: Handling authentication errors
   console.log('\n\nExample 2: Authentication Error');
   try {
-    await commerce.orders.lookup({
+    await inttegro.orders.lookup({
       order_id: 'or_123',
     });
   } catch (error) {
-    if (error instanceof CommerceAuthenticationError) {
+    if (error instanceof InttegroAuthenticationError) {
       console.error('❌ Authentication Error:');
       console.error('  Message:', error.message);
       console.error('  Status Code:', error.statusCode);
       console.error('  💡 Tip: Check your API key in the configuration');
-    } else if (error instanceof CommerceAPIError) {
+    } else if (error instanceof InttegroAPIError) {
       console.error('❌ API Error:', error.message);
     } else {
       console.error('Unexpected error:', error);
@@ -67,11 +67,11 @@ async function main() {
   try {
     // Make multiple rapid requests to trigger rate limiting
     const requests = Array.from({ length: 100 }, (_, i) =>
-      commerce.orders.lookup({ order_id: `or_${i}` })
+      inttegro.orders.lookup({ order_id: `or_${i}` })
     );
     await Promise.all(requests);
   } catch (error) {
-    if (error instanceof CommerceRateLimitError) {
+    if (error instanceof InttegroRateLimitError) {
       console.error('❌ Rate Limit Error:');
       console.error('  Message:', error.message);
       console.error('  Retry After:', error.retryAfter, 'seconds');
@@ -81,7 +81,7 @@ async function main() {
         console.log(`  Waiting ${error.retryAfter} seconds before retrying...`);
         // In a real app, you'd actually wait and retry
       }
-    } else if (error instanceof CommerceAPIError) {
+    } else if (error instanceof InttegroAPIError) {
       console.error('❌ API Error:', error.message);
     } else {
       console.error('Unexpected error:', error);
@@ -90,18 +90,18 @@ async function main() {
 
   // Example 4: Handling network errors
   console.log('\n\nExample 4: Network Error');
-  const slowCommerce = new CommerceClient({
+  const slowInttegro = new InttegroClient({
     apiKey: 'test-key',
     baseUrl: 'https://nonexistent-api.example.com',
     timeout: 1000, // Very short timeout
   });
 
   try {
-    await slowCommerce.orders.lookup({
+    await slowInttegro.orders.lookup({
       order_id: 'or_123',
     });
   } catch (error) {
-    if (error instanceof CommerceNetworkError) {
+    if (error instanceof InttegroNetworkError) {
       console.error('❌ Network Error:');
       console.error('  Message:', error.message);
       console.error('  Is Timeout:', error.isTimeout);
@@ -116,7 +116,7 @@ async function main() {
   console.log('\n\nExample 5: Generic Error Handling Pattern');
   async function safeOrderCreate() {
     try {
-      return await commerce.orders.create({
+      return await inttegro.orders.create({
         customer_data: {
           name: 'Test User',
           email_address: 'test@example.com',
@@ -149,19 +149,19 @@ async function main() {
       });
     } catch (error) {
       // Comprehensive error handling
-      if (error instanceof CommerceValidationError) {
+      if (error instanceof InttegroValidationError) {
         console.error('Validation failed:', error.message);
         // Handle validation errors (e.g., show user-friendly message)
-      } else if (error instanceof CommerceAuthenticationError) {
+      } else if (error instanceof InttegroAuthenticationError) {
         console.error('Authentication failed - check API key');
         // Handle auth errors (e.g., redirect to login)
-      } else if (error instanceof CommerceRateLimitError) {
+      } else if (error instanceof InttegroRateLimitError) {
         console.error('Rate limited - retry after', error.retryAfter, 'seconds');
         // Handle rate limiting (e.g., queue request for later)
-      } else if (error instanceof CommerceNetworkError) {
+      } else if (error instanceof InttegroNetworkError) {
         console.error('Network error:', error.message);
         // Handle network errors (e.g., show offline message)
-      } else if (error instanceof CommerceAPIError) {
+      } else if (error instanceof InttegroAPIError) {
         console.error('API error:', error.statusCode, error.message);
         // Handle general API errors
       } else {

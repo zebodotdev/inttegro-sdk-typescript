@@ -1,6 +1,6 @@
-# Contributing to Zebo Commerce SDK
+# Contributing to the Inttegro TypeScript SDK
 
-Thank you for your interest in contributing to the Zebo Commerce SDK! This document provides guidelines and instructions for contributing.
+Thank you for your interest in contributing to the Inttegro TypeScript SDK! This document provides guidelines and instructions for contributing.
 
 ## Code of Conduct
 
@@ -18,8 +18,8 @@ By participating in this project, you agree to maintain a respectful and inclusi
 1. Fork the repository on GitHub
 2. Clone your fork locally:
    ```bash
-   git clone https://github.com/your-username/commerce-sdk-typescript.git
-   cd commerce-sdk-typescript
+   git clone https://github.com/zebodotdev/inttegro-sdk-typescript.git
+   cd inttegro-sdk-typescript
    ```
 
 3. Install dependencies:
@@ -217,11 +217,11 @@ Example:
  *
  * @param request - Order creation request
  * @returns Created order details
- * @throws {CommerceValidationError} If request parameters are invalid
+ * @throws {InttegroValidationError} If request parameters are invalid
  *
  * @example
  * ```typescript
- * const order = await commerce.orders.create({
+ * const order = await inttegro.orders.create({
  *   customer_data: { ... },
  *   line_items: [ ... ],
  * });
@@ -284,4 +284,4 @@ By contributing to this project, you agree that your contributions will be licen
 
 ## Thank You!
 
-Thank you for contributing to the Zebo Commerce SDK! Your contributions help make this project better for everyone.
+Thank you for contributing to the Inttegro TypeScript SDK! Your contributions help make this project better for everyone.

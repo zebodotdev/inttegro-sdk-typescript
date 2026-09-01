@@ -457,7 +457,12 @@ export interface Payment {
   failed_at?: string;
 }
 
-export type PaymentNextActionType = 'confirm_payment' | 'execute' | 'redirect' | 'authorize' | 'none';
+export type PaymentNextActionType =
+  | 'confirm_payment'
+  | 'execute'
+  | 'redirect'
+  | 'authorize'
+  | 'none';
 
 export interface PaymentNextAction {
   type: PaymentNextActionType;

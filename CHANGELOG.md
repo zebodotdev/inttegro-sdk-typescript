@@ -5,12 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2026-09-01
+
+### Changed
+
+- **Breaking:** renamed the package to `@inttegro/typescript-sdk`.
+- **Breaking:** renamed `InttegroClient`, configuration types, and all SDK-prefixed errors from their former service name to `Inttegro*`.
+- Updated runtime metadata, examples, documentation, and repository links to Inttegro.
+
 ## [0.1.0] - 2024-01-01
 
 ### Added
 
-- Initial release of the Zebo Commerce SDK for TypeScript
-- CommerceClient class for SDK initialization
+- Initial release of the Inttegro SDK for TypeScript
+- InttegroClient class for SDK initialization
 - Orders resource with full CRUD operations:
   - `create()` - Create new orders
   - `lookup()` - Retrieve order details
@@ -19,11 +27,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `requestConfirmation()` - Request new confirmation codes
 - Comprehensive TypeScript type definitions
 - Custom error classes:
-  - `CommerceAPIError` - Base API error
-  - `CommerceValidationError` - Validation errors
-  - `CommerceNetworkError` - Network/timeout errors
-  - `CommerceAuthenticationError` - Auth errors
-  - `CommerceRateLimitError` - Rate limiting errors
+  - `InttegroAPIError` - Base API error
+  - `InttegroValidationError` - Validation errors
+  - `InttegroNetworkError` - Network/timeout errors
+  - `InttegroAuthenticationError` - Auth errors
+  - `InttegroRateLimitError` - Rate limiting errors
 - HTTP client with:
   - Automatic retry logic with exponential backoff
   - Request/response interceptors
@@ -43,5 +51,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 🧪 Thoroughly tested
 - 📝 JSDoc documentation throughout
 
-[0.1.0]: https://github.com/zebo/commerce-sdk-typescript/releases/tag/v0.1.0
-
+[2.0.0]: https://github.com/zebodotdev/inttegro-sdk-typescript/releases/tag/v2.0.0
+[0.1.0]: https://github.com/zebodotdev/inttegro-sdk-typescript/releases/tag/v0.1.0

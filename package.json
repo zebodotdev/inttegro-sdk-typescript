@@ -1,7 +1,7 @@
 {
-  "name": "@zebo-commerce/typescript-sdk",
-  "version": "1-preview.0",
-  "description": "Official TypeScript SDK for the Zebo Commerce API",
+  "name": "@inttegro/typescript-sdk",
+  "version": "2.0.0",
+  "description": "Official TypeScript SDK for the Inttegro API",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -31,9 +31,8 @@
     "prepublishOnly": "npm run build"
   },
   "keywords": [
-    "zebo",
     "api",
-    "commerce",
+    "inttegro",
     "communications",
     "marketing",
     "payments",
@@ -41,16 +40,16 @@
     "typescript",
     "mobile-money"
   ],
-  "author": "Zebo Eng <engineering@inttegro.com>",
+  "author": "Inttegro Eng <engineering@inttegro.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/zebodotdev/commerce-sdk-typescript.git"
+    "url": "https://github.com/zebodotdev/inttegro-sdk-typescript.git"
   },
   "bugs": {
-    "url": "https://github.com/zebodotdev/commerce-sdk-typescript/issues"
+    "url": "https://github.com/zebodotdev/inttegro-sdk-typescript/issues"
   },
-  "homepage": "https://github.com/zebodotdev/commerce-sdk-typescript#readme",
+  "homepage": "https://github.com/zebodotdev/inttegro-sdk-typescript#readme",
   "devDependencies": {
     "@types/node": "^20.10.0",
     "@typescript-eslint/eslint-plugin": "^6.13.0",

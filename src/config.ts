@@ -1,5 +1,5 @@
 /**
- * Configuration options for the Commerce SDK
+ * Configuration options for the Inttegro SDK
  */
 
 /**
@@ -32,7 +32,7 @@ export type ResponseInterceptor = (response: Response) => Promise<Response> | Re
 /**
  * SDK Configuration
  */
-export interface CommerceConfig {
+export interface InttegroConfig {
   /** API key for authentication (required) */
   apiKey: string;
   /** Base URL for the API (default: https://api.inttegro.com) */
@@ -52,7 +52,7 @@ export interface CommerceConfig {
 /**
  * Default configuration values
  */
-export const DEFAULT_CONFIG: Required<Omit<CommerceConfig, 'apiKey'>> = {
+export const DEFAULT_CONFIG: Required<Omit<InttegroConfig, 'apiKey'>> = {
   baseUrl: 'https://api.inttegro.com',
   timeout: 30000,
   retry: {

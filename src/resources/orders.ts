@@ -6,10 +6,10 @@
  *
  * @example
  * ```typescript
- * const commerce = new Commerce(process.env.COMMERCE_API_KEY!);
+ * const inttegro = new Inttegro(process.env.INTTEGRO_API_KEY!);
  *
  * // Create order with new customer and payment method
- * const order = await commerce.orders.create({
+ * const order = await inttegro.orders.create({
  *   customer_data: {
  *     name: 'Gloria Kesewaa',
  *     email_address: 'gloria@example.com',
@@ -106,7 +106,7 @@ export class Orders {
    * @example
    * ```typescript
    * // Create order with new customer and execute payment
-   * const result = await commerce.orders.create({
+   * const result = await inttegro.orders.create({
    *   request_meta: {
    *     idempotency_key: 'order_2025_001',
    *   },
@@ -145,7 +145,7 @@ export class Orders {
    * @example
    * ```typescript
    * // Create order with existing customer for later payment
-   * const result = await commerce.orders.create({
+   * const result = await inttegro.orders.create({
    *   customer_id: 'cu_abc123',
    *   line_items: [{
    *     type: 'product',
@@ -198,7 +198,7 @@ export class Orders {
    *
    * @example
    * ```typescript
-   * const result = await commerce.orders.lookup({
+   * const result = await inttegro.orders.lookup({
    *   order_id: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
    * });
    *
@@ -242,7 +242,7 @@ export class Orders {
    * @param request.order_id - Unique identifier of the order to pay (required)
    * @param request.payment_method_data - Inline payment method details (mobile money, card, bank, etc.)
    * @param request.payment_method_id - ID of a saved payment method to use
-   * @param request.paid_out_of_band - Set to true if payment was received outside Commerce (default: false)
+   * @param request.paid_out_of_band - Set to true if payment was received outside Inttegro (default: false)
    * @param request.request_meta - Request controls such as `idempotency_key`
    *
    * @returns Payment response with order and payment state, plus optional `next_action` if confirmation needed
@@ -252,7 +252,7 @@ export class Orders {
    * @example
    * ```typescript
    * // Pay with inline mobile money
-   * const result = await commerce.orders.pay({
+   * const result = await inttegro.orders.pay({
    *   order_id: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
    *   payment_method_data: {
    *     type: 'mobile_money',
@@ -266,7 +266,7 @@ export class Orders {
    * if (result.order.payment?.next_action?.type === 'confirm_payment') {
    *   // Customer needs to provide OTP sent to their phone
    *   const token = await promptCustomerForOTP();
-   *   await commerce.orders.confirmPayment({
+   *   await inttegro.orders.confirmPayment({
    *     order_id: result.order.id,
    *     token,
    *   });
@@ -276,7 +276,7 @@ export class Orders {
    * @example
    * ```typescript
    * // Pay with saved payment method
-   * const result = await commerce.orders.pay({
+   * const result = await inttegro.orders.pay({
    *   order_id: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
    *   payment_method_id: 'pm_xyz123abc456',
    *   request_meta: {
@@ -288,7 +288,7 @@ export class Orders {
    * @example
    * ```typescript
    * // Mark as paid offline (cash, bank transfer, etc.)
-   * const result = await commerce.orders.pay({
+   * const result = await inttegro.orders.pay({
    *   order_id: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
    *   paid_out_of_band: true,
    * });
@@ -323,7 +323,7 @@ export class Orders {
    * @example
    * ```typescript
    * // After receiving OTP from customer
-   * const result = await commerce.orders.confirmPayment({
+   * const result = await inttegro.orders.confirmPayment({
    *   order_id: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
    *   token: '123456',
    * });
@@ -363,7 +363,7 @@ export class Orders {
    * @example
    * ```typescript
    * // Resend OTP to customer
-   * const result = await commerce.orders.requestConfirmation({
+   * const result = await inttegro.orders.requestConfirmation({
    *   order_id: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
    * });
    *
@@ -402,7 +402,7 @@ export class Orders {
    *
    * @example
    * ```typescript
-   * const result = await commerce.orders.finalize({
+   * const result = await inttegro.orders.finalize({
    *   order_id: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
    * });
    *
@@ -421,7 +421,7 @@ export class Orders {
   /**
    * Send the hosted invoice link for an existing order to the customer.
    *
-   * Commerce delivers the invoice link to every contact method available on the order customer.
+   * Inttegro delivers the invoice link to every contact method available on the order customer.
    *
    * @param request - Send invoice parameters
    * @param request.order_id - Unique identifier of the order whose invoice should be sent (required)
@@ -440,7 +440,7 @@ export class Orders {
   /**
    * Send the hosted receipt link for a paid order to the customer.
    *
-   * Commerce delivers receipts only after the order has been paid.
+   * Inttegro delivers receipts only after the order has been paid.
    *
    * @param request - Send receipt parameters
    * @param request.order_id - Unique identifier of the paid order whose receipt should be sent (required)
@@ -465,7 +465,7 @@ export class Orders {
    *
    * @param request - Completion parameters
    * @param request.order_id - Unique identifier of the order to complete (required)
-   * @param request.paid_out_of_band - Set to true if payment was received outside Commerce (default: false)
+   * @param request.paid_out_of_band - Set to true if payment was received outside Inttegro (default: false)
    *
    * @returns Completed order object
    *
@@ -474,7 +474,7 @@ export class Orders {
    * @example
    * ```typescript
    * // Complete order after fulfillment
-   * const result = await commerce.orders.complete({
+   * const result = await inttegro.orders.complete({
    *   order_id: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
    * });
    *
@@ -484,7 +484,7 @@ export class Orders {
    * @example
    * ```typescript
    * // Complete order with offline payment
-   * const result = await commerce.orders.complete({
+   * const result = await inttegro.orders.complete({
    *   order_id: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
    *   paid_out_of_band: true,
    * });
@@ -515,7 +515,7 @@ export class Orders {
    *
    * @example
    * ```typescript
-   * const result = await commerce.orders.cancel({
+   * const result = await inttegro.orders.cancel({
    *   order_id: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
    * });
    *
@@ -546,7 +546,7 @@ export class Orders {
    *
    * @example
    * ```typescript
-   * const result = await commerce.orders.refund({
+   * const result = await inttegro.orders.refund({
    *   order_id: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
    * });
    *
@@ -582,7 +582,7 @@ export class Orders {
    * @example
    * ```typescript
    * // Get first page of orders
-   * const result = await commerce.orders.page({
+   * const result = await inttegro.orders.page({
    *   per_page: 25,
    *   page: 1,
    * });
@@ -592,7 +592,7 @@ export class Orders {
    *
    * // Get next page if available
    * if (result.has_more) {
-   *   const nextPage = await commerce.orders.page({
+   *   const nextPage = await inttegro.orders.page({
    *     per_page: 25,
    *     page: 2,
    *   });
@@ -602,7 +602,7 @@ export class Orders {
    * @example
    * ```typescript
    * // Filter by status
-   * const paidOrders = await commerce.orders.page({
+   * const paidOrders = await inttegro.orders.page({
    *   status: 'paid',
    *   per_page: 50,
    * });

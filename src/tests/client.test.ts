@@ -1,14 +1,14 @@
 /**
- * Tests for CommerceClient
+ * Tests for InttegroClient
  */
 
 import { describe, it, expect, beforeEach } from 'vitest';
-import { CommerceClient } from '../client';
+import { InttegroClient } from '../client';
 
-describe('CommerceClient', () => {
+describe('InttegroClient', () => {
   describe('constructor', () => {
     it('should create a client with valid config', () => {
-      const client = new CommerceClient({
+      const client = new InttegroClient({
         apiKey: 'test_key',
       });
 
@@ -22,14 +22,14 @@ describe('CommerceClient', () => {
 
     it('should throw error when API key is missing', () => {
       expect(() => {
-        new CommerceClient({
+        new InttegroClient({
           apiKey: '',
         });
       }).toThrow('API key is required');
     });
 
     it('should accept custom configuration', () => {
-      const client = new CommerceClient({
+      const client = new InttegroClient({
         apiKey: 'test_key',
         baseUrl: 'https://custom.api.com',
         timeout: 60000,
@@ -41,10 +41,10 @@ describe('CommerceClient', () => {
   });
 
   describe('updateConfig', () => {
-    let client: CommerceClient;
+    let client: InttegroClient;
 
     beforeEach(() => {
-      client = new CommerceClient({
+      client = new InttegroClient({
         apiKey: 'test_key',
       });
     });
@@ -60,10 +60,10 @@ describe('CommerceClient', () => {
   });
 
   describe('interceptors', () => {
-    let client: CommerceClient;
+    let client: InttegroClient;
 
     beforeEach(() => {
-      client = new CommerceClient({
+      client = new InttegroClient({
         apiKey: 'test_key',
       });
     });

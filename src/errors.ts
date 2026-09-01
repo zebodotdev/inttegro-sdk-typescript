@@ -1,5 +1,5 @@
 /**
- * Custom error classes for the Zebo Commerce SDK
+ * Custom error classes for the Inttegro SDK
  */
 
 /**
@@ -27,9 +27,9 @@ export interface APIErrorResponse {
 }
 
 /**
- * Base error class for all Commerce API errors
+ * Base error class for all Inttegro API errors
  */
-export class CommerceAPIError extends Error {
+export class InttegroAPIError extends Error {
   /** HTTP status code */
   public readonly statusCode?: number;
   /** Error code from API */
@@ -59,7 +59,7 @@ export class CommerceAPIError extends Error {
     response?: APIErrorResponse
   ) {
     super(message);
-    this.name = 'CommerceAPIError';
+    this.name = 'InttegroAPIError';
     this.statusCode = statusCode;
     this.code = code;
     this.type = type;
@@ -71,16 +71,16 @@ export class CommerceAPIError extends Error {
 
     // Maintains proper stack trace for where our error was thrown (only available on V8)
     if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, CommerceAPIError);
+      Error.captureStackTrace(this, InttegroAPIError);
     }
 
-    Object.setPrototypeOf(this, CommerceAPIError.prototype);
+    Object.setPrototypeOf(this, InttegroAPIError.prototype);
   }
 
   /**
    * Create error from API response
    */
-  static fromResponse(statusCode: number, response: APIErrorResponse): CommerceAPIError {
+  static fromResponse(statusCode: number, response: APIErrorResponse): InttegroAPIError {
     const payload = resolveAPIErrorPayload(response);
     const message =
       payload.message || payload.detail || response.message || 'An unknown error occurred';
@@ -93,7 +93,7 @@ export class CommerceAPIError extends Error {
 
     // Return specific error types based on status code
     if (statusCode >= 400 && statusCode < 500) {
-      return new CommerceValidationError(
+      return new InttegroValidationError(
         message,
         statusCode,
         code,
@@ -106,7 +106,7 @@ export class CommerceAPIError extends Error {
       );
     }
 
-    return new CommerceAPIError(
+    return new InttegroAPIError(
       message,
       statusCode,
       code,
@@ -124,7 +124,7 @@ export class CommerceAPIError extends Error {
  * Validation error for invalid request parameters
  * Typically thrown for 4xx status codes
  */
-export class CommerceValidationError extends CommerceAPIError {
+export class InttegroValidationError extends InttegroAPIError {
   constructor(
     message: string,
     statusCode?: number,
@@ -137,15 +137,15 @@ export class CommerceValidationError extends CommerceAPIError {
     response?: APIErrorResponse
   ) {
     super(message, statusCode, code, type, url, detail, fixCode, cause, response);
-    this.name = 'CommerceValidationError';
-    Object.setPrototypeOf(this, CommerceValidationError.prototype);
+    this.name = 'InttegroValidationError';
+    Object.setPrototypeOf(this, InttegroValidationError.prototype);
   }
 }
 
 /**
  * Network error for connection and timeout issues
  */
-export class CommerceNetworkError extends Error {
+export class InttegroNetworkError extends Error {
   /** Original error that caused the network failure */
   public readonly cause?: Error;
   /** Whether the error was due to a timeout */
@@ -153,22 +153,22 @@ export class CommerceNetworkError extends Error {
 
   constructor(message: string, cause?: Error, isTimeout = false) {
     super(message);
-    this.name = 'CommerceNetworkError';
+    this.name = 'InttegroNetworkError';
     this.cause = cause;
     this.isTimeout = isTimeout;
 
     if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, CommerceNetworkError);
+      Error.captureStackTrace(this, InttegroNetworkError);
     }
 
-    Object.setPrototypeOf(this, CommerceNetworkError.prototype);
+    Object.setPrototypeOf(this, InttegroNetworkError.prototype);
   }
 }
 
 /**
  * Authentication error for invalid credentials
  */
-export class CommerceAuthenticationError extends CommerceAPIError {
+export class InttegroAuthenticationError extends InttegroAPIError {
   constructor(
     message: string,
     statusCode = 401,
@@ -191,15 +191,15 @@ export class CommerceAuthenticationError extends CommerceAPIError {
       cause,
       response
     );
-    this.name = 'CommerceAuthenticationError';
-    Object.setPrototypeOf(this, CommerceAuthenticationError.prototype);
+    this.name = 'InttegroAuthenticationError';
+    Object.setPrototypeOf(this, InttegroAuthenticationError.prototype);
   }
 }
 
 /**
  * Rate limit error
  */
-export class CommerceRateLimitError extends CommerceAPIError {
+export class InttegroRateLimitError extends InttegroAPIError {
   /** When the rate limit resets (timestamp) */
   public readonly retryAfter?: number;
 
@@ -226,9 +226,9 @@ export class CommerceRateLimitError extends CommerceAPIError {
       cause,
       response
     );
-    this.name = 'CommerceRateLimitError';
+    this.name = 'InttegroRateLimitError';
     this.retryAfter = retryAfter;
-    Object.setPrototypeOf(this, CommerceRateLimitError.prototype);
+    Object.setPrototypeOf(this, InttegroRateLimitError.prototype);
   }
 }
 
