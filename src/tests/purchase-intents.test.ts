@@ -19,7 +19,7 @@ describe('PurchaseIntents', () => {
     const request = {
       product_id: 'prod_123',
       price_id: 'pr_123',
-      quantity: { min: 1, max: 5 },
+      quantity: { min: 1 },
     };
 
     const result = await purchaseIntents.create(request);
@@ -32,7 +32,7 @@ describe('PurchaseIntents', () => {
     const mockResponse = { purchase_intent: { id: 'sale_123' } };
     const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockResponse);
 
-    await purchaseIntents.update({ id: 'sale_123', maximum_quantity: 3 });
+    await purchaseIntents.update({ id: 'sale_123', quantity: { min: 1, max: 3 } });
     await purchaseIntents.cancel({ id: 'sale_123' });
     await purchaseIntents.lookup({ id: 'sale_123' });
     const result = await purchaseIntents.page({ page_number: 1, page_size: 20 });
@@ -40,7 +40,7 @@ describe('PurchaseIntents', () => {
     expect(result).toEqual(mockResponse);
     expect(postSpy).toHaveBeenCalledWith('/purchase_intents/update', {
       id: 'sale_123',
-      maximum_quantity: 3,
+      quantity: { min: 1, max: 3 },
     });
     expect(postSpy).toHaveBeenCalledWith('/purchase_intents/cancel', { id: 'sale_123' });
     expect(postSpy).toHaveBeenCalledWith('/purchase_intents/lookup', { id: 'sale_123' });

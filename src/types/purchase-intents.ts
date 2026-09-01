@@ -31,7 +31,7 @@ export interface PurchaseIntentPriceSelector {
 
 export interface PurchaseIntentQuantity {
   min: number;
-  max: number;
+  max?: number;
 }
 
 export interface PurchaseIntentUsage {
@@ -71,8 +71,7 @@ export type CreatePurchaseIntentRequest = CreatePurchaseIntentBase &
 
 export interface UpdatePurchaseIntentRequest {
   id: string;
-  minimum_quantity?: number;
-  maximum_quantity?: number;
+  quantity?: PurchaseIntentQuantity;
   expires_at?: string | null;
   reactivate?: boolean;
 }
@@ -141,8 +140,7 @@ export interface PurchaseIntent {
   application_id: string;
   product_id: string;
   price_id: string;
-  minimum_quantity: number;
-  maximum_quantity: number;
+  quantity: PurchaseIntentQuantity;
   adjustable_quantity: boolean;
   allow_variants: boolean;
   status: PurchaseIntentStatus;
