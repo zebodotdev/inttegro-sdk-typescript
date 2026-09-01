@@ -32,7 +32,7 @@ import { FileReferences } from './resources/file-references';
  *
  * @example
  * ```typescript
- * import { InttegroClient } from '@inttegro/typescript-sdk';
+ * import { InttegroClient } from '@inttegro/inttegro-sdk';
  *
  * const inttegro = new InttegroClient({
  *   apiKey: 'your-api-key',

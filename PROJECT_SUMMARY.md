@@ -221,7 +221,7 @@ All endpoints support both variants as specified in the requirements.
 
 ## 📦 Package Information
 
-- **Package Name**: `@inttegro/typescript-sdk`
+- **Package Name**: `@inttegro/inttegro-sdk`
 - **Version**: `2.0.0`
 - **License**: MIT
 - **Node Version**: >=24

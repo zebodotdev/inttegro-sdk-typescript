@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- **Breaking:** renamed the package to `@inttegro/typescript-sdk`.
+- **Breaking:** renamed the package to `@inttegro/inttegro-sdk`.
 - **Breaking:** renamed `InttegroClient`, configuration types, and all SDK-prefixed errors from their former service name to `Inttegro*`.
 - Updated runtime metadata, examples, documentation, and repository links to Inttegro.
 

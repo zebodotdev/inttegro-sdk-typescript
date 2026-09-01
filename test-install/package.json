@@ -13,6 +13,6 @@
     "node": ">=24"
   },
   "dependencies": {
-    "@inttegro/typescript-sdk": "file:.."
+    "@inttegro/inttegro-sdk": "file:.."
   }
 }

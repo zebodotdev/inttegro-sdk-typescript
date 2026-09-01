@@ -11,7 +11,7 @@ All official Inttegro SDKs expose the same API capabilities. This package adds T
 Requires Node.js 24 or newer.
 
 ```bash
-npm install @inttegro/typescript-sdk
+npm install @inttegro/inttegro-sdk
 ```
 
 Store your secret key in the server environment:
@@ -31,7 +31,7 @@ import {
   InttegroClient,
   InttegroAPIError,
   ProductTypes,
-} from '@inttegro/typescript-sdk';
+} from '@inttegro/inttegro-sdk';
 
 const inttegro = new InttegroClient({
   apiKey: process.env.INTTEGRO_API_KEY!,
@@ -94,7 +94,7 @@ The GitHub release for each version is the canonical record. It contains the exa
 
 ```bash
 sha256sum --check SHA256SUMS
-gh attestation verify inttegro-typescript-sdk-2.0.0.tgz \
+gh attestation verify inttegro-inttegro-sdk-2.0.0.tgz \
   --repo zebodotdev/inttegro-sdk-typescript
 ```
 
