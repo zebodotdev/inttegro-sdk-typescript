@@ -1,5 +1,16 @@
 import { CustomData, RequestMeta } from './common';
 
+export interface CustomerAddressInput {
+  country: string;
+  city?: string;
+  line1?: string;
+  line2?: string;
+  name?: string;
+  phone_number?: string;
+  post_code?: string;
+  region?: string;
+}
+
 /**
  * Customer data for new customers
  */
@@ -29,6 +40,21 @@ export interface CreateCustomerRequest {
   email_address?: string;
   phone_number?: string;
   custom_data?: CustomData;
+  billing_address?: CustomerAddressInput;
+  shipping_address?: CustomerAddressInput;
+}
+
+export interface UpdateCustomerRequest {
+  customer_id: string;
+  billing_address?: CustomerAddressInput;
+  custom_data?: Record<string, unknown>;
+  email_address?: string;
+  name?: string;
+  phone_number?: string;
+  reference?: string;
+  shipping_address?: CustomerAddressInput;
+  suffix?: string;
+  title?: string;
 }
 
 export interface LookupCustomerRequest {

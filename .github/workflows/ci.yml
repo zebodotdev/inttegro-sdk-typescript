@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: zebodotdev/openapi
-          ref: master
+          ref: f03582cc9834b2a6c95fac0795e6036e048dd8b7
           path: openapi
 
       - name: Setup Node.js ${{ matrix.node-version }}

@@ -26,6 +26,7 @@ import { Apps } from './resources/apps';
 import { Keys } from './resources/keys';
 import { PurchaseIntents } from './resources/purchase-intents';
 import { FileReferences } from './resources/file-references';
+import { Refunds } from './resources/refunds';
 
 /**
  * Main Inttegro SDK client
@@ -92,6 +93,8 @@ export class InttegroClient {
   public readonly purchaseIntents: PurchaseIntents;
   /** File references resource */
   public readonly fileReferences: FileReferences;
+  /** Refunds resource */
+  public readonly refunds: Refunds;
 
   /**
    * Create a new Inttegro SDK client
@@ -127,6 +130,7 @@ export class InttegroClient {
     this.keys = new Keys(this.httpClient);
     this.purchaseIntents = new PurchaseIntents(this.httpClient);
     this.fileReferences = new FileReferences(this.httpClient);
+    this.refunds = new Refunds(this.httpClient);
   }
 
   /**

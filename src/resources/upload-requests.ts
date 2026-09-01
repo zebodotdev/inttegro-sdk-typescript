@@ -11,6 +11,7 @@ import {
   UploadRequestLookupRequest,
   UploadRequestPageRequest,
   UploadRequestPageResponse,
+  UploadRequestReviewRequest,
   UploadRequestResponse,
 } from '../types';
 
@@ -39,6 +40,15 @@ export class UploadRequests {
     options: RequestOptions = {}
   ): Promise<UploadRequestResponse> {
     return this.httpClient.post<UploadRequestResponse>('/upload_requests/cancel', request, {
+      headers: idempotencyHeaders(options.idempotencyKey),
+    });
+  }
+
+  async review(
+    request: UploadRequestReviewRequest,
+    options: RequestOptions = {}
+  ): Promise<UploadRequestResponse> {
+    return this.httpClient.post<UploadRequestResponse>('/upload_requests/review', request, {
       headers: idempotencyHeaders(options.idempotencyKey),
     });
   }

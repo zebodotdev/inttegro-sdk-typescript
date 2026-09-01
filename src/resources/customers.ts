@@ -5,6 +5,8 @@ import {
   LookupCustomerRequest,
   PageCustomersRequest,
   PageCustomersResponse,
+  RequestOptions,
+  UpdateCustomerRequest,
 } from '../types';
 import { throwIfValidationErrors, validateRequired } from '../utils/validation';
 
@@ -28,7 +30,23 @@ export class Customers {
     return this.httpClient.post<CustomerResponse>('/customers/lookup', request);
   }
 
+  async update(
+    request: UpdateCustomerRequest,
+    options: RequestOptions = {}
+  ): Promise<CustomerResponse> {
+    const errors = validateRequired(request as unknown as Record<string, unknown>, ['customer_id']);
+    throwIfValidationErrors(errors);
+
+    return this.httpClient.post<CustomerResponse>('/customers/update', request, {
+      headers: idempotencyHeaders(options.idempotencyKey),
+    });
+  }
+
   async page(request: PageCustomersRequest = {}): Promise<PageCustomersResponse> {
     return this.httpClient.post<PageCustomersResponse>('/customers/page', request);
   }
+}
+
+function idempotencyHeaders(key?: string): Record<string, string> {
+  return key ? { 'Idempotency-Key': key } : {};
 }

@@ -6,6 +6,7 @@ import {
   PagePricesResponse,
   PriceActionRequest,
   PriceResponse,
+  RequestOptions,
   UpdatePriceRequest,
 } from '../types';
 import { throwIfValidationErrors, validateRequired } from '../utils/validation';
@@ -57,4 +58,17 @@ export class Prices {
 
     return this.httpClient.post<PriceResponse>('/prices/deactivate', request);
   }
+
+  async archive(request: PriceActionRequest, options: RequestOptions = {}): Promise<PriceResponse> {
+    const errors = validateRequired(request as unknown as Record<string, unknown>, ['price_id']);
+    throwIfValidationErrors(errors);
+
+    return this.httpClient.post<PriceResponse>('/prices/archive', request, {
+      headers: idempotencyHeaders(options.idempotencyKey),
+    });
+  }
+}
+
+function idempotencyHeaders(key?: string): Record<string, string> {
+  return key ? { 'Idempotency-Key': key } : {};
 }

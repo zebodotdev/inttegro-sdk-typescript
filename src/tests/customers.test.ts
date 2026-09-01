@@ -39,4 +39,21 @@ describe('Customers', () => {
     expect(result).toEqual({ page: { number: 1, size: 1 } });
     expect(postSpy).toHaveBeenCalledWith('/customers/page', { page_number: 1, page_size: 50 });
   });
+
+  it('should update a customer with an idempotency key', async () => {
+    const response = { customer: { id: 'cu_123' } };
+    const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(response);
+
+    const result = await customers.update(
+      { customer_id: 'cu_123', name: 'Jane Updated' },
+      { idempotencyKey: 'idem_customer_update' }
+    );
+
+    expect(result).toEqual(response);
+    expect(postSpy).toHaveBeenCalledWith(
+      '/customers/update',
+      { customer_id: 'cu_123', name: 'Jane Updated' },
+      { headers: { 'Idempotency-Key': 'idem_customer_update' } }
+    );
+  });
 });

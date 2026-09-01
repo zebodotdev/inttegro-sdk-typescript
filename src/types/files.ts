@@ -98,6 +98,33 @@ export interface UploadRequestCancelRequest {
   id: string;
 }
 
+export interface UploadRequestReviewReason {
+  code: string;
+  message: string;
+  param?: string;
+}
+
+interface UploadRequestReviewBaseRequest {
+  decision: UploadReviewDecision;
+  id: string;
+  public_message?: string;
+  reasons?: UploadRequestReviewReason[];
+}
+
+export interface UploadRequestReviewByIdRequest extends UploadRequestReviewBaseRequest {
+  attempt_id: string;
+  attempt_ordinal?: never;
+}
+
+export interface UploadRequestReviewByOrdinalRequest extends UploadRequestReviewBaseRequest {
+  attempt_id?: never;
+  attempt_ordinal: number;
+}
+
+export type UploadRequestReviewRequest =
+  | UploadRequestReviewByIdRequest
+  | UploadRequestReviewByOrdinalRequest;
+
 export interface UploadRequestFulfillRequest {
   file: string | Blob;
   filename?: string;
@@ -107,4 +134,10 @@ export interface UploadRequestFulfillRequest {
 export type UploadRequestResponse = Record<string, unknown>;
 export type UploadRequestPageResponse = Record<string, unknown>;
 export type UploadRequestFulfillResponse = Record<string, unknown>;
-import type { FileDisposition, FileLinkStatus, FileStatus, UploadRequestStatus } from './api-enums';
+import type {
+  FileDisposition,
+  FileLinkStatus,
+  FileStatus,
+  UploadRequestStatus,
+  UploadReviewDecision,
+} from './api-enums';
