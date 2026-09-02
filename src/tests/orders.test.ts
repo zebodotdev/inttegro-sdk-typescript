@@ -360,12 +360,25 @@ describe('Orders', () => {
   });
 
   describe('refund', () => {
-    it('should refund an order', async () => {
-      const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockLookupOrderResponse);
+    it('should use the same request and response shape as refunds.create', async () => {
+      const response = { refund: { id: 'rf_123' } };
+      const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(response);
+      const request = {
+        line_items: [
+          {
+            order_line_item_id: 'oli_123',
+            refund_amount: { currency: 'ghs', value: 2500 },
+          },
+        ],
+        order_id: 'or_123',
+        reason: 'requested_by_customer' as const,
+      };
 
-      const result = await orders.refund({ order_id: 'or_123' });
-      expect(result).toEqual(mockLookupOrderResponse);
-      expect(postSpy).toHaveBeenCalledWith('/orders/refund', { order_id: 'or_123' });
+      const result = await orders.refund(request, { idempotencyKey: 'refund-alias-1' });
+      expect(result).toEqual(response);
+      expect(postSpy).toHaveBeenCalledWith('/orders/refund', request, {
+        headers: { 'Idempotency-Key': 'refund-alias-1' },
+      });
     });
   });
 });

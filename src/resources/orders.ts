@@ -62,6 +62,7 @@ import {
   CancelOrderResponse,
   RefundOrderRequest,
   RefundOrderResponse,
+  RequestOptions,
   PageOrdersRequest,
   PageOrdersResponse,
 } from '../types';
@@ -532,34 +533,49 @@ export class Orders {
   }
 
   /**
-   * Refund a paid order, returning funds to the customer.
+   * Create a refund through the `/orders/refund` compatibility alias.
    *
-   * Refunds the payment associated with an order, sending funds back to the customer's original payment
-   * method. The order must have been successfully paid before it can be refunded.
+   * This accepts the same line-item request and returns the same refund response as
+   * `refunds.create`. New integrations should prefer `refunds.create`.
    *
    * @param request - Refund parameters
    * @param request.order_id - Unique identifier of the order to refund (required)
+   * @param options - Optional transport controls, including an explicit idempotency key
    *
-   * @returns Refunded order object with updated payment status
+   * @returns The created refund
    *
    * @throws {ApiError} If order not found, not paid, or refund fails
    *
    * @example
    * ```typescript
    * const result = await inttegro.orders.refund({
-   *   order_id: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
+   *   order_id: 'or_0123456789abcdefghijklmnopqrstuvwxyzABCD',
+   *   reason: 'requested_by_customer',
+   *   line_items: [{
+   *     order_line_item_id: 'oli_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMN',
+   *     refund_amount: { currency: 'ghs', value: 2500 },
+   *   }],
    * });
    *
-   * console.log(`Order refunded. Refund ID: ${result.order.payment?.refund?.id}`);
+   * console.log(`Refund created: ${result.refund.id}`);
    * ```
    *
-   * @see https://studio.inttegro.com/retry-a-payment for payment retry guide
+   * @deprecated Prefer `inttegro.refunds.create`.
    */
-  async refund(request: RefundOrderRequest): Promise<RefundOrderResponse> {
-    const errors = validateRequired(request as unknown as Record<string, unknown>, ['order_id']);
+  async refund(
+    request: RefundOrderRequest,
+    options: RequestOptions = {}
+  ): Promise<RefundOrderResponse> {
+    const errors = validateRequired(request as unknown as Record<string, unknown>, [
+      'line_items',
+      'order_id',
+      'reason',
+    ]);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<RefundOrderResponse>('/orders/refund', request);
+    return this.httpClient.post<RefundOrderResponse>('/orders/refund', request, {
+      headers: options.idempotencyKey ? { 'Idempotency-Key': options.idempotencyKey } : {},
+    });
   }
 
   /**

@@ -18,7 +18,7 @@ import {
 import { Address, CustomerData } from './customer';
 import { BankAccountConfig, FinancialAccountType, WalletType } from './financial-accounts';
 import type { PaymentAttemptStatus, PaymentConfirmationChannel } from './api-enums';
-import type { Refund } from './refunds';
+import type { CreateRefundRequest, Refund, RefundResponse } from './refunds';
 
 /**
  * Product line item
@@ -361,13 +361,8 @@ export interface CancelOrderRequest {
   request_meta?: RequestMeta;
 }
 
-/**
- * Refund order request
- */
-export interface RefundOrderRequest {
-  /** Order ID to refund */
-  order_id: string;
-}
+/** @deprecated Prefer `CreateRefundRequest` through `client.refunds.create`. */
+export type RefundOrderRequest = CreateRefundRequest;
 
 /**
  * Order status
@@ -528,7 +523,7 @@ export interface Order {
   /** Order ID */
   id: string;
   /** Order status */
-  status: OrderStatus | 'paid' | 'refunded';
+  status: OrderStatus;
   /** Order number */
   number?: string;
   /** Receipt number */
@@ -680,10 +675,8 @@ export interface CancelOrderResponse {
   order: Order;
 }
 
-/** Refund order response */
-export interface RefundOrderResponse {
-  order: Order;
-}
+/** @deprecated Prefer `RefundResponse` through `client.refunds.create`. */
+export type RefundOrderResponse = RefundResponse;
 
 /** Page orders request */
 export interface PageOrdersRequest {
