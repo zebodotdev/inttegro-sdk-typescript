@@ -18,6 +18,7 @@ import {
 import { Address, CustomerData } from './customer';
 import { BankAccountConfig, FinancialAccountType, WalletType } from './financial-accounts';
 import type { PaymentAttemptStatus, PaymentConfirmationChannel } from './api-enums';
+import type { Refund } from './refunds';
 
 /**
  * Product line item
@@ -582,6 +583,8 @@ export interface Order {
   cancelled_at?: string;
   /** Invoice info */
   invoice?: Invoice;
+  /** Refunds issued for this order, newest first. Omitted when none exist. */
+  refunds?: Refund[];
 }
 
 /**
