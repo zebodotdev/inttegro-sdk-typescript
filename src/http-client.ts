@@ -201,7 +201,7 @@ export class HttpClient {
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${this.config.apiKey}`,
-      'User-Agent': 'inttegro-sdk-typescript/2.0.0',
+      'User-Agent': 'inttegro-sdk-typescript/3.0.0',
       ...(requestOptionsWithIdempotency.headers as Record<string, string>),
     };
 
@@ -262,7 +262,7 @@ export class HttpClient {
       : options;
     const headers: Record<string, string> = {
       Accept: 'application/json',
-      'User-Agent': 'inttegro-sdk-typescript/2.0.0',
+      'User-Agent': 'inttegro-sdk-typescript/3.0.0',
       ...(authenticated ? { Authorization: `Bearer ${this.config.apiKey}` } : {}),
       ...(requestOptionsWithIdempotency.headers as Record<string, string>),
     };

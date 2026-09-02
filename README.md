@@ -94,7 +94,7 @@ The GitHub release for each version is the canonical record. It contains the exa
 
 ```bash
 sha256sum --check SHA256SUMS
-gh attestation verify inttegro-inttegro-sdk-2.0.0.tgz \
+gh attestation verify inttegro-inttegro-sdk-3.0.0.tgz \
   --repo zebodotdev/inttegro-sdk-typescript
 ```
 
