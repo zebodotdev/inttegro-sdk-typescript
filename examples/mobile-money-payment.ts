@@ -51,12 +51,12 @@ async function main() {
       },
     });
 
-    console.log('✅ Order created:', order.order.id);
+    console.log('✅ Order created:', order.id);
 
     // Step 2: Pay with mobile money
     console.log('\nProcessing mobile money payment...');
-    const payment = await inttegro.orders.pay({
-      order_id: order.order.id,
+    const paidOrder = await inttegro.orders.pay({
+      order_id: order.id,
       payment_method_data: {
         type: 'mobile_money',
         mobile_money: {
@@ -67,10 +67,9 @@ async function main() {
     });
 
     console.log('✅ Payment initiated');
-    console.log('Payment Status:', payment.order.payment_status);
-    console.log('Requires Confirmation:', payment.requires_confirmation);
+    console.log('Payment Status:', paidOrder.payment?.status);
 
-    if (payment.requires_confirmation) {
+    if (paidOrder.payment?.next_action?.type === 'confirm_payment') {
       console.log('\n⚠️  Payment requires confirmation (OTP)');
       console.log('Please check your phone for the OTP');
 
@@ -82,26 +81,22 @@ async function main() {
       // Example (with mock OTP):
       // const otp = await promptUserForOTP();
       // const confirmation = await inttegro.orders.confirmPayment({
-      //   order_id: order.order.id,
+      //   order_id: order.id,
       //   token: otp,
       // });
-
-      if (payment.redirect_url) {
-        console.log('Redirect URL:', payment.redirect_url);
-      }
     } else {
       console.log('✅ Payment completed successfully!');
     }
 
     // Step 3: Check final order status
     const finalOrder = await inttegro.orders.lookup({
-      order_id: order.order.id,
+      order_id: order.id,
     });
 
     console.log('\n📊 Final Order Status:');
-    console.log('Order Status:', finalOrder.order.status);
-    console.log('Payment Status:', finalOrder.order.payment_status);
-    console.log('Paid At:', finalOrder.order.paid_at || 'Not yet paid');
+    console.log('Order Status:', finalOrder.status);
+    console.log('Payment Status:', finalOrder.payment?.status);
+    console.log('Paid At:', finalOrder.paid_at || 'Not yet paid');
   } catch (error) {
     console.error('❌ Error:', error);
     throw error;

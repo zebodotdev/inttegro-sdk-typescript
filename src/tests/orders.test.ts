@@ -60,7 +60,7 @@ describe('Orders', () => {
         },
       });
 
-      expect(result).toEqual(mockCreateOrderResponse);
+      expect(result).toEqual(mockCreateOrderResponse.order);
       expect(postSpy).toHaveBeenCalledWith('/orders/create', expect.any(Object));
     });
 
@@ -95,7 +95,7 @@ describe('Orders', () => {
         },
       });
 
-      expect(result).toEqual(mockCreateOrderResponse);
+      expect(result).toEqual(mockCreateOrderResponse.order);
       expect(postSpy).toHaveBeenCalledWith('/orders/create', expect.any(Object));
     });
 
@@ -117,7 +117,7 @@ describe('Orders', () => {
         ],
       });
 
-      expect(result).toEqual(mockCreateOrderResponse);
+      expect(result).toEqual(mockCreateOrderResponse.order);
       expect(postSpy).toHaveBeenCalledWith('/orders/new', expect.any(Object));
     });
 
@@ -173,7 +173,7 @@ describe('Orders', () => {
         order_id: 'or_123',
       });
 
-      expect(result).toEqual(mockLookupOrderResponse);
+      expect(result).toEqual(mockLookupOrderResponse.order);
       expect(postSpy).toHaveBeenCalledWith('/orders/lookup', { order_id: 'or_123' });
     });
 
@@ -191,7 +191,7 @@ describe('Orders', () => {
         number: 'ORDER-123-REV2',
       });
 
-      expect(result).toEqual(mockLookupOrderResponse);
+      expect(result).toEqual(mockLookupOrderResponse.order);
       expect(postSpy).toHaveBeenCalledWith('/orders/update', {
         order_id: 'or_123',
         number: 'ORDER-123-REV2',
@@ -218,7 +218,7 @@ describe('Orders', () => {
         },
       });
 
-      expect(result).toEqual(mockPayOrderResponse);
+      expect(result).toEqual(mockPayOrderResponse.order);
       expect(postSpy).toHaveBeenCalledWith('/orders/pay', expect.any(Object));
     });
 
@@ -229,7 +229,7 @@ describe('Orders', () => {
         order_id: 'or_123',
       });
 
-      expect(result).toEqual(mockPayOrderResponse);
+      expect(result).toEqual(mockPayOrderResponse.order);
       expect(postSpy).toHaveBeenCalledWith('/orders/pay', { order_id: 'or_123' });
     });
 
@@ -247,7 +247,7 @@ describe('Orders', () => {
         token: '123456',
       });
 
-      expect(result).toEqual(mockConfirmPaymentResponse);
+      expect(result).toEqual(mockConfirmPaymentResponse.order);
       expect(postSpy).toHaveBeenCalledWith('/orders/confirm_payment', {
         order_id: 'or_123',
         token: '123456',
@@ -271,7 +271,7 @@ describe('Orders', () => {
         order_id: 'or_123',
       });
 
-      expect(result).toEqual(mockRequestConfirmationResponse);
+      expect(result).toEqual(mockRequestConfirmationResponse.order);
       expect(postSpy).toHaveBeenCalledWith('/orders/request_confirmation', {
         order_id: 'or_123',
       });
@@ -287,7 +287,7 @@ describe('Orders', () => {
       const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockLookupOrderResponse);
 
       const result = await orders.finalize({ order_id: 'or_123' });
-      expect(result).toEqual(mockLookupOrderResponse);
+      expect(result).toEqual(mockLookupOrderResponse.order);
       expect(postSpy).toHaveBeenCalledWith('/orders/finalize', { order_id: 'or_123' });
     });
   });
@@ -341,7 +341,7 @@ describe('Orders', () => {
       const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockLookupOrderResponse);
 
       const result = await orders.complete({ order_id: 'or_123', paid_out_of_band: true });
-      expect(result).toEqual(mockLookupOrderResponse);
+      expect(result).toEqual(mockLookupOrderResponse.order);
       expect(postSpy).toHaveBeenCalledWith('/orders/complete', {
         order_id: 'or_123',
         paid_out_of_band: true,
@@ -354,7 +354,7 @@ describe('Orders', () => {
       const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockLookupOrderResponse);
 
       const result = await orders.cancel({ order_id: 'or_123' });
-      expect(result).toEqual(mockLookupOrderResponse);
+      expect(result).toEqual(mockLookupOrderResponse.order);
       expect(postSpy).toHaveBeenCalledWith('/orders/cancel', { order_id: 'or_123' });
     });
   });
@@ -375,7 +375,7 @@ describe('Orders', () => {
       };
 
       const result = await orders.refund(request, { idempotencyKey: 'refund-alias-1' });
-      expect(result).toEqual(response);
+      expect(result).toEqual(response.refund);
       expect(postSpy).toHaveBeenCalledWith('/orders/refund', request, {
         headers: { 'Idempotency-Key': 'refund-alias-1' },
       });

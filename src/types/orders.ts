@@ -18,7 +18,7 @@ import {
 import { Address, CustomerData } from './customer';
 import { BankAccountConfig, FinancialAccountType, WalletType } from './financial-accounts';
 import type { PaymentAttemptStatus, PaymentConfirmationChannel } from './api-enums';
-import type { CreateRefundRequest, Refund, RefundResponse } from './refunds';
+import type { CreateRefundRequest, Refund } from './refunds';
 
 /**
  * Product line item
@@ -389,13 +389,6 @@ export type PaymentStatus =
   | 'expired'
   | 'failed'
   | 'unknown';
-export type PaymentResponseStatus =
-  | 'pending'
-  | 'requires_confirmation'
-  | 'processing'
-  | 'succeeded'
-  | 'failed';
-
 /**
  * Checkout settings
  */
@@ -582,61 +575,6 @@ export interface Order {
   refunds?: Refund[];
 }
 
-/**
- * Create order response
- */
-export interface CreateOrderResponse {
-  /** Created order */
-  order: Order;
-  /** Redirect URL if payment requires user action */
-  redirect_url?: string;
-}
-
-/**
- * Lookup order response
- */
-export interface LookupOrderResponse {
-  /** Order details */
-  order: Order;
-}
-
-/**
- * Update order response
- */
-export interface UpdateOrderResponse {
-  /** Updated order */
-  order: Order;
-}
-
-/**
- * Pay order response
- */
-export interface PayOrderResponse {
-  payment_id?: string;
-  order_id?: string;
-  status?: PaymentResponseStatus;
-  requires_confirmation?: boolean;
-  confirmation_sent?: boolean;
-}
-
-/**
- * Confirm payment response
- */
-export interface ConfirmPaymentResponse {
-  /** Updated order */
-  order: Order;
-}
-
-/**
- * Request confirmation response
- */
-export interface RequestConfirmationResponse {}
-
-/** Finalize order response */
-export interface FinalizeOrderResponse {
-  order: Order;
-}
-
 /** Send order document request */
 export interface OrderDocumentDeliveryRequest {
   order_id: string;
@@ -659,54 +597,22 @@ export interface OrderDocumentDelivery {
   failures?: OrderDocumentDeliveryAttempt[];
 }
 
-/** Send order document response */
-export interface OrderDocumentDeliveryResponse {
+/** Result of sending an order document. */
+export interface OrderDocumentDeliveryResult {
   order: Order;
   delivery: OrderDocumentDelivery;
 }
-
-/** Complete order response */
-export interface CompleteOrderResponse {
-  order: Order;
-}
-
-/** Cancel order response */
-export interface CancelOrderResponse {
-  order: Order;
-}
-
-/** @deprecated Prefer `RefundResponse` through `client.refunds.create`. */
-export type RefundOrderResponse = RefundResponse;
 
 /** Page orders request */
 export interface PageOrdersRequest {
   page_number?: number;
   page_size?: number;
+  customer_id?: string;
 }
 
-/** Page orders response */
-export interface PageOrdersResponse {
-  page?: {
-    number?: number;
-    size?: number;
-    orders?: Array<{
-      id?: string;
-      line_item_group?: {
-        products_count?: number;
-        total?: MoneyAmount;
-      };
-      initiated_at?: string;
-      completed_at?: string;
-      sealed_at?: string;
-      status?: string;
-      customer?: {
-        id?: string;
-        name?: string;
-        email?: string;
-        phone_number?: string;
-        suffix?: string;
-        title?: string;
-      };
-    }>;
-  };
+/** A page of orders returned by the Orders resource. */
+export interface OrderPage {
+  number?: number;
+  size?: number;
+  orders?: Order[];
 }

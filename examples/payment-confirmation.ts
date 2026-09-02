@@ -39,11 +39,11 @@ async function main() {
 
     // Step 1: Request confirmation code
     console.log('\nRequesting confirmation code...');
-    const requestResult = await inttegro.orders.requestConfirmation({
+    await inttegro.orders.requestConfirmation({
       order_id: orderId,
     });
 
-    console.log('✅', requestResult.message);
+    console.log('✅ New confirmation code requested');
 
     // Step 2: Prompt user for OTP
     console.log('\n📱 Please check your phone for the confirmation code (OTP)');
@@ -51,21 +51,16 @@ async function main() {
 
     // Step 3: Confirm payment with OTP
     console.log('\nConfirming payment...');
-    const confirmResult = await inttegro.orders.confirmPayment({
+    const order = await inttegro.orders.confirmPayment({
       order_id: orderId,
       token: otp.trim(),
     });
 
-    if (confirmResult.success) {
+    if (order.payment?.status === 'paid') {
       console.log('✅ Payment confirmed successfully!');
-      console.log('Order Status:', confirmResult.order.status);
-      console.log('Payment Status:', confirmResult.order.payment_status);
-      console.log('Paid At:', confirmResult.order.paid_at);
-
-      // Check if order is fully paid
-      if (confirmResult.order.payment_status === 'succeeded') {
-        console.log('\n🎉 Order is fully paid and completed!');
-      }
+      console.log('Order Status:', order.status);
+      console.log('Payment Status:', order.payment.status);
+      console.log('Paid At:', order.paid_at);
     } else {
       console.log('❌ Payment confirmation failed');
       console.log('Please verify the confirmation code and try again');
@@ -74,10 +69,10 @@ async function main() {
       const resend = await prompt('\nWould you like to resend the confirmation code? (y/n): ');
 
       if (resend.toLowerCase() === 'y') {
-        const resendResult = await inttegro.orders.requestConfirmation({
+        await inttegro.orders.requestConfirmation({
           order_id: orderId,
         });
-        console.log('✅', resendResult.message);
+        console.log('✅ New confirmation code requested');
       }
     }
   } catch (error) {
@@ -92,4 +87,3 @@ if (require.main === module) {
 }
 
 export default main;
-

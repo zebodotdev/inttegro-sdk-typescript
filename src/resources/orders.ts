@@ -41,32 +41,36 @@
 import { HttpClient } from '../http-client';
 import {
   CreateOrderRequest,
-  CreateOrderResponse,
   LookupOrderRequest,
-  LookupOrderResponse,
   UpdateOrderRequest,
-  UpdateOrderResponse,
   PayOrder,
-  PayOrderResponse,
   ConfirmPaymentRequest,
-  ConfirmPaymentResponse,
   RequestConfirmationRequest,
-  RequestConfirmationResponse,
   FinalizeOrderRequest,
-  FinalizeOrderResponse,
   OrderDocumentDeliveryRequest,
-  OrderDocumentDeliveryResponse,
+  OrderDocumentDeliveryResult,
   CompleteOrderRequest,
-  CompleteOrderResponse,
   CancelOrderRequest,
-  CancelOrderResponse,
   RefundOrderRequest,
-  RefundOrderResponse,
   RequestOptions,
   PageOrdersRequest,
-  PageOrdersResponse,
+  Order,
+  OrderPage,
+  Refund,
 } from '../types';
 import { validateRequired, throwIfValidationErrors } from '../utils/validation';
+
+interface OrderEnvelope {
+  order: Order;
+}
+
+interface OrderPageEnvelope {
+  page: OrderPage;
+}
+
+interface RefundEnvelope {
+  refund: Refund;
+}
 
 /**
  * Orders resource for managing complete order lifecycle operations.
@@ -107,7 +111,7 @@ export class Orders {
    * @example
    * ```typescript
    * // Create order with new customer and execute payment
-   * const result = await inttegro.orders.create({
+   * const order = await inttegro.orders.create({
    *   request_meta: {
    *     idempotency_key: 'order_2025_001',
    *   },
@@ -139,14 +143,13 @@ export class Orders {
    *   },
    * });
    *
-   * const order = result.order;
    * console.log(`Created order: ${order.id}`);
    * ```
    *
    * @example
    * ```typescript
    * // Create order with existing customer for later payment
-   * const result = await inttegro.orders.create({
+   * const order = await inttegro.orders.create({
    *   customer_id: 'cu_abc123',
    *   line_items: [{
    *     type: 'product',
@@ -163,10 +166,11 @@ export class Orders {
    * @see https://studio.inttegro.com/accept-a-payment for payment flow guide
    * @see https://studio.inttegro.com/order-lifecycle for order states
    */
-  async create(request: CreateOrderRequest): Promise<CreateOrderResponse> {
+  async create(request: CreateOrderRequest): Promise<Order> {
     validateCreateOrderRequest(request);
 
-    return this.httpClient.post<CreateOrderResponse>('/orders/create', request);
+    const response = await this.httpClient.post<OrderEnvelope>('/orders/create', request);
+    return response.order;
   }
 
   /**
@@ -174,13 +178,14 @@ export class Orders {
    *
    * Prefer `create`, which uses the canonical `/orders/create` endpoint.
    */
-  async new(request: CreateOrderRequest): Promise<CreateOrderResponse> {
+  async new(request: CreateOrderRequest): Promise<Order> {
     validateCreateOrderRequest(request);
 
-    return this.httpClient.post<CreateOrderResponse>('/orders/new', request);
+    const response = await this.httpClient.post<OrderEnvelope>('/orders/new', request);
+    return response.order;
   }
 
-  async createAlias(request: CreateOrderRequest): Promise<CreateOrderResponse> {
+  async createAlias(request: CreateOrderRequest): Promise<Order> {
     return this.new(request);
   }
 
@@ -199,33 +204,34 @@ export class Orders {
    *
    * @example
    * ```typescript
-   * const result = await inttegro.orders.lookup({
+   * const order = await inttegro.orders.lookup({
    *   order_id: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
    * });
    *
-   * const order = result.order;
    * console.log(`Order status: ${order.status}`);
    * console.log(`Payment status: ${order.payment?.status}`);
    * ```
    *
    * @see https://studio.inttegro.com/orders for API reference
    */
-  async lookup(request: LookupOrderRequest): Promise<LookupOrderResponse> {
+  async lookup(request: LookupOrderRequest): Promise<Order> {
     // Validate required fields
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['order_id']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<LookupOrderResponse>('/orders/lookup', request);
+    const response = await this.httpClient.post<OrderEnvelope>('/orders/lookup', request);
+    return response.order;
   }
 
   /**
    * Update mutable order metadata, line items, invoice settings, or attached payment method.
    */
-  async update(request: UpdateOrderRequest): Promise<UpdateOrderResponse> {
+  async update(request: UpdateOrderRequest): Promise<Order> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['order_id']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<UpdateOrderResponse>('/orders/update', request);
+    const response = await this.httpClient.post<OrderEnvelope>('/orders/update', request);
+    return response.order;
   }
 
   /**
@@ -236,7 +242,7 @@ export class Orders {
    * 2. New payment method: Include `payment_method_data` with inline payment details (mobile money, card, etc.)
    * 3. Offline payment: Set `paid_out_of_band` to true for cash, bank transfer, or check payments
    *
-   * When payment requires customer confirmation (e.g., OTP), the response includes a `next_action` field
+   * When payment requires customer confirmation (e.g., OTP), the returned order includes a `next_action` field
    * indicating what the customer needs to do. Call `confirmPayment()` once the customer provides the token.
    *
    * @param request - Payment parameters
@@ -246,14 +252,14 @@ export class Orders {
    * @param request.paid_out_of_band - Set to true if payment was received outside Inttegro (default: false)
    * @param request.request_meta - Request controls such as `idempotency_key`
    *
-   * @returns Payment response with order and payment state, plus optional `next_action` if confirmation needed
+   * @returns Updated order with typed payment and next-action state
    *
    * @throws {ApiError} If order not found or payment fails
    *
    * @example
    * ```typescript
    * // Pay with inline mobile money
-   * const result = await inttegro.orders.pay({
+   * const order = await inttegro.orders.pay({
    *   order_id: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
    *   payment_method_data: {
    *     type: 'mobile_money',
@@ -264,11 +270,11 @@ export class Orders {
    *   },
    * });
    *
-   * if (result.order.payment?.next_action?.type === 'confirm_payment') {
+   * if (order.payment?.next_action?.type === 'confirm_payment') {
    *   // Customer needs to provide OTP sent to their phone
    *   const token = await promptCustomerForOTP();
    *   await inttegro.orders.confirmPayment({
-   *     order_id: result.order.id,
+   *     order_id: order.id,
    *     token,
    *   });
    * }
@@ -277,7 +283,7 @@ export class Orders {
    * @example
    * ```typescript
    * // Pay with saved payment method
-   * const result = await inttegro.orders.pay({
+   * const order = await inttegro.orders.pay({
    *   order_id: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
    *   payment_method_id: 'pm_xyz123abc456',
    *   request_meta: {
@@ -289,7 +295,7 @@ export class Orders {
    * @example
    * ```typescript
    * // Mark as paid offline (cash, bank transfer, etc.)
-   * const result = await inttegro.orders.pay({
+   * const order = await inttegro.orders.pay({
    *   order_id: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
    *   paid_out_of_band: true,
    * });
@@ -298,12 +304,13 @@ export class Orders {
    * @see https://studio.inttegro.com/accept-a-payment for payment flow guide
    * @see https://studio.inttegro.com/charge-repeat-customers for saved payment methods
    */
-  async pay(request: PayOrder): Promise<PayOrderResponse> {
+  async pay(request: PayOrder): Promise<Order> {
     // Validate required fields
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['order_id']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<PayOrderResponse>('/orders/pay', request);
+    const response = await this.httpClient.post<OrderEnvelope>('/orders/pay', request);
+    return response.order;
   }
 
   /**
@@ -324,19 +331,19 @@ export class Orders {
    * @example
    * ```typescript
    * // After receiving OTP from customer
-   * const result = await inttegro.orders.confirmPayment({
+   * const order = await inttegro.orders.confirmPayment({
    *   order_id: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
    *   token: '123456',
    * });
    *
-   * if (result.order.payment?.status === 'succeeded') {
+   * if (order.payment?.status === 'paid') {
    *   console.log('Payment confirmed successfully!');
    * }
    * ```
    *
    * @see https://studio.inttegro.com/accept-a-payment for complete payment flow
    */
-  async confirmPayment(request: ConfirmPaymentRequest): Promise<ConfirmPaymentResponse> {
+  async confirmPayment(request: ConfirmPaymentRequest): Promise<Order> {
     // Validate required fields
     const errors = validateRequired(request as unknown as Record<string, unknown>, [
       'order_id',
@@ -344,7 +351,8 @@ export class Orders {
     ]);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<ConfirmPaymentResponse>('/orders/confirm_payment', request);
+    const response = await this.httpClient.post<OrderEnvelope>('/orders/confirm_payment', request);
+    return response.order;
   }
 
   /**
@@ -357,14 +365,14 @@ export class Orders {
    * @param request.order_id - Unique identifier of the order requiring confirmation (required)
    * @param request.request_meta - Request controls such as `idempotency_key`
    *
-   * @returns Response indicating token was resent
+   * @returns Updated order
    *
    * @throws {ApiError} If order not found or not in confirmable state
    *
    * @example
    * ```typescript
    * // Resend OTP to customer
-   * const result = await inttegro.orders.requestConfirmation({
+   * const order = await inttegro.orders.requestConfirmation({
    *   order_id: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
    * });
    *
@@ -373,17 +381,16 @@ export class Orders {
    *
    * @see https://studio.inttegro.com/accept-a-payment for payment confirmation flow
    */
-  async requestConfirmation(
-    request: RequestConfirmationRequest
-  ): Promise<RequestConfirmationResponse> {
+  async requestConfirmation(request: RequestConfirmationRequest): Promise<Order> {
     // Validate required fields
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['order_id']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<RequestConfirmationResponse>(
+    const response = await this.httpClient.post<OrderEnvelope>(
       '/orders/request_confirmation',
       request
     );
+    return response.order;
   }
 
   /**
@@ -403,20 +410,21 @@ export class Orders {
    *
    * @example
    * ```typescript
-   * const result = await inttegro.orders.finalize({
+   * const order = await inttegro.orders.finalize({
    *   order_id: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
    * });
    *
-   * console.log(`Order finalized at: ${result.order.sealed_at}`);
+   * console.log(`Order finalized at: ${order.sealed_at}`);
    * ```
    *
    * @see https://studio.inttegro.com/order-lifecycle for order states
    */
-  async finalize(request: FinalizeOrderRequest): Promise<FinalizeOrderResponse> {
+  async finalize(request: FinalizeOrderRequest): Promise<Order> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['order_id']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<FinalizeOrderResponse>('/orders/finalize', request);
+    const response = await this.httpClient.post<OrderEnvelope>('/orders/finalize', request);
+    return response.order;
   }
 
   /**
@@ -431,11 +439,11 @@ export class Orders {
    *
    * @throws {ApiError} If order not found, customer has no contact method, or delivery fails
    */
-  async sendInvoice(request: OrderDocumentDeliveryRequest): Promise<OrderDocumentDeliveryResponse> {
+  async sendInvoice(request: OrderDocumentDeliveryRequest): Promise<OrderDocumentDeliveryResult> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['order_id']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<OrderDocumentDeliveryResponse>('/orders/send_invoice', request);
+    return this.httpClient.post<OrderDocumentDeliveryResult>('/orders/send_invoice', request);
   }
 
   /**
@@ -450,11 +458,11 @@ export class Orders {
    *
    * @throws {ApiError} If order not found, unpaid, customer has no contact method, or delivery fails
    */
-  async sendReceipt(request: OrderDocumentDeliveryRequest): Promise<OrderDocumentDeliveryResponse> {
+  async sendReceipt(request: OrderDocumentDeliveryRequest): Promise<OrderDocumentDeliveryResult> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['order_id']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<OrderDocumentDeliveryResponse>('/orders/send_receipt', request);
+    return this.httpClient.post<OrderDocumentDeliveryResult>('/orders/send_receipt', request);
   }
 
   /**
@@ -475,11 +483,11 @@ export class Orders {
    * @example
    * ```typescript
    * // Complete order after fulfillment
-   * const result = await inttegro.orders.complete({
+   * const order = await inttegro.orders.complete({
    *   order_id: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
    * });
    *
-   * console.log(`Order completed at: ${result.order.completed_at}`);
+   * console.log(`Order completed at: ${order.completed_at}`);
    * ```
    *
    * @example
@@ -493,11 +501,12 @@ export class Orders {
    *
    * @see https://studio.inttegro.com/order-lifecycle for order states
    */
-  async complete(request: CompleteOrderRequest): Promise<CompleteOrderResponse> {
+  async complete(request: CompleteOrderRequest): Promise<Order> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['order_id']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<CompleteOrderResponse>('/orders/complete', request);
+    const response = await this.httpClient.post<OrderEnvelope>('/orders/complete', request);
+    return response.order;
   }
 
   /**
@@ -516,27 +525,28 @@ export class Orders {
    *
    * @example
    * ```typescript
-   * const result = await inttegro.orders.cancel({
+   * const order = await inttegro.orders.cancel({
    *   order_id: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
    * });
    *
-   * console.log(`Order ${result.order.id} has been cancelled`);
+   * console.log(`Order ${order.id} has been cancelled`);
    * ```
    *
    * @see https://studio.inttegro.com/order-lifecycle for order states
    */
-  async cancel(request: CancelOrderRequest): Promise<CancelOrderResponse> {
+  async cancel(request: CancelOrderRequest): Promise<Order> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['order_id']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<CancelOrderResponse>('/orders/cancel', request);
+    const response = await this.httpClient.post<OrderEnvelope>('/orders/cancel', request);
+    return response.order;
   }
 
   /**
    * Create a refund through the `/orders/refund` compatibility alias.
    *
-   * This accepts the same line-item request and returns the same refund response as
-   * `refunds.create`. New integrations should prefer `refunds.create`.
+   * This accepts the same line-item request as `refunds.create` and returns the created
+   * `Refund` directly. New integrations should prefer `refunds.create`.
    *
    * @param request - Refund parameters
    * @param request.order_id - Unique identifier of the order to refund (required)
@@ -548,7 +558,7 @@ export class Orders {
    *
    * @example
    * ```typescript
-   * const result = await inttegro.orders.refund({
+   * const refund = await inttegro.orders.refund({
    *   order_id: 'or_0123456789abcdefghijklmnopqrstuvwxyzABCD',
    *   reason: 'requested_by_customer',
    *   line_items: [{
@@ -557,15 +567,12 @@ export class Orders {
    *   }],
    * });
    *
-   * console.log(`Refund created: ${result.refund.id}`);
+   * console.log(`Refund created: ${refund.id}`);
    * ```
    *
    * @deprecated Prefer `inttegro.refunds.create`.
    */
-  async refund(
-    request: RefundOrderRequest,
-    options: RequestOptions = {}
-  ): Promise<RefundOrderResponse> {
+  async refund(request: RefundOrderRequest, options: RequestOptions = {}): Promise<Refund> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, [
       'line_items',
       'order_id',
@@ -573,23 +580,21 @@ export class Orders {
     ]);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<RefundOrderResponse>('/orders/refund', request, {
+    const response = await this.httpClient.post<RefundEnvelope>('/orders/refund', request, {
       headers: options.idempotencyKey ? { 'Idempotency-Key': options.idempotencyKey } : {},
     });
+    return response.refund;
   }
 
   /**
    * Retrieve a paginated list of orders.
    *
-   * Returns orders in reverse chronological order (most recent first). Use the `has_more` field
-   * and `page` parameter to navigate through results. Supports filtering by status and time range.
+   * Returns orders in reverse chronological order (most recent first).
    *
    * @param request - Pagination and filter parameters (optional)
-   * @param request.page - Page number to retrieve (minimum 1, default: 1)
-   * @param request.per_page - Number of results per page (minimum 1, maximum 100, default: 10)
-   * @param request.status - Filter by order status (e.g., 'paid', 'requires_payment', 'completed')
-   * @param request.created_after - Filter orders created after this timestamp (ISO 8601)
-   * @param request.created_before - Filter orders created before this timestamp (ISO 8601)
+   * @param request.page_number - Zero-based page index to retrieve (0-10)
+   * @param request.page_size - Number of orders per page (1-256)
+   * @param request.customer_id - Optional customer whose orders should be returned
    *
    * @returns Paginated list of orders with pagination details
    *
@@ -598,37 +603,29 @@ export class Orders {
    * @example
    * ```typescript
    * // Get first page of orders
-   * const result = await inttegro.orders.page({
-   *   per_page: 25,
-   *   page: 1,
+   * const page = await inttegro.orders.page({
+   *   page_size: 25,
+   *   page_number: 0,
    * });
    *
-   * console.log(`Retrieved ${result.orders.length} orders`);
-   * console.log(`Has more: ${result.has_more}`);
-   *
-   * // Get next page if available
-   * if (result.has_more) {
-   *   const nextPage = await inttegro.orders.page({
-   *     per_page: 25,
-   *     page: 2,
-   *   });
-   * }
+   * console.log(`Retrieved ${page.orders?.length ?? 0} orders`);
    * ```
    *
    * @example
    * ```typescript
-   * // Filter by status
-   * const paidOrders = await inttegro.orders.page({
-   *   status: 'paid',
-   *   per_page: 50,
+   * // Restrict the page to one customer
+   * const customerOrders = await inttegro.orders.page({
+   *   customer_id: 'cu_123',
+   *   page_size: 50,
    * });
    * ```
    *
    * @see https://studio.inttegro.com/pagination for pagination guide
    * @see https://studio.inttegro.com/orders for API reference
    */
-  async page(request: PageOrdersRequest = {}): Promise<PageOrdersResponse> {
-    return this.httpClient.post<PageOrdersResponse>('/orders/page', request);
+  async page(request: PageOrdersRequest = {}): Promise<OrderPage> {
+    const response = await this.httpClient.post<OrderPageEnvelope>('/orders/page', request);
+    return response.page;
   }
 }
 

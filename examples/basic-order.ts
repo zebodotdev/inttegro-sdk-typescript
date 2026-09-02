@@ -15,7 +15,7 @@ async function main() {
 
   try {
     // Create a new order
-    const result = await inttegro.orders.create({
+    const order = await inttegro.orders.create({
       customer_data: {
         name: 'John Doe',
         email_address: 'john@example.com',
@@ -88,23 +88,19 @@ async function main() {
     });
 
     console.log('✅ Order created successfully!');
-    console.log('Order ID:', result.order.id);
-    console.log('Order Number:', result.order.number);
-    console.log('Status:', result.order.status);
-    console.log('Payment Status:', result.order.payment_status);
-    console.log('Total:', `GHS ${result.order.total.value / 100}`);
-
-    if (result.redirect_url) {
-      console.log('Redirect URL:', result.redirect_url);
-    }
+    console.log('Order ID:', order.id);
+    console.log('Order Number:', order.number);
+    console.log('Status:', order.status);
+    console.log('Payment Status:', order.payment_status);
+    console.log('Total:', `GHS ${(order.total?.value ?? 0) / 100}`);
 
     // Lookup the order to verify
     const orderDetails = await inttegro.orders.lookup({
-      order_id: result.order.id,
+      order_id: order.id,
     });
 
     console.log('\n✅ Order lookup successful!');
-    console.log('Order Status:', orderDetails.order.status);
+    console.log('Order Status:', orderDetails.status);
   } catch (error) {
     console.error('❌ Error:', error);
     throw error;

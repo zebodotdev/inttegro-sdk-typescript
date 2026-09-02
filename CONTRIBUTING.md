@@ -227,7 +227,7 @@ Example:
  * });
  * ```
  */
-async create(request: CreateOrderRequest): Promise<CreateOrderResponse>
+async create(request: CreateOrderRequest): Promise<Order>
 ```
 
 ### README Updates

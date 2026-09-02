@@ -4,11 +4,6 @@
 
 import {
   Order,
-  CreateOrderResponse,
-  LookupOrderResponse,
-  PayOrderResponse,
-  ConfirmPaymentResponse,
-  RequestConfirmationResponse,
   ChimeResponse,
   CreateFinancialAccountResponse,
   OrderPaymentStatuses,
@@ -77,7 +72,7 @@ export const mockOrder: Order = {
 /**
  * Mock create order response
  */
-export const mockCreateOrderResponse: CreateOrderResponse = {
+export const mockCreateOrderResponse = {
   order: mockOrder,
   redirect_url: 'https://payment.inttegro.com/checkout/test_123',
 };
@@ -85,7 +80,7 @@ export const mockCreateOrderResponse: CreateOrderResponse = {
 /**
  * Mock lookup order response
  */
-export const mockLookupOrderResponse: LookupOrderResponse = {
+export const mockLookupOrderResponse = {
   order: {
     ...mockOrder,
     payment_status: OrderPaymentStatuses.Paid,
@@ -96,18 +91,17 @@ export const mockLookupOrderResponse: LookupOrderResponse = {
 /**
  * Mock pay order response
  */
-export const mockPayOrderResponse: PayOrderResponse = {
-  payment_id: 'py_123',
-  order_id: 'or_test_123456789',
-  status: 'requires_confirmation',
-  requires_confirmation: true,
-  confirmation_sent: true,
+export const mockPayOrderResponse = {
+  order: {
+    ...mockOrder,
+    payment_status: OrderPaymentStatuses.RequiresAction,
+  },
 };
 
 /**
  * Mock confirm payment response
  */
-export const mockConfirmPaymentResponse: ConfirmPaymentResponse = {
+export const mockConfirmPaymentResponse = {
   order: {
     ...mockOrder,
     payment_status: OrderPaymentStatuses.Paid,
@@ -118,7 +112,9 @@ export const mockConfirmPaymentResponse: ConfirmPaymentResponse = {
 /**
  * Mock request confirmation response
  */
-export const mockRequestConfirmationResponse: RequestConfirmationResponse = {};
+export const mockRequestConfirmationResponse = {
+  order: mockOrder,
+};
 
 export const mockChimeResponse: ChimeResponse = {
   chime: {

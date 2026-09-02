@@ -29,18 +29,14 @@ Never put the key in browser code, a mobile app, or source control. The client u
 Create and finalize an order, then send the customer to its hosted invoice URL:
 
 ```ts
-import {
-  InttegroClient,
-  InttegroAPIError,
-  ProductTypes,
-} from '@inttegro/inttegro-sdk';
+import { InttegroClient, InttegroAPIError, ProductTypes } from '@inttegro/inttegro-sdk';
 
 const inttegro = new InttegroClient({
   apiKey: process.env.INTTEGRO_API_KEY!,
 });
 
 try {
-  const { order } = await inttegro.orders.create({
+  const order = await inttegro.orders.create({
     request_meta: { idempotency_key: 'checkout-cart-123' },
     customer_data: {
       name: 'Akua Mensah',
@@ -52,15 +48,17 @@ try {
       redirect_url: 'https://example.com/orders/complete',
       cancel_url: 'https://example.com/cart',
     },
-    line_items: [{
-      type: 'product',
-      product: {
-        type: ProductTypes.Digital,
-        name: 'Monthly subscription',
-        quantity: 1,
-        price: { currency: 'ghs', value: 5000 },
+    line_items: [
+      {
+        type: 'product',
+        product: {
+          type: ProductTypes.Digital,
+          name: 'Monthly subscription',
+          quantity: 1,
+          price: { currency: 'ghs', value: 5000 },
+        },
       },
-    }],
+    ],
   });
 
   const checkoutUrl = order.invoice?.format?.web?.url;
@@ -82,7 +80,7 @@ The SDK covers orders and checkout, customers, products and prices, purchase int
 
 TypeScript-specific features:
 
-- Typed request and response objects, plus exported constants for public enum values.
+- Typed request and domain objects, plus exported constants for public enum values.
 - Promise-based resource methods with ESM and CommonJS builds.
 - No runtime dependencies; the client uses the platform `fetch` implementation.
 - Configurable timeouts, exponential retries, debug logging, and request/response interceptors.

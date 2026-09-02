@@ -7,11 +7,13 @@ This directory contains practical examples demonstrating various features of the
 Before running any example, make sure you have:
 
 1. Installed dependencies:
+
    ```bash
    npm install
    ```
 
 2. Built the SDK:
+
    ```bash
    npm run build
    ```
@@ -38,6 +40,7 @@ npx ts-node examples/basic-order.ts
 **File:** `basic-order.ts`
 
 Demonstrates how to:
+
 - Initialize the Inttegro SDK client
 - Create an order with a new customer
 - Add products and fees as line items
@@ -45,6 +48,7 @@ Demonstrates how to:
 - Lookup order details
 
 **Run:**
+
 ```bash
 npx tsx examples/basic-order.ts
 ```
@@ -54,12 +58,14 @@ npx tsx examples/basic-order.ts
 **File:** `mobile-money-payment.ts`
 
 Demonstrates how to:
+
 - Create an order
 - Pay for an order using mobile money
 - Handle payment confirmation requirements
 - Check final payment status
 
 **Run:**
+
 ```bash
 npx tsx examples/mobile-money-payment.ts
 ```
@@ -69,6 +75,7 @@ npx tsx examples/mobile-money-payment.ts
 **File:** `payment-confirmation.ts`
 
 Demonstrates how to:
+
 - Request confirmation codes (OTP)
 - Prompt users for OTP input
 - Confirm payments with OTP
@@ -76,6 +83,7 @@ Demonstrates how to:
 - Handle confirmation failures
 
 **Run:**
+
 ```bash
 npx tsx examples/payment-confirmation.ts
 ```
@@ -87,6 +95,7 @@ npx tsx examples/payment-confirmation.ts
 **File:** `error-handling.ts`
 
 Demonstrates how to:
+
 - Handle validation errors
 - Handle authentication errors
 - Handle rate limiting
@@ -94,6 +103,7 @@ Demonstrates how to:
 - Implement comprehensive error handling patterns
 
 **Run:**
+
 ```bash
 npx tsx examples/error-handling.ts
 ```
@@ -130,8 +140,12 @@ const order = await inttegro.orders.create({
     },
     enable_fx: false,
   },
-  line_items: [/* subscription items */],
-  billing_details: {/* billing info */},
+  line_items: [
+    /* subscription items */
+  ],
+  billing_details: {
+    /* billing info */
+  },
 });
 ```
 
@@ -143,10 +157,10 @@ Poll order status for real-time updates:
 async function trackOrder(orderId: string) {
   const interval = setInterval(async () => {
     const order = await inttegro.orders.lookup({ order_id: orderId });
-    
-    console.log('Status:', order.order.payment_status);
-    
-    if (order.order.payment_status === 'succeeded') {
+
+    console.log('Status:', order.payment?.status);
+
+    if (order.payment?.status === 'paid') {
       clearInterval(interval);
       console.log('Payment complete!');
     }
