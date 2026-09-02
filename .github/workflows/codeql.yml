@@ -1,5 +1,7 @@
 name: TypeScript SDK Code Scanning
 
+permissions: read-all
+
 on:
   push:
     branches: [master]
