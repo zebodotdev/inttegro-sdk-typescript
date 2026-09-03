@@ -30,6 +30,8 @@ export * from './types';
 export * as money from './types/money';
 export * as payments from './types/payments';
 export * as chimes from './types/chimes';
+export * as wallets from './types/wallets';
+export * as bankAccounts from './types/bank-accounts';
 
 // Utilities
 export { generateIdempotencyKey } from './utils/idempotency';

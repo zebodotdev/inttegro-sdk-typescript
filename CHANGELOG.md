@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.0.0] - 2026-09-03
+
+- **Breaking:** moved financial-account wallet types into the `wallets` module.
+- **Breaking:** moved financial-account bank types into the `bank-accounts` module.
+- Added `wallets` and `bankAccounts` namespace exports from the package root.
+
 ## [6.1.0] - 2026-09-03
 
 - Moved runtime enum constants into their owning domain modules and removed the internal catch-all `api-enums` module.
@@ -86,9 +92,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 🧪 Thoroughly tested
 - 📝 JSDoc documentation throughout
 
+[7.0.0]: https://github.com/zebodotdev/inttegro-sdk-typescript/releases/tag/v7.0.0
+[6.1.0]: https://github.com/zebodotdev/inttegro-sdk-typescript/releases/tag/v6.1.0
+[6.0.1]: https://github.com/zebodotdev/inttegro-sdk-typescript/releases/tag/v6.0.1
+[6.0.0]: https://github.com/zebodotdev/inttegro-sdk-typescript/releases/tag/v6.0.0
 [4.0.0]: https://github.com/zebodotdev/inttegro-sdk-typescript/releases/tag/v4.0.0
 [5.0.0]: https://github.com/zebodotdev/inttegro-sdk-typescript/releases/tag/v5.0.0
-[6.0.0]: https://github.com/zebodotdev/inttegro-sdk-typescript/releases/tag/v6.0.0
 [3.0.0]: https://github.com/zebodotdev/inttegro-sdk-typescript/releases/tag/v3.0.0
 [2.0.0]: https://github.com/zebodotdev/inttegro-sdk-typescript/releases/tag/v2.0.0
 [0.1.0]: https://github.com/zebodotdev/inttegro-sdk-typescript/releases/tag/v0.1.0

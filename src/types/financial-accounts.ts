@@ -1,3 +1,6 @@
+import type { BankAccountConfig, BankAccountOwner } from './bank-accounts';
+import type { WalletConfig } from './wallets';
+
 export const FinancialAccountTypes = {
   Wallet: 'wallet',
   BankAccount: 'bank_account',
@@ -6,58 +9,10 @@ export const FinancialAccountTypes = {
 export type FinancialAccountType =
   (typeof FinancialAccountTypes)[keyof typeof FinancialAccountTypes];
 
-export const WalletTypes = { MobileMoney: 'mobile_money' } as const;
-export type WalletType = (typeof WalletTypes)[keyof typeof WalletTypes];
-
-export const BankAccountTypes = { GhanaBankAccount: 'ghana_bank_account' } as const;
-export type BankAccountType = (typeof BankAccountTypes)[keyof typeof BankAccountTypes];
-
-export interface WalletConfig {
-  type: WalletType;
-  mobile_money?: {
-    id?: string;
-    account_number: string;
-    network: string;
-  };
-}
-
 export interface PullPushConfig {
   enabled?: boolean;
   enabled_at?: string;
   mandate?: Record<string, unknown> | null;
-}
-
-export interface BankAccountOwnerAddress {
-  id?: string;
-  application_id?: string;
-  name: string;
-  phone?: string;
-  line_1: string;
-  line_2?: string;
-  city: string;
-  region: string;
-  post_code?: string;
-  country: string;
-}
-
-export interface BankAccountOwner {
-  name: string;
-  address: BankAccountOwnerAddress;
-}
-
-export interface GhanaBankAccount {
-  bank_name?: string;
-  branch?: string;
-  number: string;
-  sort_code?: string;
-  swift_code?: string;
-  holder?: BankAccountOwner;
-}
-
-export interface BankAccountConfig {
-  id?: string;
-  type: BankAccountType;
-  ghana_bank_account?: GhanaBankAccount;
 }
 
 interface FinancialAccountRequestBase {

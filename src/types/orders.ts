@@ -5,7 +5,9 @@ import type { ProductType } from './products';
 import type { RequestMeta } from './requests';
 import { PaymentMethodData, MobileMoneyNetwork } from './payment-methods';
 import { Address, CustomerData } from './customer';
-import { BankAccountConfig, FinancialAccountType, WalletType } from './financial-accounts';
+import type { BankAccountConfig } from './bank-accounts';
+import type { FinancialAccountType } from './financial-accounts';
+import type { WalletType } from './wallets';
 import type { Payment, PaymentStatus } from './payments';
 import type { CreateRefundRequest, Refund } from './refunds';
 
