@@ -1,11 +1,7 @@
 import type { BalanceTransaction } from './balance-transactions';
 import type { Amount } from './money';
 import type { PaymentMethod } from './payment-methods';
-import type {
-  PaymentAttemptStatus,
-  PaymentConfirmationChannel,
-  PaymentStatus,
-} from './api-enums';
+import type { PaymentAttemptStatus, PaymentConfirmationChannel, PaymentStatus } from './api-enums';
 
 export type { PaymentStatus } from './api-enums';
 

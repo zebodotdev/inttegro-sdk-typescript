@@ -29,7 +29,7 @@ Never put the key in browser code, a mobile app, or source control. The client u
 Create and finalize an order, then send the customer to its hosted invoice URL:
 
 ```ts
-import { InttegroClient, InttegroAPIError, ProductTypes } from '@inttegro/inttegro-sdk';
+import { Currencies, InttegroClient, InttegroAPIError, ProductTypes } from '@inttegro/inttegro-sdk';
 
 const inttegro = new InttegroClient({
   apiKey: process.env.INTTEGRO_API_KEY!,
@@ -55,7 +55,7 @@ try {
           type: ProductTypes.Digital,
           name: 'Monthly subscription',
           quantity: 1,
-          price: { currency: 'ghs', value: 5000 },
+          price: { currency: Currencies.GHS, value: 5000 },
         },
       },
     ],
@@ -94,7 +94,7 @@ The GitHub release for each version is the canonical record. It contains the exa
 
 ```bash
 sha256sum --check SHA256SUMS
-gh attestation verify inttegro-inttegro-sdk-6.0.0.tgz \
+gh attestation verify inttegro-inttegro-sdk-6.0.1.tgz \
   --repo zebodotdev/inttegro-sdk-typescript
 ```
 

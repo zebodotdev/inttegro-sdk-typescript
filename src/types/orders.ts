@@ -3,10 +3,7 @@ import type { Amount, Currency } from './money';
 import type { Price, PriceParams } from './prices';
 import type { ProductType } from './products';
 import type { RequestMeta } from './requests';
-import {
-  PaymentMethodData,
-  MobileMoneyNetwork,
-} from './payment-methods';
+import { PaymentMethodData, MobileMoneyNetwork } from './payment-methods';
 import { Address, CustomerData } from './customer';
 import { BankAccountConfig, FinancialAccountType, WalletType } from './financial-accounts';
 import type { Payment, PaymentStatus } from './payments';
