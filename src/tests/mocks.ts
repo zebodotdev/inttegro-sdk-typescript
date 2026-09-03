@@ -2,7 +2,7 @@
  * Mock data and responses for testing
  */
 
-import { Order, Chime, FinancialAccount, OrderPaymentStatuses, OrderStatuses } from '../types';
+import { Order, Chime, FinancialAccount, PaymentStatuses, OrderStatuses } from '../types';
 
 /**
  * Mock order object
@@ -11,7 +11,7 @@ export const mockOrder: Order = {
   id: 'or_test_123456789',
   number: 'ORD-001',
   status: OrderStatuses.Preparing,
-  payment_status: OrderPaymentStatuses.Initiated,
+  payment_status: PaymentStatuses.Initiated,
   customer_id: 'cu_test_123',
   line_items: [
     {
@@ -77,7 +77,7 @@ export const mockCreateOrderResponse = {
 export const mockLookupOrderResponse = {
   order: {
     ...mockOrder,
-    payment_status: OrderPaymentStatuses.Paid,
+    payment_status: PaymentStatuses.Paid,
     paid_at: '2024-01-01T00:05:00Z',
   },
 };
@@ -88,7 +88,7 @@ export const mockLookupOrderResponse = {
 export const mockPayOrderResponse = {
   order: {
     ...mockOrder,
-    payment_status: OrderPaymentStatuses.RequiresAction,
+    payment_status: PaymentStatuses.RequiresAction,
   },
 };
 
@@ -98,7 +98,7 @@ export const mockPayOrderResponse = {
 export const mockConfirmPaymentResponse = {
   order: {
     ...mockOrder,
-    payment_status: OrderPaymentStatuses.Paid,
+    payment_status: PaymentStatuses.Paid,
     paid_at: '2024-01-01T00:05:00Z',
   },
 };

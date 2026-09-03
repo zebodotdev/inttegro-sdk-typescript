@@ -27,6 +27,9 @@ export type { APIErrorDocument } from './errors';
 
 // Types
 export * from './types';
+export * as money from './types/money';
+export * as payments from './types/payments';
+export * as chimes from './types/chimes';
 
 // Utilities
 export { generateIdempotencyKey } from './utils/idempotency';

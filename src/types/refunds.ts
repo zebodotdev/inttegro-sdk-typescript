@@ -1,14 +1,10 @@
 import type { RefundReason, RefundStatus } from './api-enums';
-import type { RequestMeta } from './common';
-
-export interface RefundMoney {
-  currency: string;
-  value: number;
-}
+import type { Amount, AmountParams } from './money';
+import type { RequestMeta } from './requests';
 
 export interface CreateRefundLineItem {
   order_line_item_id: string;
-  refund_amount: RefundMoney;
+  refund_amount: AmountParams;
   reason?: RefundReason;
   reason_details?: string;
 }
@@ -40,8 +36,8 @@ export interface PageRefundsRequest {
 export interface RefundLineItem {
   id: string;
   order_line_item_id: string;
-  original_amount_paid: RefundMoney;
-  refund_amount: RefundMoney;
+  original_amount_paid: Amount;
+  refund_amount: Amount;
   reason?: RefundReason;
   reason_details?: string;
 }
@@ -53,7 +49,7 @@ export interface Refund {
   order_id: string;
   reason: RefundReason;
   status: RefundStatus;
-  total: RefundMoney;
+  total: Amount;
   canceled_at?: string;
   custom_data?: Record<string, string>;
   failed_at?: string;

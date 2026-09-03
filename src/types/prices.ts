@@ -1,13 +1,18 @@
-export interface PriceAmount {
-  currency: string;
-  value: number;
-}
+import type { Amount, AmountParams } from './money';
+import type { Product } from './products';
 
-export interface CreatePriceRequest {
+/** An inline price supplied in a request. */
+export interface PriceParams extends AmountParams {}
+
+/** An inline price returned by the API. */
+export interface Price extends Amount {}
+
+/** Parameters for creating a stored catalog price. */
+export interface CatalogPriceParams {
   product_id?: string;
   label?: string;
   about?: string;
-  amount: PriceAmount;
+  amount: AmountParams;
 }
 
 export interface LookupPriceRequest {
@@ -31,18 +36,13 @@ export interface PagePricesRequest {
   product_id?: string;
 }
 
-export interface PriceNominal {
-  currency: string;
-  value: number;
-  sign: number;
-}
-
-export interface Price {
+export interface CatalogPrice {
   id: string;
-  product_id?: string | null;
   label?: string | null;
   about?: string | null;
-  nominal: PriceNominal;
+  active: boolean;
+  nominal: Amount;
+  product?: Product | null;
   created_at: string;
   updated_at?: string | null;
   archived_at?: string | null;
@@ -51,5 +51,5 @@ export interface Price {
 export interface PricePage {
   number?: number;
   size?: number;
-  prices?: Price[];
+  prices?: CatalogPrice[];
 }

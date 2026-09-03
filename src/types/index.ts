@@ -2,8 +2,10 @@
  * Type definitions for the Inttegro SDK
  */
 
-// Common types
-export * from './common';
+// Cross-resource primitives
+export * from './custom-data';
+export * from './money';
+export * from './requests';
 export * from './api-enums';
 
 // Customer types
@@ -13,15 +15,19 @@ export * from './prices';
 
 // Order types
 export type {
-  Product as OrderLineItemProduct,
-  Fee,
+  ProductLineItemParams,
+  ProductLineItem as OrderLineItemProduct,
+  FeeLineItemParams,
+  FeeLineItem,
+  ShippingLineItemParams,
+  ShippingLineItem,
+  LineItemParams,
   LineItem,
   BillingDetails,
   Shipping,
   ShippingDetails,
   OrderPayoutSettings,
   InvoiceSettings,
-  PayoutConfiguration as OrderPayoutConfiguration,
   CreateOrderWithCustomerRequest,
   CreateOrderWithCustomerIdRequest,
   CreateOrderRequest,
@@ -37,13 +43,7 @@ export type {
   CancelOrderRequest,
   RefundOrderRequest,
   OrderStatus,
-  PaymentStatus,
   CheckoutSettings,
-  PaymentMethod as OrderPaymentMethod,
-  PaymentAttempt,
-  Payment,
-  PaymentNextActionType,
-  PaymentNextAction,
   LineItemGroup,
   InvoiceFormatDetails,
   Invoice,
@@ -56,14 +56,11 @@ export type {
   OrderPage,
 } from './orders';
 
+// Payment types
+export * from './payments';
+
 // Chime types
 export * from './chimes';
-
-// Schedule types
-export * from './schedules';
-
-// Broadcast types
-export * from './broadcasts';
 
 // Message template types
 export * from './message-templates';

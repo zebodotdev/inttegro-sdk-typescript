@@ -80,7 +80,7 @@ export const PaymentMethodTypes = {
 } as const;
 export const MobileMoneyNetworks = {
   Airtel: 'airtel',
-  Mtn: 'mtn',
+  MTN: 'mtn',
   Telecel: 'telecel',
   Vodafone: 'vodafone',
 } as const;
@@ -183,7 +183,7 @@ export const OrderStatuses = {
   Expired: 'expired',
   Unknown: 'unknown',
 } as const;
-export const OrderPaymentStatuses = {
+export const PaymentStatuses = {
   Initiated: 'initiated',
   RequiresAction: 'requires_action',
   Overdue: 'overdue',
@@ -300,7 +300,7 @@ export type ContentSafetyStatus = ValueOf<typeof ContentSafetyStatuses>;
 export type OrderDocumentKind = ValueOf<typeof OrderDocumentKinds>;
 export type DeliveryChannel = ValueOf<typeof DeliveryChannels>;
 export type CheckoutOrderStatus = ValueOf<typeof CheckoutOrderStatuses>;
-export type OrderPaymentStatus = ValueOf<typeof OrderPaymentStatuses>;
+export type PaymentStatus = ValueOf<typeof PaymentStatuses>;
 export type PaymentAttemptStatus = ValueOf<typeof PaymentAttemptStatuses>;
 export type CheckoutPaymentStatus = ValueOf<typeof CheckoutPaymentStatuses>;
 export type OrderCreatedFromResourceType = ValueOf<typeof OrderCreatedFromResourceTypes>;

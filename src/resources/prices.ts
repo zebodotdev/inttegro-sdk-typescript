@@ -1,9 +1,9 @@
 import { HttpClient } from '../http-client';
 import {
-  CreatePriceRequest,
+  CatalogPriceParams,
+  CatalogPrice,
   LookupPriceRequest,
   PagePricesRequest,
-  Price,
   PricePage,
   PriceActionRequest,
   RequestOptions,
@@ -17,50 +17,50 @@ import { throwIfValidationErrors, validateRequired } from '../utils/validation';
 export class Prices {
   constructor(private httpClient: HttpClient) {}
 
-  async create(request: CreatePriceRequest): Promise<Price> {
+  async create(request: CatalogPriceParams): Promise<CatalogPrice> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['amount']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.postResource<Price>('/prices/create', 'price', request);
+    return this.httpClient.postResource<CatalogPrice>('/prices/create', 'price', request);
   }
 
-  async lookup(request: LookupPriceRequest): Promise<Price> {
+  async lookup(request: LookupPriceRequest): Promise<CatalogPrice> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['price_id']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.postResource<Price>('/prices/lookup', 'price', request);
+    return this.httpClient.postResource<CatalogPrice>('/prices/lookup', 'price', request);
   }
 
-  async update(request: UpdatePriceRequest): Promise<Price> {
+  async update(request: UpdatePriceRequest): Promise<CatalogPrice> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['price_id']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.postResource<Price>('/prices/update', 'price', request);
+    return this.httpClient.postResource<CatalogPrice>('/prices/update', 'price', request);
   }
 
   async page(request: PagePricesRequest = {}): Promise<PricePage> {
     return this.httpClient.postResource<PricePage>('/prices/page', 'page', request);
   }
 
-  async activate(request: PriceActionRequest): Promise<Price> {
+  async activate(request: PriceActionRequest): Promise<CatalogPrice> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['price_id']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.postResource<Price>('/prices/activate', 'price', request);
+    return this.httpClient.postResource<CatalogPrice>('/prices/activate', 'price', request);
   }
 
-  async deactivate(request: PriceActionRequest): Promise<Price> {
+  async deactivate(request: PriceActionRequest): Promise<CatalogPrice> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['price_id']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.postResource<Price>('/prices/deactivate', 'price', request);
+    return this.httpClient.postResource<CatalogPrice>('/prices/deactivate', 'price', request);
   }
 
-  async archive(request: PriceActionRequest, options: RequestOptions = {}): Promise<Price> {
+  async archive(request: PriceActionRequest, options: RequestOptions = {}): Promise<CatalogPrice> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['price_id']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.postResource<Price>('/prices/archive', 'price', request, {
+    return this.httpClient.postResource<CatalogPrice>('/prices/archive', 'price', request, {
       headers: idempotencyHeaders(options.idempotencyKey),
     });
   }

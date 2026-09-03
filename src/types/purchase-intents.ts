@@ -1,5 +1,6 @@
-import type { MoneyAmount } from './common';
-import type { Product, ProductPriceSummary } from './products';
+import type { Amount } from './money';
+import type { PriceParams } from './prices';
+import type { Product } from './products';
 
 export type PurchaseIntentStatus = 'active' | 'expired' | 'inactive' | 'used';
 export type PurchaseIntentActivityType =
@@ -14,19 +15,29 @@ export interface PurchaseIntentProductSelector {
   variant_set_id?: string;
 }
 
-export interface PurchaseIntentPriceAmount {
-  currency: string;
-  value: number;
-}
-
 export interface PurchaseIntentPriceSelector {
   id?: string;
-  nominal?: PurchaseIntentPriceAmount;
+  nominal?: PriceParams;
   original?: {
     id?: string;
-    nominal?: PurchaseIntentPriceAmount;
+    nominal?: PriceParams;
   };
   original_id?: string;
+}
+
+export interface PurchaseIntentOriginalPrice {
+  active: boolean;
+  id?: string;
+  label?: string;
+  nominal: Amount;
+}
+
+export interface PurchaseIntentPrice {
+  active: boolean;
+  id?: string;
+  label?: string;
+  nominal: Amount;
+  original?: PurchaseIntentOriginalPrice;
 }
 
 export interface PurchaseIntentQuantity {
@@ -124,7 +135,7 @@ export interface PurchaseIntentActivity {
   product_id?: string;
   variant_product_id?: string;
   quantity?: number;
-  amount?: MoneyAmount;
+  amount?: Amount;
   order_id?: string;
   payment_id?: string;
   error_code?: string;
@@ -148,7 +159,7 @@ export interface PurchaseIntent {
   updated_at?: string | null;
   activity?: PurchaseIntentActivityLog;
   product?: Product;
-  price?: ProductPriceSummary;
+  price?: PurchaseIntentPrice;
 }
 
 export interface PurchaseIntentPage {

@@ -1,4 +1,4 @@
-import { RequestMeta } from './common';
+import type { RequestMeta } from './requests';
 import type { OTPAlphabetType, OTPStatus, OTPTransmissionStatus } from './api-enums';
 
 export interface InitiateOtpRequest {

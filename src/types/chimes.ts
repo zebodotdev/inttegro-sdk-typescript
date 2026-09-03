@@ -1,7 +1,6 @@
-import { CustomData, RequestMeta } from './common';
+import type { CustomData } from './custom-data';
 import type { MessageTemplateReference } from './message-templates';
-import type { Broadcast } from './broadcasts';
-import { ScheduledChime } from './schedules';
+import type { RequestMeta } from './requests';
 
 export type ChimeTransport = 'sms' | 'email';
 export type ChimeRecipientType = 'phone' | 'email';
@@ -164,4 +163,61 @@ export interface ChimePage {
   chimes?: Chime[];
 }
 
-export type { Broadcast, ScheduledChime };
+export interface LookupBroadcastRequest {
+  broadcast_id: string;
+}
+
+export interface CancelBroadcastRequest {
+  broadcast_id: string;
+}
+
+export interface BroadcastError {
+  recipient?: string;
+  fix_code?: string;
+  type?: string;
+}
+
+export interface Broadcast {
+  id?: string;
+  recipients?: string[];
+  content?: string;
+  sender_id?: string;
+  purpose?: string | null;
+  send_after?: string;
+  created_at?: string;
+  executed_at?: string | null;
+  canceled_at?: string | null;
+  errors?: BroadcastError[];
+  chime_ids?: string[];
+  customer_ids?: string[];
+  email?: Record<string, unknown>;
+}
+
+export interface LookupScheduleRequest {
+  schedule_id: string;
+}
+
+export interface CancelScheduleRequest {
+  schedule_id: string;
+}
+
+export interface ScheduleError {
+  recipient?: string;
+  fix_code?: string;
+  type?: string;
+}
+
+export interface ScheduledChime {
+  id?: string;
+  recipients?: string[];
+  content?: string;
+  sender_id?: string;
+  purpose?: string | null;
+  send_after?: string;
+  created_at?: string;
+  executed_at?: string | null;
+  canceled_at?: string | null;
+  errors?: ScheduleError[];
+  chime_ids?: string[];
+  full_message?: string;
+}

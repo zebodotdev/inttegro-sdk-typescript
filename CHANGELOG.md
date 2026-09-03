@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [6.0.0] - 2026-09-03
+
+- **Breaking:** consolidated Chime, broadcast, and schedule types in the `chimes` module.
+- **Breaking:** moved payment lifecycle types out of `orders` and into the `payments` module, with `PaymentStatus` as the canonical status type.
+- **Breaking:** replaced the catch-all `common` module with focused `money`, `requests`, and `custom-data` modules.
+- Added distinct request and response amount and price types across order, product, refund, payout, and purchase-intent contracts.
+
 ## [5.0.0] - 2026-09-03
 
 - **Breaking:** request objects now match the canonical API contract for orders, Chimes,
@@ -76,6 +83,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [4.0.0]: https://github.com/zebodotdev/inttegro-sdk-typescript/releases/tag/v4.0.0
 [5.0.0]: https://github.com/zebodotdev/inttegro-sdk-typescript/releases/tag/v5.0.0
+[6.0.0]: https://github.com/zebodotdev/inttegro-sdk-typescript/releases/tag/v6.0.0
 [3.0.0]: https://github.com/zebodotdev/inttegro-sdk-typescript/releases/tag/v3.0.0
 [2.0.0]: https://github.com/zebodotdev/inttegro-sdk-typescript/releases/tag/v2.0.0
 [0.1.0]: https://github.com/zebodotdev/inttegro-sdk-typescript/releases/tag/v0.1.0

@@ -1,10 +1,8 @@
-import { CustomData, ProductType } from './common';
+import type { CustomData } from './custom-data';
 import type { ProductShipmentInputType, ProductShipmentType } from './api-enums';
+import type { Amount, AmountParams } from './money';
 
-export interface ProductPriceAmount {
-  currency: string;
-  value: number;
-}
+export type ProductType = 'physical' | 'digital' | 'service' | 'voucher' | 'custom' | 'cause';
 
 export interface ProductDefaultUnitPrice {
   id: string;
@@ -12,7 +10,7 @@ export interface ProductDefaultUnitPrice {
   product_id?: string | null;
   label?: string | null;
   about?: string | null;
-  nominal: ProductPriceAmount;
+  nominal: Amount;
   created_at: string;
   updated_at?: string | null;
   archived_at?: string | null;
@@ -22,7 +20,7 @@ export interface ProductPriceSummary {
   id: string;
   active: boolean;
   label?: string | null;
-  nominal: ProductPriceAmount;
+  nominal: Amount;
 }
 
 export interface ProductPhysicalDimensions {
@@ -127,7 +125,7 @@ export interface ProductActionRequest {
 
 export interface AddProductPriceRequest {
   product_id: string;
-  amount: ProductPriceAmount;
+  amount: AmountParams;
   label?: string;
   about?: string;
 }

@@ -1,4 +1,4 @@
-import { MoneyAmount } from './common';
+import type { Amount } from './money';
 
 export interface PageBalanceTransactionsRequest {
   page_number?: number;
@@ -23,16 +23,16 @@ interface BalanceTransactionBase {
   type: BalanceTransactionType;
   payout_id?: string;
   order_id: string;
-  amount: MoneyAmount;
+  amount: Amount;
   created_at: string;
   available_at?: string;
   claimed_at?: string;
   paid_at?: string;
 
   /** @deprecated Not returned by the reviewed API. Use `amount`. */
-  amount_expected?: MoneyAmount;
+  amount_expected?: Amount;
   /** @deprecated Not returned by the reviewed API. Use `amount`. */
-  amount_available?: MoneyAmount;
+  amount_available?: Amount;
   /** @deprecated Not returned on balance transactions by the reviewed API. */
   payout_configuration?: PayoutConfiguration | null;
 }

@@ -1,29 +1,23 @@
+import type { CustomData } from './custom-data';
+import type { Amount, Currency } from './money';
+import type { Price, PriceParams } from './prices';
+import type { ProductType } from './products';
+import type { RequestMeta } from './requests';
 import {
-  Currency,
-  CustomData,
-  MoneyAmount,
-  PaymentMethodType,
-  ProductType,
-  RequestMeta,
-} from './common';
-import { BalanceTransaction } from './balance-transactions';
-import {
-  PaymentMethodBankAccount,
-  PaymentMethodCard,
   PaymentMethodData,
-  PaymentMethodMobileMoney,
   MobileMoneyNetwork,
-  PaymentMethodVerification,
 } from './payment-methods';
 import { Address, CustomerData } from './customer';
 import { BankAccountConfig, FinancialAccountType, WalletType } from './financial-accounts';
-import type { PaymentAttemptStatus, PaymentConfirmationChannel } from './api-enums';
+import type { Payment, PaymentStatus } from './payments';
 import type { CreateRefundRequest, Refund } from './refunds';
+
+export type LineItemType = 'product' | 'fee' | 'shipping';
 
 /**
  * Product line item
  */
-export interface Product {
+export interface ProductLineItemParams {
   /** Internal product ID for reconciliation */
   id?: string;
   /** Product type */
@@ -39,7 +33,7 @@ export interface Product {
   /** Tax code (optional) */
   tax_code?: string;
   /** Product price */
-  price: MoneyAmount;
+  price: PriceParams;
   /** Arbitrary custom data */
   custom_data?: CustomData;
 }
@@ -47,13 +41,13 @@ export interface Product {
 /**
  * Fee line item
  */
-export interface Fee {
+export interface FeeLineItemParams {
   /** Fee identifier */
   id?: string;
   /** Customer-facing label */
   label?: string;
   /** Fee amount */
-  amount: MoneyAmount;
+  amount: import('./money').AmountParams;
   /** Fee description */
   description?: string;
   /** Tax classification code */
@@ -67,19 +61,44 @@ export interface Fee {
 /**
  * Line item - can be a product or a fee
  */
-export type LineItem =
+export interface ShippingLineItemParams {
+  id?: string;
+  label?: string;
+  fee: import('./money').AmountParams;
+  tax_code?: string;
+  custom_data?: CustomData;
+}
+
+export type LineItemParams =
   | {
       type: 'product';
-      product: Product;
+      product: ProductLineItemParams;
     }
   | {
       type: 'fee';
-      fee: Fee;
+      fee: FeeLineItemParams;
     }
   | {
       type: 'shipping';
-      shipping: ShippingDetails;
+      shipping: ShippingLineItemParams;
     };
+
+export interface ProductLineItem extends Omit<ProductLineItemParams, 'price'> {
+  price: Price;
+}
+
+export interface FeeLineItem extends Omit<FeeLineItemParams, 'amount'> {
+  amount: Amount;
+}
+
+export interface ShippingLineItem extends Omit<ShippingLineItemParams, 'fee'> {
+  fee: Amount;
+}
+
+export type LineItem =
+  | { type: 'product'; product: ProductLineItem }
+  | { type: 'fee'; fee: FeeLineItem }
+  | { type: 'shipping'; shipping: ShippingLineItem };
 
 /**
  * Billing details for an order
@@ -112,7 +131,7 @@ export interface ShippingDetails {
   /** Shipping label */
   label?: string;
   /** Shipping fee */
-  fee: MoneyAmount;
+  fee: Amount;
   /** Tax code */
   tax_code?: string;
   /** Arbitrary custom data */
@@ -160,24 +179,11 @@ export interface InvoiceSettings {
 }
 
 /**
- * Payout configuration for a payment or balance transaction
- */
-export interface PayoutConfiguration {
-  /** Whether to enable foreign exchange conversion for this payout */
-  enable_fx?: boolean;
-  /** Destination financial account for payout */
-  destination?: {
-    /** ID of the financial account receiving the payout */
-    financial_account_id?: string;
-  };
-}
-
-/**
  * Base order creation request
  */
 interface BaseCreateOrderRequest {
   /** Line items (products or fees) */
-  line_items: LineItem[];
+  line_items: LineItemParams[];
   /** Billing details */
   billing_details?: BillingDetails;
   /** Shipping information (required for physical products) */
@@ -265,7 +271,7 @@ export interface UpdateOrderRequest {
   /** Explicit seal decision */
   finalize?: boolean;
   /** Full replacement for the order's line items */
-  line_items?: LineItem[];
+  line_items?: LineItemParams[];
   /** Replacement order number */
   number?: string;
   /** Replacement receipt number */
@@ -389,19 +395,6 @@ export type OrderStatus =
   | 'unknown';
 
 /**
- * Payment status
- */
-export type PaymentStatus =
-  | 'initiated'
-  | 'requires_action'
-  | 'overdue'
-  | 'executed'
-  | 'paid'
-  | 'canceled'
-  | 'expired'
-  | 'failed'
-  | 'unknown';
-/**
  * Checkout settings
  */
 export interface CheckoutSettings {
@@ -410,86 +403,11 @@ export interface CheckoutSettings {
 }
 
 /**
- * Payment method summary
- */
-export interface PaymentMethod {
-  id?: string;
-  customer_id?: string;
-  type?: PaymentMethodType;
-  mobile_money?: PaymentMethodMobileMoney | null;
-  bank_account?: PaymentMethodBankAccount | null;
-  card?: PaymentMethodCard | null;
-  verification?: PaymentMethodVerification | null;
-  custom_data?: Record<string, string>;
-  expires_on?: string | null;
-  verified?: boolean;
-  verified_at?: string | null;
-  created_at?: string;
-}
-
-/**
- * Latest payment attempt details
- */
-export interface PaymentAttempt {
-  payment_method_type?: PaymentMethodType;
-  payment_method_id?: string;
-  reference?: string;
-  status?: PaymentAttemptStatus;
-  initiated_at?: string;
-  succeeded_at?: string;
-}
-
-/**
- * Payment intent tied to an order
- */
-export interface Payment {
-  id?: string;
-  status?: PaymentStatus;
-  statement_descriptor?: string;
-  amount?: MoneyAmount;
-  payment_method?: PaymentMethod;
-  latest_attempt?: PaymentAttempt;
-  next_action?: PaymentNextAction | null;
-  payout_configuration?: PayoutConfiguration | null;
-  balance_transaction?: BalanceTransaction | null;
-  initiated_at?: string;
-  executed_at?: string;
-  paid_at?: string;
-  failed_at?: string;
-}
-
-export type PaymentNextActionType =
-  | 'confirm_payment'
-  | 'execute'
-  | 'redirect'
-  | 'authorize'
-  | 'none';
-
-export interface PaymentNextAction {
-  type: PaymentNextActionType;
-  confirm_payment?: {
-    expires_at: string;
-    scheme?: string;
-    request?: {
-      id: string;
-      recipient: string;
-      sent_via: PaymentConfirmationChannel;
-      token_size: number;
-      sender_id: string;
-    };
-  };
-  execute?: Record<string, unknown>;
-  redirect?: {
-    url: string;
-  };
-}
-
-/**
  * Line item group summarizing items and totals
  */
 export interface LineItemGroup {
   line_items: LineItem[];
-  total: MoneyAmount;
+  total: Amount;
 }
 
 /**
@@ -550,9 +468,9 @@ export interface Order {
   /** Shipping information */
   shipping?: Shipping;
   /** Totals */
-  total?: MoneyAmount;
-  subtotal?: MoneyAmount;
-  tax?: MoneyAmount;
+  total?: Amount;
+  subtotal?: Amount;
+  tax?: Amount;
   currency?: Currency;
   /** Order-level custom metadata */
   custom_data?: CustomData | null;

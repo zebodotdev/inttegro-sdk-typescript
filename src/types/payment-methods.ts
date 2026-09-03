@@ -1,6 +1,10 @@
-import { PaymentMethodType, RequestMeta } from './common';
+import type { RequestMeta } from './requests';
+
+export type PaymentMethodType = 'mobile_money' | 'bank_account' | 'card' | 'motito';
 
 export type MobileMoneyNetwork = 'airtel' | 'mtn' | 'telecel' | 'vodafone';
+/** @deprecated Prefer `MobileMoneyNetwork`. */
+export type MobileMoneyIssuer = MobileMoneyNetwork;
 
 export interface MobileMoneyDetails {
   account_number: string;

@@ -1,4 +1,4 @@
-import { MoneyAmount } from './common';
+import type { Amount } from './money';
 import type { PayoutStatus } from './api-enums';
 
 export interface PayoutScheduleSpec {
@@ -56,7 +56,7 @@ export interface Payout {
   id?: string;
   application_id?: string;
   destination_id?: string;
-  amount?: MoneyAmount;
+  amount?: Amount;
   balance_transactions?: string[];
   status?: PayoutStatus;
   initiated_by?: string;
@@ -68,7 +68,7 @@ export interface Payout {
   error?: PayoutError | null;
   executed_by?: string;
   failed_at?: string | null;
-  max_amount?: MoneyAmount;
+  max_amount?: Amount;
   latest_attempt_id?: string;
   latest_error?: PayoutError;
   reference?: string;

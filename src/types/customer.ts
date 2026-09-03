@@ -1,4 +1,5 @@
-import { CustomData, RequestMeta } from './common';
+import type { CustomData } from './custom-data';
+import type { RequestMeta } from './requests';
 
 export interface CustomerAddressInput {
   country: string;
