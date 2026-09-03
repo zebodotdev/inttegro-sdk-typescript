@@ -15,33 +15,58 @@ export interface ChimeRecipientEmail {
   address: string;
 }
 
-export interface ChimeRecipient {
-  type?: ChimeRecipientType;
-  transport?: ChimeRecipientTransport;
-  customer_id?: string;
-  name?: string;
-  phone?: ChimeRecipientPhone;
-  email?: ChimeRecipientEmail;
-}
+export type ChimeRecipient =
+  | {
+      type: 'phone';
+      name?: string;
+      phone: ChimeRecipientPhone;
+      email?: never;
+      customer_id?: never;
+      transport?: never;
+    }
+  | {
+      type: 'email';
+      name?: string;
+      email: ChimeRecipientEmail;
+      phone?: never;
+      customer_id?: never;
+      transport?: never;
+    }
+  | {
+      customer_id: string;
+      transport: ChimeRecipientTransport;
+      type?: never;
+      name?: never;
+      phone?: never;
+      email?: never;
+    };
 
 export interface ChimeEmailAddress {
   address: string;
   name?: string;
 }
 
-export interface ChimeEmailMessage {
+export interface ChimeEmailMessageInput {
   subject: string;
   text: string;
   html?: string;
   from: ChimeEmailAddress;
+  reply_to?: string;
+  headers?: Record<string, string>;
+}
+
+export interface ChimeEmailMessage {
+  subject?: string;
+  text?: string;
+  html?: string | null;
+  from?: ChimeEmailAddress;
   reply_to?: ChimeEmailAddress;
   headers?: Record<string, string>;
 }
 
 interface SendChimeRequestBase {
   recipient: ChimeRecipient;
-  transport?: ChimeTransport;
-  sender?: string;
+  sender_id?: string;
   purpose?: string;
   custom_data?: CustomData;
   request_meta?: RequestMeta;
@@ -51,15 +76,22 @@ export type SendChimeRequest =
   | (SendChimeRequestBase & {
       full_message: string;
       email?: never;
+      message_template?: never;
     })
   | (SendChimeRequestBase & {
       full_message?: never;
-      email: ChimeEmailMessage;
+      email: ChimeEmailMessageInput;
+      message_template?: never;
+    })
+  | (SendChimeRequestBase & {
+      full_message?: never;
+      email?: never;
+      message_template: MessageTemplateReference;
     });
 
 interface ScheduleChimeRequestBase {
-  recipients?: string[];
-  send_after?: string;
+  recipients: ChimeRecipient[];
+  send_after: string;
   sender_id?: string;
   purpose?: string | null;
   request_meta?: RequestMeta;
@@ -69,10 +101,17 @@ export type ScheduleChimeRequest =
   | (ScheduleChimeRequestBase & {
       full_message: string;
       email?: never;
+      message_template?: never;
     })
   | (ScheduleChimeRequestBase & {
       full_message?: never;
-      email: ChimeEmailMessage;
+      email: ChimeEmailMessageInput;
+      message_template?: never;
+    })
+  | (ScheduleChimeRequestBase & {
+      full_message?: never;
+      email?: never;
+      message_template: MessageTemplateReference;
     });
 
 export interface LookupChimeRequest {
@@ -104,12 +143,11 @@ export interface Chime {
 export type BroadcastChimeMessageTemplate = string | MessageTemplateReference;
 
 export interface BroadcastChimeRequest {
-  idempotency_key?: string;
   message_template?: BroadcastChimeMessageTemplate;
-  email?: ChimeEmailMessage;
+  email?: ChimeEmailMessageInput;
   purpose?: string;
   recipients: ChimeRecipient[];
-  sender: string;
+  sender?: string;
   request_meta?: RequestMeta;
 }
 

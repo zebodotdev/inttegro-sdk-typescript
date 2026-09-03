@@ -1,9 +1,13 @@
+export interface PriceAmount {
+  currency: string;
+  value: number;
+}
+
 export interface CreatePriceRequest {
   product_id?: string;
   label?: string;
   about?: string;
-  currency: string;
-  amount: number;
+  amount: PriceAmount;
 }
 
 export interface LookupPriceRequest {

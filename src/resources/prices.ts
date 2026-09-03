@@ -18,10 +18,7 @@ export class Prices {
   constructor(private httpClient: HttpClient) {}
 
   async create(request: CreatePriceRequest): Promise<Price> {
-    const errors = validateRequired(request as unknown as Record<string, unknown>, [
-      'currency',
-      'amount',
-    ]);
+    const errors = validateRequired(request as unknown as Record<string, unknown>, ['amount']);
     throwIfValidationErrors(errors);
 
     return this.httpClient.postResource<Price>('/prices/create', 'price', request);

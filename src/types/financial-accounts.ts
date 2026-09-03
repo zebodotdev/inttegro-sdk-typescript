@@ -41,7 +41,7 @@ export interface GhanaBankAccount {
   number: string;
   sort_code?: string;
   swift_code?: string;
-  holder: BankAccountOwner;
+  holder?: BankAccountOwner;
 }
 
 export interface BankAccountConfig {
@@ -50,23 +50,44 @@ export interface BankAccountConfig {
   ghana_bank_account?: GhanaBankAccount;
 }
 
-export interface CreateFinancialAccountRequest {
+interface FinancialAccountRequestBase {
   label: string;
-  type: FinancialAccountType;
   reference: string;
   currency: string;
   description?: string;
   pull_configuration?: PullPushConfig;
   push_configuration?: PullPushConfig;
-  wallet?: WalletConfig;
-  bank_account?: BankAccountConfig;
-  dosh_account?: Record<string, unknown>;
-  custom_data?: Record<string, string>;
-  owner: BankAccountOwner;
-  verification?: Record<string, unknown> | null;
-  archived_at?: string | null;
-  created_at?: string;
+  custom_data?: Record<string, unknown>;
 }
+
+export interface FinancialAccountWalletRequest extends FinancialAccountRequestBase {
+  type: 'wallet';
+  owner: BankAccountOwner;
+  wallet: WalletConfig;
+  bank_account?: never;
+  dosh_account?: never;
+}
+
+export type FinancialAccountBankRequest = FinancialAccountRequestBase & {
+  type: 'bank_account';
+  bank_account: BankAccountConfig;
+  wallet?: never;
+  dosh_account?: never;
+  owner?: BankAccountOwner;
+};
+
+export interface FinancialAccountDoshRequest extends FinancialAccountRequestBase {
+  type: 'dosh_account';
+  owner: BankAccountOwner;
+  dosh_account: Record<string, never>;
+  wallet?: never;
+  bank_account?: never;
+}
+
+export type CreateFinancialAccountRequest =
+  | FinancialAccountWalletRequest
+  | FinancialAccountBankRequest
+  | FinancialAccountDoshRequest;
 
 export interface FinancialAccount {
   id?: string;
@@ -110,7 +131,7 @@ export interface VerifyFinancialAccountRequest {
   [key: string]: unknown;
 }
 
-export interface ConnectFinancialAccountRequest extends CreateFinancialAccountRequest {}
+export type ConnectFinancialAccountRequest = CreateFinancialAccountRequest;
 
 export interface UpdateFinancialAccountRequest {
   account_id: string;

@@ -38,7 +38,6 @@ describe('Products', () => {
     await products.addPrice({
       product_id: 'prod_123',
       amount: { currency: 'ghs', value: 5000 },
-      set_as_default: true,
     });
     await products.setDefaultUnitPrice({ product_id: 'prod_123', price_id: 'pr_123' });
     await products.page({ page_number: 1, page_size: 20 });
@@ -54,7 +53,6 @@ describe('Products', () => {
     expect(postSpy).toHaveBeenCalledWith('/products/add_price', {
       product_id: 'prod_123',
       amount: { currency: 'ghs', value: 5000 },
-      set_as_default: true,
     });
     expect(postSpy).toHaveBeenCalledWith('/products/set_default_unit_price', {
       product_id: 'prod_123',

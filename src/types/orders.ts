@@ -219,6 +219,8 @@ export interface CreateOrderWithCustomerRequest extends BaseCreateOrderRequest {
   customer_id?: never;
   /** Payment method ID should not be present when creating with customer data */
   payment_method_id?: never;
+  /** Optional inline payment method details to tokenize and attach */
+  payment_method_data?: PaymentMethodData;
 }
 
 /**
@@ -229,6 +231,8 @@ export interface CreateOrderWithCustomerIdRequest extends BaseCreateOrderRequest
   customer_id: string;
   /** Optional pre-saved payment method ID */
   payment_method_id?: string;
+  /** Optional inline payment method details to tokenize and attach */
+  payment_method_data?: PaymentMethodData;
   /** Customer data should not be present when using existing customer */
   customer_data?: never;
 }
@@ -317,6 +321,10 @@ export interface ConfirmPaymentRequest {
   order_id: string;
   /** Request metadata such as idempotency controls */
   request_meta?: RequestMeta;
+  /** Payment being confirmed */
+  payment_id: string;
+  /** Confirmation challenge being answered */
+  confirmation_id: string;
   /** Confirmation token (e.g., OTP) */
   token: string;
 }
@@ -359,6 +367,10 @@ export interface CancelOrderRequest {
   order_id: string;
   /** Request metadata such as idempotency controls */
   request_meta?: RequestMeta;
+  /** Optional cancellation reason */
+  reason?: string;
+  /** Record whether a refund was requested as part of the cancellation */
+  execute_refund?: boolean;
 }
 
 /** @deprecated Prefer `CreateRefundRequest` through `client.refunds.create`. */

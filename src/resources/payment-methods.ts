@@ -22,7 +22,9 @@ export class PaymentMethods {
   async tokenize(request: TokenizePaymentMethodRequest): Promise<PaymentMethod> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, [
       'customer_id',
-      'payment_method_data',
+      'type',
+      'mobile_money',
+      'owner',
     ]);
     throwIfValidationErrors(errors);
 

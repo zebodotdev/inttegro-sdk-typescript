@@ -93,8 +93,10 @@ export interface TokenizePaymentMethodRequest {
   /** Request metadata such as idempotency controls */
   request_meta?: RequestMeta;
   customer_id: string;
-  payment_method_data: PaymentMethodData;
-  verify_immediately?: boolean;
+  type: 'mobile_money';
+  mobile_money: MobileMoneyDetails;
+  owner: PaymentMethodOwner;
+  custom_data?: Record<string, string>;
 }
 
 export interface VerifyPaymentMethodRequest {
