@@ -14,7 +14,7 @@ import {
   InttegroAuthenticationError,
   InttegroNetworkError,
   InttegroRateLimitError,
-  APIErrorResponse,
+  APIErrorDocument,
 } from './errors';
 import { Logger } from './utils/logger';
 import { withRetry, isRetryableHttpError } from './utils/retry';
@@ -135,11 +135,11 @@ export class HttpClient {
   /**
    * Parse error response
    */
-  private async parseErrorResponse(response: Response): Promise<APIErrorResponse> {
+  private async parseErrorResponse(response: Response): Promise<APIErrorDocument> {
     try {
       const contentType = response.headers.get('content-type');
       if (contentType && contentType.includes('application/json')) {
-        return (await response.json()) as APIErrorResponse;
+        return (await response.json()) as APIErrorDocument;
       }
       return { message: await response.text() };
     } catch {
@@ -327,6 +327,39 @@ export class HttpClient {
   }
 
   /**
+   * Make a POST request and return one domain value from the wire envelope.
+   * Transport envelopes are deliberately kept out of the public resource API.
+   */
+  async postResource<T>(
+    path: string,
+    field: string,
+    body?: unknown,
+    options: RequestInit = {}
+  ): Promise<T> {
+    const envelope = Object.keys(options).length
+      ? await this.post<Record<string, unknown>>(path, body, options)
+      : await this.post<Record<string, unknown>>(path, body);
+    return resourceFromEnvelope<T>(envelope, field, path);
+  }
+
+  /** Extract one domain value from a multipart response envelope. */
+  async postFormResource<T>(
+    pathOrUrl: string,
+    field: string,
+    form: FormData,
+    options: RequestInit = {},
+    authenticated = true
+  ): Promise<T> {
+    const envelope = await this.postForm<Record<string, unknown>>(
+      pathOrUrl,
+      form,
+      options,
+      authenticated
+    );
+    return resourceFromEnvelope<T>(envelope, field, pathOrUrl);
+  }
+
+  /**
    * Make a PUT request
    */
   async put<T>(path: string, body?: unknown, options: RequestInit = {}): Promise<T> {
@@ -391,6 +424,18 @@ export class HttpClient {
 
     return requestOptions;
   }
+}
+
+function resourceFromEnvelope<T>(
+  envelope: Record<string, unknown>,
+  field: string,
+  path: string
+): T {
+  const resource = envelope[field];
+  if (resource === undefined || resource === null) {
+    throw new TypeError(`Inttegro returned an invalid ${field} value for ${path}`);
+  }
+  return resource as T;
 }
 
 function stripTopLevelIdempotencyKey(body: string): string {

@@ -68,7 +68,7 @@ describe('HttpClient idempotency', () => {
       'fetch',
       vi.fn(async (_url: string, options: RequestInit) => {
         calls.push(options);
-        return jsonResponse({ ok: true });
+        return jsonResponse({ message_template: { id: 'mt_123' } });
       })
     );
 

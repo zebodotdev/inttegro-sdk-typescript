@@ -1,11 +1,12 @@
 import { HttpClient } from '../http-client';
 import {
   FileLinkCreateRequest,
+  FileLink,
+  FileLinkCreation,
   FileLinkLookupRequest,
   FileLinkOpenRequest,
   FileLinkPageRequest,
-  FileLinkPageResponse,
-  FileLinkResponse,
+  FileLinkPage,
   FileLinkRevokeRequest,
   RequestOptions,
 } from '../types';
@@ -17,25 +18,22 @@ export class FileLinks {
   async create(
     request: FileLinkCreateRequest,
     options: RequestOptions = {}
-  ): Promise<FileLinkResponse> {
-    return this.httpClient.post<FileLinkResponse>('/file_links/create', request, {
+  ): Promise<FileLinkCreation> {
+    return this.httpClient.post<FileLinkCreation>('/file_links/create', request, {
       headers: idempotencyHeaders(options.idempotencyKey),
     });
   }
 
-  async lookup(request: FileLinkLookupRequest): Promise<FileLinkResponse> {
-    return this.httpClient.post<FileLinkResponse>('/file_links/lookup', request);
+  async lookup(request: FileLinkLookupRequest): Promise<FileLink> {
+    return this.httpClient.postResource<FileLink>('/file_links/lookup', 'file_link', request);
   }
 
-  async page(request: FileLinkPageRequest = {}): Promise<FileLinkPageResponse> {
-    return this.httpClient.post<FileLinkPageResponse>('/file_links/page', request);
+  async page(request: FileLinkPageRequest = {}): Promise<FileLinkPage> {
+    return this.httpClient.postResource<FileLinkPage>('/file_links/page', 'page', request);
   }
 
-  async revoke(
-    request: FileLinkRevokeRequest,
-    options: RequestOptions = {}
-  ): Promise<FileLinkResponse> {
-    return this.httpClient.post<FileLinkResponse>('/file_links/revoke', request, {
+  async revoke(request: FileLinkRevokeRequest, options: RequestOptions = {}): Promise<FileLink> {
+    return this.httpClient.postResource<FileLink>('/file_links/revoke', 'file_link', request, {
       headers: idempotencyHeaders(options.idempotencyKey),
     });
   }

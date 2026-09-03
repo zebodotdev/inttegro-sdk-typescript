@@ -13,7 +13,10 @@ describe('Refunds', () => {
   });
 
   it('should create, cancel, look up, and page refunds', async () => {
-    const response = { refund: { id: 'rf_123' } };
+    const response = {
+      refund: { id: 'rf_123' },
+      page: { number: 1, size: 20, refunds: [] },
+    };
     const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(response);
 
     await refunds.create(

@@ -10,6 +10,4 @@ export interface BalanceBreakdown {
   includes_transactions_before?: string;
 }
 
-export interface BalancesResponse {
-  balances?: Record<string, BalanceBreakdown>;
-}
+export type BalanceSnapshot = Record<string, BalanceBreakdown>;

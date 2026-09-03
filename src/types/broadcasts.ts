@@ -12,7 +12,7 @@ export interface BroadcastError {
   type?: string;
 }
 
-export interface BroadcastDetail {
+export interface Broadcast {
   id?: string;
   recipients?: string[];
   content?: string;
@@ -24,12 +24,6 @@ export interface BroadcastDetail {
   canceled_at?: string | null;
   errors?: BroadcastError[];
   chime_ids?: string[];
-}
-
-export interface LookupBroadcastResponse {
-  broadcast?: BroadcastDetail;
-}
-
-export interface BroadcastCancelResponse {
-  broadcast?: BroadcastDetail;
+  customer_ids?: string[];
+  email?: Record<string, unknown>;
 }

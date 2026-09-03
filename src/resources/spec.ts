@@ -1,10 +1,10 @@
 import { HttpClient } from '../http-client';
-import { GetCountrySpecificationsResponse } from '../types';
+import { CountrySpecifications } from '../types';
 
 export class Spec {
   constructor(private httpClient: HttpClient) {}
 
-  async countries(): Promise<GetCountrySpecificationsResponse> {
-    return this.httpClient.post<GetCountrySpecificationsResponse>('/spec/countries', {});
+  async countries(): Promise<CountrySpecifications> {
+    return this.httpClient.postResource<CountrySpecifications>('/spec/countries', 'countries', {});
   }
 }

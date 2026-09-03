@@ -12,7 +12,9 @@ describe('Apps', () => {
   });
 
   it('calls every apps endpoint', async () => {
-    const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue({ ok: true } as never);
+    const postSpy = vi
+      .spyOn(httpClient, 'post')
+      .mockResolvedValue({ app: { id: 'app_123' } } as never);
 
     await apps.create({ name: 'My App' });
     await apps.lookup();

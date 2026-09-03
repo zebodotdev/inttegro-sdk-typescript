@@ -17,7 +17,7 @@ describe('Broadcasts', () => {
 
     const result = await broadcasts.lookup({ broadcast_id: 'brc_123' });
 
-    expect(result).toEqual(mockBroadcastResponse);
+    expect(result).toEqual(mockBroadcastResponse.broadcast);
     expect(postSpy).toHaveBeenCalledWith('/broadcasts/lookup', { broadcast_id: 'brc_123' });
   });
 
@@ -26,7 +26,7 @@ describe('Broadcasts', () => {
 
     const result = await broadcasts.cancel({ broadcast_id: 'brc_123' });
 
-    expect(result).toEqual(mockBroadcastResponse);
+    expect(result).toEqual(mockBroadcastResponse.broadcast);
     expect(postSpy).toHaveBeenCalledWith('/broadcasts/cancel', { broadcast_id: 'brc_123' });
   });
 

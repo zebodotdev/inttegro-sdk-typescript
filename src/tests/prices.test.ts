@@ -13,7 +13,7 @@ describe('Prices', () => {
   });
 
   it('should page, activate, deactivate, and archive prices', async () => {
-    const mockResponse = { price: { id: 'pr_123' } };
+    const mockResponse = { price: { id: 'pr_123' }, page: { number: 1, size: 20, prices: [] } };
     const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockResponse);
 
     await prices.page({ product_id: 'prod_123', page_number: 1, page_size: 20 });
@@ -21,7 +21,7 @@ describe('Prices', () => {
     const result = await prices.deactivate({ price_id: 'pr_123' });
     await prices.archive({ price_id: 'pr_123' }, { idempotencyKey: 'idem_price_archive' });
 
-    expect(result).toEqual(mockResponse);
+    expect(result).toEqual(mockResponse.price);
     expect(postSpy).toHaveBeenCalledWith('/prices/page', {
       product_id: 'prod_123',
       page_number: 1,

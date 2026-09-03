@@ -3,7 +3,7 @@
  */
 
 /**
- * API error response structure
+ * API error document structure
  */
 export interface APIErrorPayload {
   type?: string;
@@ -15,7 +15,7 @@ export interface APIErrorPayload {
   cause?: string;
 }
 
-export interface APIErrorResponse {
+export interface APIErrorDocument {
   error?: APIErrorPayload;
   message?: string;
   code?: string;
@@ -44,8 +44,8 @@ export class InttegroAPIError extends Error {
   public readonly fixCode?: string;
   /** Underlying category of failure */
   public readonly cause?: string;
-  /** Original error response */
-  public readonly response?: APIErrorResponse;
+  /** Original decoded API error document */
+  public readonly errorDocument?: APIErrorDocument;
 
   constructor(
     message: string,
@@ -56,7 +56,7 @@ export class InttegroAPIError extends Error {
     detail?: string,
     fixCode?: string,
     cause?: string,
-    response?: APIErrorResponse
+    errorDocument?: APIErrorDocument
   ) {
     super(message);
     this.name = 'InttegroAPIError';
@@ -67,7 +67,7 @@ export class InttegroAPIError extends Error {
     this.detail = detail;
     this.fixCode = fixCode;
     this.cause = cause;
-    this.response = response;
+    this.errorDocument = errorDocument;
 
     // Maintains proper stack trace for where our error was thrown (only available on V8)
     if (Error.captureStackTrace) {
@@ -80,7 +80,7 @@ export class InttegroAPIError extends Error {
   /**
    * Create error from API response
    */
-  static fromResponse(statusCode: number, response: APIErrorResponse): InttegroAPIError {
+  static fromResponse(statusCode: number, response: APIErrorDocument): InttegroAPIError {
     const payload = resolveAPIErrorPayload(response);
     const message =
       payload.message || payload.detail || response.message || 'An unknown error occurred';
@@ -134,9 +134,9 @@ export class InttegroValidationError extends InttegroAPIError {
     detail?: string,
     fixCode?: string,
     cause?: string,
-    response?: APIErrorResponse
+    errorDocument?: APIErrorDocument
   ) {
-    super(message, statusCode, code, type, url, detail, fixCode, cause, response);
+    super(message, statusCode, code, type, url, detail, fixCode, cause, errorDocument);
     this.name = 'InttegroValidationError';
     Object.setPrototypeOf(this, InttegroValidationError.prototype);
   }
@@ -178,7 +178,7 @@ export class InttegroAuthenticationError extends InttegroAPIError {
     detail?: string,
     fixCode?: string,
     cause?: string,
-    response?: APIErrorResponse
+    errorDocument?: APIErrorDocument
   ) {
     super(
       message,
@@ -189,7 +189,7 @@ export class InttegroAuthenticationError extends InttegroAPIError {
       detail,
       fixCode,
       cause,
-      response
+      errorDocument
     );
     this.name = 'InttegroAuthenticationError';
     Object.setPrototypeOf(this, InttegroAuthenticationError.prototype);
@@ -213,7 +213,7 @@ export class InttegroRateLimitError extends InttegroAPIError {
     detail?: string,
     fixCode?: string,
     cause?: string,
-    response?: APIErrorResponse
+    errorDocument?: APIErrorDocument
   ) {
     super(
       message,
@@ -224,7 +224,7 @@ export class InttegroRateLimitError extends InttegroAPIError {
       detail,
       fixCode,
       cause,
-      response
+      errorDocument
     );
     this.name = 'InttegroRateLimitError';
     this.retryAfter = retryAfter;
@@ -232,7 +232,7 @@ export class InttegroRateLimitError extends InttegroAPIError {
   }
 }
 
-function resolveAPIErrorPayload(response: APIErrorResponse): APIErrorPayload {
+function resolveAPIErrorPayload(response: APIErrorDocument): APIErrorPayload {
   if (response.error) {
     return response.error;
   }

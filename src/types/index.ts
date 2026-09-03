@@ -39,7 +39,7 @@ export type {
   OrderStatus,
   PaymentStatus,
   CheckoutSettings,
-  PaymentMethod,
+  PaymentMethod as OrderPaymentMethod,
   PaymentAttempt,
   Payment,
   PaymentNextActionType,

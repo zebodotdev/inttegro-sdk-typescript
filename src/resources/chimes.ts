@@ -1,14 +1,14 @@
 import { HttpClient } from '../http-client';
 import {
+  Broadcast,
   BroadcastChimeRequest,
-  BroadcastChimeResponse,
-  ChimeResponse,
+  Chime,
+  ChimePage,
   LookupChimeRequest,
   PageChimesRequest,
-  PageChimesResponse,
   SendChimeRequest,
   ScheduleChimeRequest,
-  ScheduleChimeResponse,
+  ScheduledChime,
 } from '../types';
 import { throwIfValidationErrors, validateRequired } from '../utils/validation';
 import type { ValidationError } from '../utils/validation';
@@ -19,26 +19,26 @@ import type { ValidationError } from '../utils/validation';
 export class Chimes {
   constructor(private httpClient: HttpClient) {}
 
-  async send(request: SendChimeRequest): Promise<ChimeResponse> {
+  async send(request: SendChimeRequest): Promise<Chime> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['recipient']);
     errors.push(...validateExclusiveChimeContent(request, 'full_message'));
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<ChimeResponse>('/chimes/send', request);
+    return this.httpClient.postResource<Chime>('/chimes/send', 'chime', request);
   }
 
-  async lookup(request: LookupChimeRequest): Promise<ChimeResponse> {
+  async lookup(request: LookupChimeRequest): Promise<Chime> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['chime_id']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<ChimeResponse>('/chimes/lookup', request);
+    return this.httpClient.postResource<Chime>('/chimes/lookup', 'chime', request);
   }
 
-  async page(request: PageChimesRequest = {}): Promise<PageChimesResponse> {
-    return this.httpClient.post<PageChimesResponse>('/chimes/page', request);
+  async page(request: PageChimesRequest = {}): Promise<ChimePage> {
+    return this.httpClient.postResource<ChimePage>('/chimes/page', 'page', request);
   }
 
-  async broadcast(request: BroadcastChimeRequest): Promise<BroadcastChimeResponse> {
+  async broadcast(request: BroadcastChimeRequest): Promise<Broadcast> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, [
       'recipients',
       'sender',
@@ -48,10 +48,10 @@ export class Chimes {
     }
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<BroadcastChimeResponse>('/chimes/broadcast', request);
+    return this.httpClient.postResource<Broadcast>('/chimes/broadcast', 'broadcast', request);
   }
 
-  async schedule(request: ScheduleChimeRequest): Promise<ScheduleChimeResponse> {
+  async schedule(request: ScheduleChimeRequest): Promise<ScheduledChime> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['send_after']);
     if (!request.recipients || request.recipients.length === 0) {
       errors.push({ field: 'recipients', message: 'recipients is required' });
@@ -59,7 +59,11 @@ export class Chimes {
     errors.push(...validateExclusiveChimeContent(request, 'full_message'));
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<ScheduleChimeResponse>('/chimes/schedule', request);
+    return this.httpClient.postResource<ScheduledChime>(
+      '/chimes/schedule',
+      'scheduled_chime',
+      request
+    );
   }
 }
 

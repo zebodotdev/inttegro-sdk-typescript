@@ -53,21 +53,9 @@ export interface App {
   relationship?: AppRelationship;
 }
 
-export interface CreateAppResponse {
-  app: App;
-}
-
-export interface LookupAppResponse {
-  app: App;
-}
-
 export interface UpdateAppRequest {
   name?: string;
   alias?: string;
   description?: string;
   legal_entity_type?: string;
-}
-
-export interface UpdateAppResponse {
-  app: App;
 }

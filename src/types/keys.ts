@@ -74,27 +74,7 @@ export interface SecretKeyUsagePage {
   rows: SecretKeyUsageRow[];
 }
 
-export interface GenerateSecretKeyResponse {
-  key?: GeneratedSecretKey;
-}
-
-export interface LookupSecretKeyResponse {
-  key?: SecretKey;
-}
-
-export interface UpdateSecretKeyResponse {
-  key?: SecretKey;
-}
-
-export interface DestroySecretKeyResponse {
-  key?: SecretKey;
-}
-
-export interface PageSecretKeysResponse {
-  page?: SecretKeyPage;
-}
-
-export interface SecretKeyUsageResponse {
-  key?: SecretKey;
-  usage?: SecretKeyUsagePage;
+export interface SecretKeyUsage {
+  key: SecretKey;
+  usage: SecretKeyUsagePage;
 }

@@ -3,13 +3,11 @@ import {
   ArchiveFinancialAccountRequest,
   ConnectFinancialAccountRequest,
   CreateFinancialAccountRequest,
-  CreateFinancialAccountResponse,
+  FinancialAccount,
+  FinancialAccountPage,
   LookupFinancialAccountRequest,
-  LookupFinancialAccountResponse,
   PageFinancialAccountsRequest,
-  PageFinancialAccountsResponse,
   ReconnectFinancialAccountRequest,
-  ReconnectFinancialAccountResponse,
   ToggleFinancialAccountRequest,
   UpdateFinancialAccountRequest,
   VerifyFinancialAccountRequest,
@@ -22,7 +20,7 @@ import { throwIfValidationErrors, validateRequired } from '../utils/validation';
 export class FinancialAccounts {
   constructor(private httpClient: HttpClient) {}
 
-  async create(request: CreateFinancialAccountRequest): Promise<CreateFinancialAccountResponse> {
+  async create(request: CreateFinancialAccountRequest): Promise<FinancialAccount> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, [
       'label',
       'type',
@@ -32,117 +30,126 @@ export class FinancialAccounts {
     ]);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<CreateFinancialAccountResponse>(
+    return this.httpClient.postResource<FinancialAccount>(
       '/financial_accounts/create',
+      'account',
       request
     );
   }
 
-  async lookup(request: LookupFinancialAccountRequest): Promise<LookupFinancialAccountResponse> {
+  async lookup(request: LookupFinancialAccountRequest): Promise<FinancialAccount> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['account_id']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<LookupFinancialAccountResponse>(
+    return this.httpClient.postResource<FinancialAccount>(
       '/financial_accounts/lookup',
+      'account',
       request
     );
   }
 
-  async archive(request: ArchiveFinancialAccountRequest): Promise<unknown> {
-    return this.httpClient.post('/financial_accounts/archive', request);
+  async archive(request: ArchiveFinancialAccountRequest): Promise<FinancialAccount> {
+    return this.httpClient.postResource<FinancialAccount>(
+      '/financial_accounts/archive',
+      'account',
+      request
+    );
   }
 
-  async page(request: PageFinancialAccountsRequest): Promise<PageFinancialAccountsResponse> {
-    return this.httpClient.post<PageFinancialAccountsResponse>('/financial_accounts/page', request);
+  async page(request: PageFinancialAccountsRequest): Promise<FinancialAccountPage> {
+    return this.httpClient.postResource<FinancialAccountPage>(
+      '/financial_accounts/page',
+      'page',
+      request
+    );
   }
 
-  async verify(request: VerifyFinancialAccountRequest): Promise<unknown> {
-    return this.httpClient.post('/financial_accounts/verify', request);
+  async verify(request: VerifyFinancialAccountRequest): Promise<FinancialAccount> {
+    return this.httpClient.postResource<FinancialAccount>(
+      '/financial_accounts/verify',
+      'account',
+      request
+    );
   }
 
-  async update(request: UpdateFinancialAccountRequest): Promise<CreateFinancialAccountResponse> {
+  async update(request: UpdateFinancialAccountRequest): Promise<FinancialAccount> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['account_id']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<CreateFinancialAccountResponse>(
+    return this.httpClient.postResource<FinancialAccount>(
       '/financial_accounts/update',
+      'account',
       request
     );
   }
 
-  async enablePush(
-    request: ToggleFinancialAccountRequest
-  ): Promise<CreateFinancialAccountResponse> {
+  async enablePush(request: ToggleFinancialAccountRequest): Promise<FinancialAccount> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['account_id']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<CreateFinancialAccountResponse>(
+    return this.httpClient.postResource<FinancialAccount>(
       '/financial_accounts/enable_push',
+      'account',
       request
     );
   }
 
-  async disablePush(
-    request: ToggleFinancialAccountRequest
-  ): Promise<CreateFinancialAccountResponse> {
+  async disablePush(request: ToggleFinancialAccountRequest): Promise<FinancialAccount> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['account_id']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<CreateFinancialAccountResponse>(
+    return this.httpClient.postResource<FinancialAccount>(
       '/financial_accounts/disable_push',
+      'account',
       request
     );
   }
 
-  async enablePull(
-    request: ToggleFinancialAccountRequest
-  ): Promise<CreateFinancialAccountResponse> {
+  async enablePull(request: ToggleFinancialAccountRequest): Promise<FinancialAccount> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['account_id']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<CreateFinancialAccountResponse>(
+    return this.httpClient.postResource<FinancialAccount>(
       '/financial_accounts/enable_pull',
+      'account',
       request
     );
   }
 
-  async disablePull(
-    request: ToggleFinancialAccountRequest
-  ): Promise<CreateFinancialAccountResponse> {
+  async disablePull(request: ToggleFinancialAccountRequest): Promise<FinancialAccount> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['account_id']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<CreateFinancialAccountResponse>(
+    return this.httpClient.postResource<FinancialAccount>(
       '/financial_accounts/disable_pull',
+      'account',
       request
     );
   }
 
-  async disconnect(
-    request: ToggleFinancialAccountRequest
-  ): Promise<CreateFinancialAccountResponse> {
+  async disconnect(request: ToggleFinancialAccountRequest): Promise<FinancialAccount> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['account_id']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<CreateFinancialAccountResponse>(
+    return this.httpClient.postResource<FinancialAccount>(
       '/financial_accounts/disconnect',
+      'account',
       request
     );
   }
 
-  async reconnect(
-    request: ReconnectFinancialAccountRequest
-  ): Promise<ReconnectFinancialAccountResponse> {
+  async reconnect(request: ReconnectFinancialAccountRequest): Promise<FinancialAccount> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['account_id']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<ReconnectFinancialAccountResponse>(
+    return this.httpClient.postResource<FinancialAccount>(
       '/financial_accounts/reconnect',
+      'account',
       request
     );
   }
 
-  async connect(request: ConnectFinancialAccountRequest): Promise<CreateFinancialAccountResponse> {
+  async connect(request: ConnectFinancialAccountRequest): Promise<FinancialAccount> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, [
       'label',
       'type',
@@ -152,8 +159,9 @@ export class FinancialAccounts {
     ]);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<CreateFinancialAccountResponse>(
+    return this.httpClient.postResource<FinancialAccount>(
       '/financial_accounts/connect',
+      'account',
       request
     );
   }

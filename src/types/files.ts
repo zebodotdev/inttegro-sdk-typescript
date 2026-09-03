@@ -32,8 +32,41 @@ export interface FileDeleteRequest {
   file_id: string;
 }
 
-export type FileResponse = Record<string, unknown>;
-export type FilePageResponse = Record<string, unknown>;
+export interface FileActor {
+  type?: string;
+  id?: string;
+  name?: string;
+  email?: string;
+}
+
+export interface FileSource {
+  type?: string;
+  id?: string;
+}
+
+export interface File {
+  id: string;
+  purpose: string;
+  status: FileStatus;
+  scan_status?: string;
+  name?: string | null;
+  filename?: string | null;
+  content_type?: string;
+  size?: number;
+  created_at?: string;
+  updated_at?: string | null;
+  deleted_at?: string | null;
+  title?: string | null;
+  custom_data?: Record<string, string>;
+  created_by?: FileActor;
+  source?: FileSource;
+}
+
+export interface FilePage {
+  number?: number;
+  size?: number;
+  files?: File[];
+}
 
 export interface FileLinkCreateRequest {
   access?: Record<string, unknown>;
@@ -65,8 +98,29 @@ export interface FileLinkOpenRequest {
   save_to?: string;
 }
 
-export type FileLinkResponse = Record<string, unknown>;
-export type FileLinkPageResponse = Record<string, unknown>;
+export interface FileLink {
+  id: string;
+  file_id: string;
+  status: FileLinkStatus;
+  expires_at?: string | null;
+  created_at?: string;
+  revoked_at?: string | null;
+  custom_data?: Record<string, string>;
+  metadata?: Record<string, string>;
+  access?: Record<string, unknown>;
+  delivery?: Record<string, unknown>;
+}
+
+export interface FileLinkPage {
+  number?: number;
+  size?: number;
+  file_links?: FileLink[];
+}
+
+export interface FileLinkCreation {
+  file_link: FileLink;
+  url: string;
+}
 
 export interface UploadRequestCreateRequest {
   attempts?: Record<string, unknown>;
@@ -131,9 +185,35 @@ export interface UploadRequestFulfillRequest {
   upload_url: string;
 }
 
-export type UploadRequestResponse = Record<string, unknown>;
-export type UploadRequestPageResponse = Record<string, unknown>;
-export type UploadRequestFulfillResponse = Record<string, unknown>;
+export interface UploadRequest {
+  id: string;
+  purpose: string;
+  status: UploadRequestStatus;
+  upload_url?: string;
+  expires_at?: string | null;
+  created_at?: string;
+  canceled_at?: string | null;
+  custom_data?: Record<string, string>;
+  metadata?: Record<string, string>;
+  constraints?: Record<string, unknown>;
+  display?: Record<string, unknown>;
+  recipient?: Record<string, unknown>;
+  requester?: Record<string, unknown>;
+  resource?: Record<string, unknown>;
+  subject?: Record<string, unknown>;
+  attempts?: Record<string, unknown>;
+}
+
+export interface UploadRequestPage {
+  number?: number;
+  size?: number;
+  upload_requests?: UploadRequest[];
+}
+
+export interface UploadFulfillment {
+  upload_request: UploadRequest;
+  file: File;
+}
 import type {
   FileDisposition,
   FileLinkStatus,

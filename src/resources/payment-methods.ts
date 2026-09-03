@@ -1,128 +1,147 @@
 import { HttpClient } from '../http-client';
 import {
   ConfirmPaymentMethodVerificationRequest,
-  ConfirmPaymentMethodVerificationResponse,
   DeletePaymentMethodRequest,
-  DeletePaymentMethodResponse,
-  GetPaymentMethodSettingsResponse,
   LookupPaymentMethodRequest,
-  LookupPaymentMethodResponse,
   PagePaymentMethodsRequest,
-  PagePaymentMethodsResponse,
+  PaymentMethod,
   PaymentMethodActionRequest,
-  PaymentMethodResponse,
+  PaymentMethodDeletion,
+  PaymentMethodPage,
+  PaymentMethodSettings,
+  PaymentMethodVerificationSession,
   TokenizePaymentMethodRequest,
-  TokenizePaymentMethodResponse,
   UpdatePaymentMethodRequest,
   VerifyPaymentMethodRequest,
-  VerifyPaymentMethodResponse,
 } from '../types';
 import { throwIfValidationErrors, validateRequired } from '../utils/validation';
 
 export class PaymentMethods {
   constructor(private httpClient: HttpClient) {}
 
-  async tokenize(request: TokenizePaymentMethodRequest): Promise<TokenizePaymentMethodResponse> {
+  async tokenize(request: TokenizePaymentMethodRequest): Promise<PaymentMethod> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, [
       'customer_id',
       'payment_method_data',
     ]);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<TokenizePaymentMethodResponse>(
+    return this.httpClient.postResource<PaymentMethod>(
       '/payment_methods/tokenize',
+      'payment_method',
       request
     );
   }
 
-  async verify(request: VerifyPaymentMethodRequest): Promise<VerifyPaymentMethodResponse> {
+  async verify(request: VerifyPaymentMethodRequest): Promise<PaymentMethodVerificationSession> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, [
       'payment_method_id',
     ]);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<VerifyPaymentMethodResponse>('/payment_methods/verify', request);
+    return this.httpClient.postResource<PaymentMethodVerificationSession>(
+      '/payment_methods/verify',
+      'verification',
+      request
+    );
   }
 
   async confirmVerification(
     request: ConfirmPaymentMethodVerificationRequest
-  ): Promise<ConfirmPaymentMethodVerificationResponse> {
+  ): Promise<PaymentMethod> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, [
       'payment_method_id',
       'token',
     ]);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<ConfirmPaymentMethodVerificationResponse>(
+    return this.httpClient.postResource<PaymentMethod>(
       '/payment_methods/confirm_verification',
+      'payment_method',
       request
     );
   }
 
-  async lookup(request: LookupPaymentMethodRequest): Promise<LookupPaymentMethodResponse> {
+  async lookup(request: LookupPaymentMethodRequest): Promise<PaymentMethod> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, [
       'payment_method_id',
     ]);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<LookupPaymentMethodResponse>('/payment_methods/lookup', request);
+    return this.httpClient.postResource<PaymentMethod>(
+      '/payment_methods/lookup',
+      'payment_method',
+      request
+    );
   }
 
-  async page(request: PagePaymentMethodsRequest = {}): Promise<PagePaymentMethodsResponse> {
-    return this.httpClient.post<PagePaymentMethodsResponse>('/payment_methods/page', request);
+  async page(request: PagePaymentMethodsRequest = {}): Promise<PaymentMethodPage> {
+    return this.httpClient.postResource<PaymentMethodPage>(
+      '/payment_methods/page',
+      'page',
+      request
+    );
   }
 
-  async update(request: UpdatePaymentMethodRequest): Promise<PaymentMethodResponse> {
+  async update(request: UpdatePaymentMethodRequest): Promise<PaymentMethod> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, [
       'payment_method_id',
     ]);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<PaymentMethodResponse>('/payment_methods/update', request);
+    return this.httpClient.postResource<PaymentMethod>(
+      '/payment_methods/update',
+      'payment_method',
+      request
+    );
   }
 
-  async activate(request: PaymentMethodActionRequest): Promise<PaymentMethodResponse> {
+  async activate(request: PaymentMethodActionRequest): Promise<PaymentMethod> {
     return this.postAction('/payment_methods/activate', request);
   }
 
-  async disactivate(request: PaymentMethodActionRequest): Promise<PaymentMethodResponse> {
+  async disactivate(request: PaymentMethodActionRequest): Promise<PaymentMethod> {
     return this.postAction('/payment_methods/disactivate', request);
   }
 
-  async deactivate(request: PaymentMethodActionRequest): Promise<PaymentMethodResponse> {
+  async deactivate(request: PaymentMethodActionRequest): Promise<PaymentMethod> {
     return this.disactivate(request);
   }
 
-  async archive(request: PaymentMethodActionRequest): Promise<PaymentMethodResponse> {
+  async archive(request: PaymentMethodActionRequest): Promise<PaymentMethod> {
     return this.postAction('/payment_methods/archive', request);
   }
 
-  async unarchive(request: PaymentMethodActionRequest): Promise<PaymentMethodResponse> {
+  async unarchive(request: PaymentMethodActionRequest): Promise<PaymentMethod> {
     return this.postAction('/payment_methods/unarchive', request);
   }
 
-  async delete(request: DeletePaymentMethodRequest): Promise<DeletePaymentMethodResponse> {
+  async delete(request: DeletePaymentMethodRequest): Promise<PaymentMethodDeletion> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, [
       'payment_method_id',
     ]);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<DeletePaymentMethodResponse>('/payment_methods/delete', request);
+    return this.httpClient.post<PaymentMethodDeletion>('/payment_methods/delete', request);
   }
 
-  async settings(): Promise<GetPaymentMethodSettingsResponse> {
-    return this.httpClient.post<GetPaymentMethodSettingsResponse>('/payment_methods/settings', {});
+  async settings(): Promise<PaymentMethodSettings> {
+    return this.httpClient.postResource<PaymentMethodSettings>(
+      '/payment_methods/settings',
+      'settings',
+      {}
+    );
   }
 
   private async postAction(
     path: string,
     request: PaymentMethodActionRequest
-  ): Promise<PaymentMethodResponse> {
+  ): Promise<PaymentMethod> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, [
       'payment_method_id',
     ]);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<PaymentMethodResponse>(path, request);
+    return this.httpClient.postResource<PaymentMethod>(path, 'payment_method', request);
   }
 }

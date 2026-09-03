@@ -1,10 +1,5 @@
 import { HttpClient } from '../http-client';
-import {
-  LookupScheduleRequest,
-  CancelScheduleRequest,
-  ScheduleLookupResponse,
-  ScheduleCancelResponse,
-} from '../types';
+import { LookupScheduleRequest, CancelScheduleRequest, ScheduledChime } from '../types';
 import { throwIfValidationErrors, validateRequired } from '../utils/validation';
 
 /**
@@ -13,17 +8,25 @@ import { throwIfValidationErrors, validateRequired } from '../utils/validation';
 export class Schedules {
   constructor(private httpClient: HttpClient) {}
 
-  async lookup(request: LookupScheduleRequest): Promise<ScheduleLookupResponse> {
+  async lookup(request: LookupScheduleRequest): Promise<ScheduledChime> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['schedule_id']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<ScheduleLookupResponse>('/schedules/lookup', request);
+    return this.httpClient.postResource<ScheduledChime>(
+      '/schedules/lookup',
+      'scheduled_chime',
+      request
+    );
   }
 
-  async cancel(request: CancelScheduleRequest): Promise<ScheduleCancelResponse> {
+  async cancel(request: CancelScheduleRequest): Promise<ScheduledChime> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['schedule_id']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<ScheduleCancelResponse>('/schedules/cancel', request);
+    return this.httpClient.postResource<ScheduledChime>(
+      '/schedules/cancel',
+      'scheduled_chime',
+      request
+    );
   }
 }

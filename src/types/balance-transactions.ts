@@ -51,14 +51,8 @@ export interface RefundBalanceTransaction extends BalanceTransactionBase {
 
 export type BalanceTransaction = PaymentBalanceTransaction | RefundBalanceTransaction;
 
-export interface LookupBalanceTransactionResponse {
-  transaction: BalanceTransaction;
-}
-
-export interface PageBalanceTransactionsResponse {
-  page: {
-    number: number;
-    size: number;
-    transactions?: BalanceTransaction[];
-  };
+export interface BalanceTransactionPage {
+  number: number;
+  size: number;
+  transactions?: BalanceTransaction[];
 }

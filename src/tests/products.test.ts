@@ -19,12 +19,16 @@ describe('Products', () => {
       name: 'T-Shirt',
     });
 
-    expect(result).toEqual({ product: { id: 'prod_123' } });
+    expect(result).toEqual({ id: 'prod_123' });
     expect(postSpy).toHaveBeenCalledWith('/products/create', expect.any(Object));
   });
 
   it('should lookup/update and manage product state', async () => {
-    const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue({ product: { id: 'prod_123' } });
+    const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue({
+      product: { id: 'prod_123' },
+      price: { id: 'pr_123' },
+      page: { number: 1, size: 20, products: [] },
+    });
 
     await products.lookup({ product_id: 'prod_123' });
     await products.update({ product_id: 'prod_123', name: 'New Name' });

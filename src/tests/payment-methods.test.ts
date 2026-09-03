@@ -13,7 +13,10 @@ describe('PaymentMethods', () => {
   });
 
   it('should page and update payment methods', async () => {
-    const mockResponse = { payment_method: { id: 'pm_123', customer_id: 'cu_123' } };
+    const mockResponse = {
+      payment_method: { id: 'pm_123', customer_id: 'cu_123' },
+      page: { number: 1, size: 20, payment_methods: [] },
+    };
     const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockResponse);
 
     await paymentMethods.page({ customer_id: 'cu_123', page_number: 1, page_size: 20 });
@@ -22,7 +25,7 @@ describe('PaymentMethods', () => {
       custom_data: { segment: 'vip', internal_note: null },
     });
 
-    expect(result).toEqual(mockResponse);
+    expect(result).toEqual(mockResponse.payment_method);
     expect(postSpy).toHaveBeenCalledWith('/payment_methods/page', {
       customer_id: 'cu_123',
       page_number: 1,
@@ -43,7 +46,7 @@ describe('PaymentMethods', () => {
     await paymentMethods.archive({ payment_method_id: 'pm_123' });
     const result = await paymentMethods.unarchive({ payment_method_id: 'pm_123' });
 
-    expect(result).toEqual(mockResponse);
+    expect(result).toEqual(mockResponse.payment_method);
     expect(postSpy).toHaveBeenCalledWith('/payment_methods/activate', {
       payment_method_id: 'pm_123',
     });

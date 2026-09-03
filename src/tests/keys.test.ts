@@ -13,19 +13,25 @@ describe('Keys', () => {
   });
 
   it('should generate and page secret keys', async () => {
-    const mockResponse = { key: { id: 'sk_123', token_type: 'bearer' } };
+    const mockResponse = {
+      key: { id: 'sk_123', token_type: 'bearer' },
+      page: { number: 1, size: 20, count: 0, total: 0, has_more: false, keys: [] },
+    };
     const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockResponse);
 
     await keys.generate({ label: 'Production checkout' });
     const result = await keys.page({ number: 1, size: 20 });
 
-    expect(result).toEqual(mockResponse);
+    expect(result).toEqual(mockResponse.page);
     expect(postSpy).toHaveBeenCalledWith('/keys/generate', { label: 'Production checkout' });
     expect(postSpy).toHaveBeenCalledWith('/keys/page', { number: 1, size: 20 });
   });
 
   it('should lookup, update, destroy, and fetch usage for secret keys', async () => {
-    const mockResponse = { key: { id: 'sk_123', token_type: 'bearer' } };
+    const mockResponse = {
+      key: { id: 'sk_123', token_type: 'bearer' },
+      usage: { number: 1, size: 20, count: 0, total: 0, has_more: false, rows: [] },
+    };
     const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockResponse);
 
     await keys.lookup({ secret_key_id: 'sk_123' });

@@ -44,14 +44,8 @@ export interface Price {
   archived_at?: string | null;
 }
 
-export interface PriceResponse {
-  price?: Price;
-}
-
-export interface PagePricesResponse {
-  page?: {
-    number?: number;
-    size?: number;
-    prices?: Price[];
-  };
+export interface PricePage {
+  number?: number;
+  size?: number;
+  prices?: Price[];
 }

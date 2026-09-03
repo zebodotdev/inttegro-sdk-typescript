@@ -48,12 +48,6 @@ export interface OtpTransaction {
   canceled_at?: string | null;
   cancel_reason?: string | null;
   transmission?: OtpTransmission | null;
-}
-
-export interface OtpCanceledTransaction {
-  id?: string;
-  status?: OTPStatus;
-  full_message?: string;
   recipient?: string;
   sender?: string;
   mechanism?: string;
@@ -62,8 +56,6 @@ export interface OtpCanceledTransaction {
   created_at?: string;
   delivered_at?: string;
   verifiable_until?: string;
-  canceled_at?: string;
-  cancel_reason?: string;
 }
 
 export interface OtpVerificationAttempt {
@@ -71,25 +63,13 @@ export interface OtpVerificationAttempt {
   recipient?: string;
   presented_token?: string;
   attempted_at?: string;
+  result?: {
+    detail?: string | null;
+    verdict?: string;
+  };
 }
 
-export interface InitiateOtpResponse {
-  transaction?: OtpTransaction;
-  error?: Record<string, unknown>;
-}
-
-export interface VerifyOtpResponse {
-  transaction?: OtpTransaction;
-  verification_attempt?: OtpVerificationAttempt;
-  error?: Record<string, unknown>;
-}
-
-export interface LookupOtpResponse {
-  transaction?: OtpTransaction;
-  error?: Record<string, unknown>;
-}
-
-export interface CancelOtpResponse {
-  transaction?: OtpCanceledTransaction;
-  error?: Record<string, unknown>;
+export interface OtpVerification {
+  transaction: OtpTransaction;
+  verification_attempt: OtpVerificationAttempt;
 }

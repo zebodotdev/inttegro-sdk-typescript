@@ -29,10 +29,6 @@ export interface SetPayoutDestinationsRequest {
   destinations: Record<string, string>;
 }
 
-export interface PayoutSettingsResponse {
-  settings?: PayoutSettings;
-}
-
 export interface SchedulePayoutRequest {
   destination_id: string;
   execute_after?: string;
@@ -86,22 +82,12 @@ export interface Payout {
   balance_transaction_ids?: string[];
 }
 
-export interface PagePayoutsResponse {
-  page?: {
-    number?: number;
-    size?: number;
-    payouts?: Payout[];
-  };
-}
-
-export interface PayoutResponse {
-  payout?: Payout;
+export interface PayoutPage {
+  number?: number;
+  size?: number;
+  payouts?: Payout[];
 }
 
 export interface CancelPayoutRequest {
   payout_id: string;
-}
-
-export interface CancelPayoutResponse {
-  payout?: Payout;
 }

@@ -1,5 +1,6 @@
 import { CustomData, RequestMeta } from './common';
 import type { MessageTemplateReference } from './message-templates';
+import type { Broadcast } from './broadcasts';
 import { ScheduledChime } from './schedules';
 
 export type ChimeTransport = 'sms' | 'email';
@@ -87,27 +88,17 @@ export interface ChimeTransmission {
   status?: string;
 }
 
-export interface ChimeRecipientResponse extends ChimeRecipient {}
-
 export interface Chime {
   id?: string;
   created_at?: string;
   full_message?: string;
   email?: ChimeEmailMessage;
-  recipient?: ChimeRecipientResponse;
+  recipient?: ChimeRecipient;
   sender_id?: string;
   purpose?: string | null;
   custom_data?: CustomData;
   delivery?: Record<string, unknown> | null;
   transmission?: ChimeTransmission | null;
-}
-
-export interface ChimeResponse {
-  chime?: Chime;
-}
-
-export interface ScheduleChimeResponse {
-  scheduled_chime?: ScheduledChime;
 }
 
 export type BroadcastChimeMessageTemplate = string | MessageTemplateReference;
@@ -122,20 +113,6 @@ export interface BroadcastChimeRequest {
   request_meta?: RequestMeta;
 }
 
-export interface BroadcastChimeResponse {
-  broadcast?: {
-    id?: string;
-    customer_ids?: string[];
-    recipients?: string[];
-    content?: string;
-    email?: ChimeEmailMessage;
-    sender_id?: string;
-    purpose?: string | null;
-    send_after?: string;
-    created_at?: string;
-  };
-}
-
 export interface PageChimesRequest {
   customer_id?: string;
   page_number?: number;
@@ -143,10 +120,10 @@ export interface PageChimesRequest {
   recipient?: string;
 }
 
-export interface PageChimesResponse {
-  page?: {
-    number?: number;
-    size?: number;
-    chimes?: Chime[];
-  };
+export interface ChimePage {
+  number?: number;
+  size?: number;
+  chimes?: Chime[];
 }
+
+export type { Broadcast, ScheduledChime };

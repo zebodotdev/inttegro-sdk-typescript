@@ -6,10 +6,10 @@ import {
   FileContentsRequest,
   FileCreateRequest,
   FileDeleteRequest,
+  File,
+  FilePage,
   FileLookupRequest,
   FilePageRequest,
-  FilePageResponse,
-  FileResponse,
   RequestOptions,
 } from '../types';
 import { throwIfValidationErrors, validateRequired } from '../utils/validation';
@@ -18,7 +18,7 @@ import { FileDownload } from './file-download';
 export class Files {
   constructor(private httpClient: HttpClient) {}
 
-  async create(request: FileCreateRequest, options: RequestOptions = {}): Promise<FileResponse> {
+  async create(request: FileCreateRequest, options: RequestOptions = {}): Promise<File> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, [
       'file',
       'purpose',
@@ -31,17 +31,17 @@ export class Files {
     if (request.custom_data) form.append('custom_data', JSON.stringify(request.custom_data));
     await appendFile(form, request.file, request.filename);
 
-    return this.httpClient.postForm<FileResponse>('/files/create', form, {
+    return this.httpClient.postFormResource<File>('/files/create', 'file', form, {
       headers: idempotencyHeaders(options.idempotencyKey),
     });
   }
 
-  async lookup(request: FileLookupRequest): Promise<FileResponse> {
-    return this.httpClient.post<FileResponse>('/files/lookup', request);
+  async lookup(request: FileLookupRequest): Promise<File> {
+    return this.httpClient.postResource<File>('/files/lookup', 'file', request);
   }
 
-  async page(request: FilePageRequest = {}): Promise<FilePageResponse> {
-    return this.httpClient.post<FilePageResponse>('/files/page', request);
+  async page(request: FilePageRequest = {}): Promise<FilePage> {
+    return this.httpClient.postResource<FilePage>('/files/page', 'page', request);
   }
 
   async contents(request: FileContentsRequest): Promise<FileDownload> {
@@ -53,8 +53,8 @@ export class Files {
     return new FileDownload(response);
   }
 
-  async delete(request: FileDeleteRequest): Promise<FileResponse> {
-    return this.httpClient.post<FileResponse>('/files/delete', request);
+  async delete(request: FileDeleteRequest): Promise<File> {
+    return this.httpClient.postResource<File>('/files/delete', 'file', request);
   }
 }
 

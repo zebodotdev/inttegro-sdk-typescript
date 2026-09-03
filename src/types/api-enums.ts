@@ -210,7 +210,7 @@ export const CheckoutPaymentStatuses = {
   Failed: 'failed',
   Cancelled: 'cancelled',
 } as const;
-export const PaymentResponseStatuses = {
+export const PaymentResultStatuses = {
   Pending: 'pending',
   RequiresConfirmation: 'requires_confirmation',
   Processing: 'processing',

@@ -4,15 +4,15 @@ import { readFile } from 'node:fs/promises';
 import { HttpClient } from '../http-client';
 import {
   RequestOptions,
+  UploadFulfillment,
+  UploadRequest,
   UploadRequestCancelRequest,
   UploadRequestCreateRequest,
   UploadRequestFulfillRequest,
-  UploadRequestFulfillResponse,
   UploadRequestLookupRequest,
   UploadRequestPageRequest,
-  UploadRequestPageResponse,
+  UploadRequestPage,
   UploadRequestReviewRequest,
-  UploadRequestResponse,
 } from '../types';
 
 export class UploadRequests {
@@ -21,47 +21,65 @@ export class UploadRequests {
   async create(
     request: UploadRequestCreateRequest,
     options: RequestOptions = {}
-  ): Promise<UploadRequestResponse> {
-    return this.httpClient.post<UploadRequestResponse>('/upload_requests/create', request, {
-      headers: idempotencyHeaders(options.idempotencyKey),
-    });
+  ): Promise<UploadRequest> {
+    return this.httpClient.postResource<UploadRequest>(
+      '/upload_requests/create',
+      'upload_request',
+      request,
+      {
+        headers: idempotencyHeaders(options.idempotencyKey),
+      }
+    );
   }
 
-  async lookup(request: UploadRequestLookupRequest): Promise<UploadRequestResponse> {
-    return this.httpClient.post<UploadRequestResponse>('/upload_requests/lookup', request);
+  async lookup(request: UploadRequestLookupRequest): Promise<UploadRequest> {
+    return this.httpClient.postResource<UploadRequest>(
+      '/upload_requests/lookup',
+      'upload_request',
+      request
+    );
   }
 
-  async page(request: UploadRequestPageRequest = {}): Promise<UploadRequestPageResponse> {
-    return this.httpClient.post<UploadRequestPageResponse>('/upload_requests/page', request);
+  async page(request: UploadRequestPageRequest = {}): Promise<UploadRequestPage> {
+    return this.httpClient.postResource<UploadRequestPage>(
+      '/upload_requests/page',
+      'page',
+      request
+    );
   }
 
   async cancel(
     request: UploadRequestCancelRequest,
     options: RequestOptions = {}
-  ): Promise<UploadRequestResponse> {
-    return this.httpClient.post<UploadRequestResponse>('/upload_requests/cancel', request, {
-      headers: idempotencyHeaders(options.idempotencyKey),
-    });
+  ): Promise<UploadRequest> {
+    return this.httpClient.postResource<UploadRequest>(
+      '/upload_requests/cancel',
+      'upload_request',
+      request,
+      {
+        headers: idempotencyHeaders(options.idempotencyKey),
+      }
+    );
   }
 
   async review(
     request: UploadRequestReviewRequest,
     options: RequestOptions = {}
-  ): Promise<UploadRequestResponse> {
-    return this.httpClient.post<UploadRequestResponse>('/upload_requests/review', request, {
-      headers: idempotencyHeaders(options.idempotencyKey),
-    });
+  ): Promise<UploadRequest> {
+    return this.httpClient.postResource<UploadRequest>(
+      '/upload_requests/review',
+      'upload_request',
+      request,
+      {
+        headers: idempotencyHeaders(options.idempotencyKey),
+      }
+    );
   }
 
-  async fulfill(request: UploadRequestFulfillRequest): Promise<UploadRequestFulfillResponse> {
+  async fulfill(request: UploadRequestFulfillRequest): Promise<UploadFulfillment> {
     const form = new FormData();
     await appendFile(form, request.file, request.filename);
-    return this.httpClient.postForm<UploadRequestFulfillResponse>(
-      request.upload_url,
-      form,
-      {},
-      false
-    );
+    return this.httpClient.postForm<UploadFulfillment>(request.upload_url, form, {}, false);
   }
 }
 

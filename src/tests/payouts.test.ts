@@ -16,7 +16,7 @@ describe('Payouts', () => {
 
     const result = await payouts.page({ page_number: 1, page_size: 20 });
 
-    expect(result).toEqual({ page: { payouts: [] } });
+    expect(result).toEqual({ payouts: [] });
     expect(postSpy).toHaveBeenCalledWith('/payouts/page', { page_number: 1, page_size: 20 });
   });
 
@@ -31,7 +31,7 @@ describe('Payouts', () => {
     });
     const result = await payouts.lookup({ payout_id: 'po_123' });
 
-    expect(result).toEqual(mockResponse);
+    expect(result).toEqual(mockResponse.payout);
     expect(postSpy).toHaveBeenCalledWith('/payouts/schedule', {
       destination_id: 'fa_123',
       max_amount: 250000,
@@ -46,7 +46,7 @@ describe('Payouts', () => {
 
     const result = await payouts.enableAutomatic();
 
-    expect(result).toEqual(mockResponse);
+    expect(result).toEqual(mockResponse.settings);
     expect(postSpy).toHaveBeenCalledWith('/payouts/enable', {});
   });
 
@@ -56,7 +56,7 @@ describe('Payouts', () => {
 
     const result = await payouts.cancel({ payout_id: 'po_123' });
 
-    expect(result).toEqual(mockResponse);
+    expect(result).toEqual(mockResponse.payout);
     expect(postSpy).toHaveBeenCalledWith('/payouts/cancel', { payout_id: 'po_123' });
   });
 

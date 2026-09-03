@@ -16,7 +16,7 @@ describe('Customers', () => {
 
     const result = await customers.create({ name: 'Jane Doe' });
 
-    expect(result).toEqual({ customer: { id: 'cu_123' } });
+    expect(result).toEqual({ id: 'cu_123' });
     expect(postSpy).toHaveBeenCalledWith('/customers/create', { name: 'Jane Doe' });
   });
 
@@ -25,7 +25,7 @@ describe('Customers', () => {
 
     const result = await customers.lookup({ customer_id: 'cu_123' });
 
-    expect(result).toEqual({ customer: { id: 'cu_123' } });
+    expect(result).toEqual({ id: 'cu_123' });
     expect(postSpy).toHaveBeenCalledWith('/customers/lookup', { customer_id: 'cu_123' });
   });
 
@@ -36,7 +36,7 @@ describe('Customers', () => {
 
     const result = await customers.page({ page_number: 1, page_size: 50 });
 
-    expect(result).toEqual({ page: { number: 1, size: 1 } });
+    expect(result).toEqual({ number: 1, size: 1 });
     expect(postSpy).toHaveBeenCalledWith('/customers/page', { page_number: 1, page_size: 50 });
   });
 
@@ -49,7 +49,7 @@ describe('Customers', () => {
       { idempotencyKey: 'idem_customer_update' }
     );
 
-    expect(result).toEqual(response);
+    expect(result).toEqual(response.customer);
     expect(postSpy).toHaveBeenCalledWith(
       '/customers/update',
       { customer_id: 'cu_123', name: 'Jane Updated' },

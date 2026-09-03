@@ -63,14 +63,8 @@ export interface Refund {
   succeeded_at?: string;
 }
 
-export interface RefundResponse {
-  refund: Refund;
-}
-
-export interface RefundPageResponse {
-  page: {
-    number: number;
-    refunds: Refund[];
-    size: number;
-  };
+export interface RefundPage {
+  number: number;
+  refunds: Refund[];
+  size: number;
 }

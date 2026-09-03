@@ -37,7 +37,7 @@ describe('FinancialAccounts', () => {
       },
     });
 
-    expect(result).toEqual(mockFinancialAccountResponse);
+    expect(result).toEqual(mockFinancialAccountResponse.account);
     expect(postSpy).toHaveBeenCalledWith('/financial_accounts/create', expect.any(Object));
   });
 
@@ -50,12 +50,15 @@ describe('FinancialAccounts', () => {
 
     const result = await fa.lookup({ account_id: 'fa_123' });
 
-    expect(result).toEqual(mockFinancialAccountResponse);
+    expect(result).toEqual(mockFinancialAccountResponse.account);
     expect(postSpy).toHaveBeenCalledWith('/financial_accounts/lookup', { account_id: 'fa_123' });
   });
 
   it('should call archive/page/verify/connect/reconnect', async () => {
-    const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockFinancialAccountResponse);
+    const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue({
+      ...mockFinancialAccountResponse,
+      page: { number: 1, size: 20, accounts: [] },
+    });
 
     await fa.archive({ account_id: 'fa_123' });
     await fa.page({});

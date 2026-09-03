@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.0] - 2026-09-03
+
+### Changed
+
+- **Breaking:** every resource method now unwraps the wire payload and returns its domain object or page directly.
+- **Breaking:** removed response- and envelope-oriented public resource types.
+- **Breaking:** renamed `APIErrorResponse` to `APIErrorDocument`, exposed it as `errorDocument`, and removed the raw response from `FileDownload`.
+- Renamed the payment result status constants to `PaymentResultStatuses`.
+
 ## [3.0.0] - 2026-09-02
 
 ### Changed
@@ -58,5 +67,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 🧪 Thoroughly tested
 - 📝 JSDoc documentation throughout
 
+[4.0.0]: https://github.com/zebodotdev/inttegro-sdk-typescript/releases/tag/v4.0.0
+[3.0.0]: https://github.com/zebodotdev/inttegro-sdk-typescript/releases/tag/v3.0.0
 [2.0.0]: https://github.com/zebodotdev/inttegro-sdk-typescript/releases/tag/v2.0.0
 [0.1.0]: https://github.com/zebodotdev/inttegro-sdk-typescript/releases/tag/v0.1.0

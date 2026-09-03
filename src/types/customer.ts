@@ -73,21 +73,15 @@ export interface Customer {
   created_at: string;
 }
 
-export interface CustomerResponse {
-  customer?: Customer;
-}
-
 export interface PageCustomersRequest {
   page_number?: number;
   page_size?: number;
 }
 
-export interface PageCustomersResponse {
-  page?: {
-    number?: number;
-    size?: number;
-    customers?: Customer[];
-  };
+export interface CustomerPage {
+  number?: number;
+  size?: number;
+  customers?: Customer[];
 }
 
 /**

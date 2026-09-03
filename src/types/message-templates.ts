@@ -111,18 +111,10 @@ export interface MessageTemplateRenderPreviewRequest {
   message_template: MessageTemplateReference;
 }
 
-export interface MessageTemplateResponse {
-  message_template?: MessageTemplate;
-}
-
 export interface MessageTemplatePage {
   number?: number;
   size?: number;
   message_templates?: MessageTemplate[];
-}
-
-export interface MessageTemplatePageResponse {
-  page?: MessageTemplatePage;
 }
 
 export interface MessageTemplateRenderedContent {
@@ -133,7 +125,7 @@ export interface MessageTemplateRenderedContent {
   };
 }
 
-export interface MessageTemplateRenderPreviewResponse {
-  message_template?: MessageTemplate;
-  rendered?: MessageTemplateRenderedContent;
+export interface MessageTemplatePreview {
+  message_template: MessageTemplate;
+  rendered: MessageTemplateRenderedContent;
 }

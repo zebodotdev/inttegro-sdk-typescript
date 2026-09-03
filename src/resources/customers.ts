@@ -1,10 +1,10 @@
 import { HttpClient } from '../http-client';
 import {
   CreateCustomerRequest,
-  CustomerResponse,
+  Customer,
+  CustomerPage,
   LookupCustomerRequest,
   PageCustomersRequest,
-  PageCustomersResponse,
   RequestOptions,
   UpdateCustomerRequest,
 } from '../types';
@@ -16,34 +16,31 @@ import { throwIfValidationErrors, validateRequired } from '../utils/validation';
 export class Customers {
   constructor(private httpClient: HttpClient) {}
 
-  async create(request: CreateCustomerRequest): Promise<CustomerResponse> {
+  async create(request: CreateCustomerRequest): Promise<Customer> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['name']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<CustomerResponse>('/customers/create', request);
+    return this.httpClient.postResource<Customer>('/customers/create', 'customer', request);
   }
 
-  async lookup(request: LookupCustomerRequest): Promise<CustomerResponse> {
+  async lookup(request: LookupCustomerRequest): Promise<Customer> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['customer_id']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<CustomerResponse>('/customers/lookup', request);
+    return this.httpClient.postResource<Customer>('/customers/lookup', 'customer', request);
   }
 
-  async update(
-    request: UpdateCustomerRequest,
-    options: RequestOptions = {}
-  ): Promise<CustomerResponse> {
+  async update(request: UpdateCustomerRequest, options: RequestOptions = {}): Promise<Customer> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['customer_id']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<CustomerResponse>('/customers/update', request, {
+    return this.httpClient.postResource<Customer>('/customers/update', 'customer', request, {
       headers: idempotencyHeaders(options.idempotencyKey),
     });
   }
 
-  async page(request: PageCustomersRequest = {}): Promise<PageCustomersResponse> {
-    return this.httpClient.post<PageCustomersResponse>('/customers/page', request);
+  async page(request: PageCustomersRequest = {}): Promise<CustomerPage> {
+    return this.httpClient.postResource<CustomerPage>('/customers/page', 'page', request);
   }
 }
 

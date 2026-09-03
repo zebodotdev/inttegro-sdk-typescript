@@ -50,6 +50,4 @@ export interface CountrySpecification {
   banks?: CountryBankSpec;
 }
 
-export interface GetCountrySpecificationsResponse {
-  countries?: Record<string, CountrySpecification>;
-}
+export type CountrySpecifications = Record<string, CountrySpecification>;

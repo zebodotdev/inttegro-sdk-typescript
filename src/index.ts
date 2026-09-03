@@ -23,7 +23,7 @@ export {
   InttegroAuthenticationError,
   InttegroRateLimitError,
 } from './errors';
-export type { APIErrorResponse } from './errors';
+export type { APIErrorDocument } from './errors';
 
 // Types
 export * from './types';

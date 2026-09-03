@@ -14,7 +14,7 @@ export interface FileReferenceReconcileRequest {
   references?: FileReferenceInput[];
 }
 
-export interface FileReferenceReconcileResponse {
+export interface FileReferenceReconciliation {
   reconciled?: boolean;
   error?: Record<string, unknown>;
 }

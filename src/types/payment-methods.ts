@@ -71,7 +71,7 @@ export interface PaymentMethodOwner {
   address?: PaymentMethodOwnerAddress | null;
 }
 
-export interface PaymentMethodObject {
+export interface PaymentMethod {
   id: string;
   active?: boolean;
   archived_at?: string | null;
@@ -97,10 +97,6 @@ export interface TokenizePaymentMethodRequest {
   verify_immediately?: boolean;
 }
 
-export interface TokenizePaymentMethodResponse {
-  payment_method?: PaymentMethodObject;
-}
-
 export interface VerifyPaymentMethodRequest {
   /** Request metadata such as idempotency controls */
   request_meta?: RequestMeta;
@@ -109,17 +105,15 @@ export interface VerifyPaymentMethodRequest {
 
 export type VerificationStatus = 'pending' | 'verified' | 'failed' | string;
 
-export interface VerifyPaymentMethodResponse {
-  verification?: {
-    payment_method_id?: string;
-    status?: VerificationStatus;
-    token_sent_at?: string;
-    expires_at?: string;
-    delivery?: {
-      recipient?: string;
-      channel?: 'sms' | 'email' | string;
-      sender_id?: string;
-    };
+export interface PaymentMethodVerificationSession {
+  payment_method_id?: string;
+  status?: VerificationStatus;
+  token_sent_at?: string;
+  expires_at?: string;
+  delivery?: {
+    recipient?: string;
+    channel?: 'sms' | 'email' | string;
+    sender_id?: string;
   };
 }
 
@@ -128,16 +122,8 @@ export interface ConfirmPaymentMethodVerificationRequest {
   token: string;
 }
 
-export interface ConfirmPaymentMethodVerificationResponse {
-  payment_method?: PaymentMethodObject;
-}
-
 export interface LookupPaymentMethodRequest {
   payment_method_id: string;
-}
-
-export interface LookupPaymentMethodResponse {
-  payment_method?: PaymentMethodObject;
 }
 
 export interface PagePaymentMethodsRequest {
@@ -146,12 +132,10 @@ export interface PagePaymentMethodsRequest {
   page_size?: number;
 }
 
-export interface PagePaymentMethodsResponse {
-  page?: {
-    number?: number;
-    size?: number;
-    payment_methods?: PaymentMethodObject[];
-  };
+export interface PaymentMethodPage {
+  number?: number;
+  size?: number;
+  payment_methods?: PaymentMethod[];
 }
 
 export interface UpdatePaymentMethodRequest {
@@ -166,17 +150,13 @@ export interface PaymentMethodActionRequest {
   payment_method_id: string;
 }
 
-export interface PaymentMethodResponse {
-  payment_method?: PaymentMethodObject;
-}
-
 export interface DeletePaymentMethodRequest {
   /** Request metadata such as idempotency controls */
   request_meta?: RequestMeta;
   payment_method_id: string;
 }
 
-export interface DeletePaymentMethodResponse {
+export interface PaymentMethodDeletion {
   deleted?: boolean;
   payment_method_id?: string;
 }
@@ -194,8 +174,4 @@ export interface PaymentMethodSettings {
   bank_account?: PaymentMethodTypeSetting;
   card?: PaymentMethodTypeSetting;
   motito?: PaymentMethodTypeSetting;
-}
-
-export interface GetPaymentMethodSettingsResponse {
-  settings?: PaymentMethodSettings;
 }

@@ -21,7 +21,7 @@ describe('UploadRequests', () => {
       { idempotencyKey: 'idem_upload_review' }
     );
 
-    expect(result).toEqual(response);
+    expect(result).toEqual(response.upload_request);
     expect(postSpy).toHaveBeenCalledWith(
       '/upload_requests/review',
       { id: 'ur_123', attempt_ordinal: 1, decision: 'approved' },

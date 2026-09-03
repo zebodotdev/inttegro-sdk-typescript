@@ -20,7 +20,7 @@ describe('Chimes', () => {
       full_message: 'Hello',
     });
 
-    expect(result).toEqual(mockChimeResponse);
+    expect(result).toEqual(mockChimeResponse.chime);
     expect(postSpy).toHaveBeenCalledWith('/chimes/send', expect.any(Object));
   });
 
@@ -38,7 +38,7 @@ describe('Chimes', () => {
 
     const result = await chimes.send(request);
 
-    expect(result).toEqual(mockChimeResponse);
+    expect(result).toEqual(mockChimeResponse.chime);
     expect(postSpy).toHaveBeenCalledWith('/chimes/send', request);
   });
 
@@ -65,7 +65,7 @@ describe('Chimes', () => {
 
     const result = await chimes.lookup({ chime_id: 'ch_123' });
 
-    expect(result).toEqual(mockChimeResponse);
+    expect(result).toEqual(mockChimeResponse.chime);
     expect(postSpy).toHaveBeenCalledWith('/chimes/lookup', { chime_id: 'ch_123' });
   });
 
@@ -75,7 +75,7 @@ describe('Chimes', () => {
 
     const result = await chimes.page({ page_number: 1, page_size: 20 });
 
-    expect(result).toEqual(mockResponse);
+    expect(result).toEqual(mockResponse.page);
     expect(postSpy).toHaveBeenCalledWith('/chimes/page', {
       page_number: 1,
       page_size: 20,
@@ -94,7 +94,7 @@ describe('Chimes', () => {
 
     const result = await chimes.broadcast(request);
 
-    expect(result).toEqual(mockResponse);
+    expect(result).toEqual(mockResponse.broadcast);
     expect(postSpy).toHaveBeenCalledWith('/chimes/broadcast', request);
   });
 
@@ -113,7 +113,7 @@ describe('Chimes', () => {
       send_after: '2026-01-18T10:00:00Z',
     });
 
-    expect(result).toEqual(mockScheduleResponse);
+    expect(result).toEqual(mockScheduleResponse.scheduled_chime);
     expect(postSpy).toHaveBeenCalledWith('/chimes/schedule', expect.any(Object));
   });
 
@@ -132,7 +132,7 @@ describe('Chimes', () => {
 
     const result = await chimes.schedule(request);
 
-    expect(result).toEqual(mockScheduleResponse);
+    expect(result).toEqual(mockScheduleResponse.scheduled_chime);
     expect(postSpy).toHaveBeenCalledWith('/chimes/schedule', request);
   });
 

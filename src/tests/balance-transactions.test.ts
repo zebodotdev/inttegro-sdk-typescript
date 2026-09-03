@@ -2,10 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { BalanceTransactions } from '../resources/balance-transactions';
 import { HttpClient } from '../http-client';
-import type {
-  BalanceTransaction,
-  LookupBalanceTransactionResponse,
-} from '../types/balance-transactions';
+import type { BalanceTransaction } from '../types/balance-transactions';
 import type { Payment } from '../types/orders';
 
 describe('BalanceTransactions', () => {
@@ -18,7 +15,7 @@ describe('BalanceTransactions', () => {
   });
 
   it('should lookup a balance transaction', async () => {
-    const mockResponse: LookupBalanceTransactionResponse = {
+    const mockResponse = {
       transaction: {
         id: 'bt_123',
         type: 'payment',
@@ -32,12 +29,12 @@ describe('BalanceTransactions', () => {
 
     const result = await balanceTransactions.lookup({ transaction_id: 'bt_123' });
 
-    expect(result).toEqual(mockResponse);
+    expect(result).toEqual(mockResponse.transaction);
     expect(postSpy).toHaveBeenCalledWith('/balance_transactions/lookup', {
       transaction_id: 'bt_123',
     });
 
-    const transaction = result.transaction;
+    const transaction = result;
     if (transaction.type === 'payment') {
       expect(transaction.payment_id).toBe('py_123');
       expect(transaction.refund_id).toBeUndefined();
@@ -81,7 +78,7 @@ describe('BalanceTransactions', () => {
 
     const result = await balanceTransactions.page({ page_number: 1, page_size: 20 });
 
-    expect(result).toEqual(mockResponse);
+    expect(result).toEqual(mockResponse.page);
     expect(postSpy).toHaveBeenCalledWith('/balance_transactions/page', {
       page_number: 1,
       page_size: 20,

@@ -17,7 +17,7 @@ describe('Schedules', () => {
 
     const result = await schedules.lookup({ schedule_id: 'sch_123' });
 
-    expect(result).toEqual(mockScheduleLookupResponse);
+    expect(result).toEqual(mockScheduleLookupResponse.scheduled_chime);
     expect(postSpy).toHaveBeenCalledWith('/schedules/lookup', { schedule_id: 'sch_123' });
   });
 
@@ -26,7 +26,7 @@ describe('Schedules', () => {
 
     const result = await schedules.cancel({ schedule_id: 'sch_123' });
 
-    expect(result).toEqual(mockScheduleLookupResponse);
+    expect(result).toEqual(mockScheduleLookupResponse.scheduled_chime);
     expect(postSpy).toHaveBeenCalledWith('/schedules/cancel', { schedule_id: 'sch_123' });
   });
 

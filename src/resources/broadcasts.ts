@@ -1,10 +1,5 @@
 import { HttpClient } from '../http-client';
-import {
-  LookupBroadcastRequest,
-  CancelBroadcastRequest,
-  LookupBroadcastResponse,
-  BroadcastCancelResponse,
-} from '../types';
+import { Broadcast, LookupBroadcastRequest, CancelBroadcastRequest } from '../types';
 import { throwIfValidationErrors, validateRequired } from '../utils/validation';
 
 /**
@@ -13,21 +8,21 @@ import { throwIfValidationErrors, validateRequired } from '../utils/validation';
 export class Broadcasts {
   constructor(private httpClient: HttpClient) {}
 
-  async lookup(request: LookupBroadcastRequest): Promise<LookupBroadcastResponse> {
+  async lookup(request: LookupBroadcastRequest): Promise<Broadcast> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, [
       'broadcast_id',
     ]);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<LookupBroadcastResponse>('/broadcasts/lookup', request);
+    return this.httpClient.postResource<Broadcast>('/broadcasts/lookup', 'broadcast', request);
   }
 
-  async cancel(request: CancelBroadcastRequest): Promise<BroadcastCancelResponse> {
+  async cancel(request: CancelBroadcastRequest): Promise<Broadcast> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, [
       'broadcast_id',
     ]);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<BroadcastCancelResponse>('/broadcasts/cancel', request);
+    return this.httpClient.postResource<Broadcast>('/broadcasts/cancel', 'broadcast', request);
   }
 }

@@ -86,16 +86,8 @@ export interface FinancialAccount {
   created_at?: string;
 }
 
-export interface CreateFinancialAccountResponse {
-  account?: FinancialAccount;
-}
-
 export interface LookupFinancialAccountRequest {
   account_id: string;
-}
-
-export interface LookupFinancialAccountResponse {
-  account?: FinancialAccount;
 }
 
 export interface ArchiveFinancialAccountRequest {
@@ -107,12 +99,10 @@ export interface PageFinancialAccountsRequest {
   page_size?: number;
 }
 
-export interface PageFinancialAccountsResponse {
-  page?: {
-    number?: number;
-    size?: number;
-    accounts?: FinancialAccount[];
-  };
+export interface FinancialAccountPage {
+  number?: number;
+  size?: number;
+  accounts?: FinancialAccount[];
 }
 
 export interface VerifyFinancialAccountRequest {
@@ -138,8 +128,4 @@ export interface ToggleFinancialAccountRequest {
 
 export interface ReconnectFinancialAccountRequest {
   account_id: string;
-}
-
-export interface ReconnectFinancialAccountResponse {
-  account?: FinancialAccount;
 }

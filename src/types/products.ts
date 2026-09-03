@@ -136,20 +136,8 @@ export interface Product {
   archived_at?: string | null;
 }
 
-export interface ProductResponse {
-  product?: Product;
-}
-
-export interface AddProductPriceResponse {
-  price?: ProductDefaultUnitPrice;
-}
-
 export interface ProductPage {
   number?: number;
   size?: number;
   products?: Product[];
-}
-
-export interface PageProductsResponse {
-  page?: ProductPage;
 }

@@ -2,13 +2,7 @@
  * Mock data and responses for testing
  */
 
-import {
-  Order,
-  ChimeResponse,
-  CreateFinancialAccountResponse,
-  OrderPaymentStatuses,
-  OrderStatuses,
-} from '../types';
+import { Order, Chime, FinancialAccount, OrderPaymentStatuses, OrderStatuses } from '../types';
 
 /**
  * Mock order object
@@ -116,7 +110,7 @@ export const mockRequestConfirmationResponse = {
   order: mockOrder,
 };
 
-export const mockChimeResponse: ChimeResponse = {
+export const mockChimeResponse = {
   chime: {
     id: 'ch_123',
     full_message: 'hello there',
@@ -130,7 +124,7 @@ export const mockChimeResponse: ChimeResponse = {
       failed_at: null,
     },
   },
-};
+} satisfies { chime: Chime };
 
 export const mockScheduleResponse = {
   scheduled_chime: {
@@ -174,7 +168,7 @@ export const mockBroadcastResponse = {
   },
 };
 
-export const mockFinancialAccountResponse: CreateFinancialAccountResponse = {
+export const mockFinancialAccountResponse = {
   account: {
     id: 'fa_123',
     label: 'My Wallet',
@@ -182,7 +176,7 @@ export const mockFinancialAccountResponse: CreateFinancialAccountResponse = {
     reference: 'REF-2024-001',
     currency: 'ghs',
   },
-};
+} satisfies { account: FinancialAccount };
 
 /**
  * Mock error response

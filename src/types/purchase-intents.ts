@@ -151,14 +151,8 @@ export interface PurchaseIntent {
   price?: ProductPriceSummary;
 }
 
-export interface PurchaseIntentResponse {
-  purchase_intent?: PurchaseIntent;
-}
-
-export interface PagePurchaseIntentsResponse {
-  page?: {
-    number?: number;
-    size?: number;
-    purchase_intents?: PurchaseIntent[];
-  };
+export interface PurchaseIntentPage {
+  number?: number;
+  size?: number;
+  purchase_intents?: PurchaseIntent[];
 }

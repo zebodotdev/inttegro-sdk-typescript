@@ -4,8 +4,8 @@ import {
   CreateRefundRequest,
   LookupRefundRequest,
   PageRefundsRequest,
-  RefundPageResponse,
-  RefundResponse,
+  Refund,
+  RefundPage,
   RequestOptions,
 } from '../types';
 import { throwIfValidationErrors, validateRequired } from '../utils/validation';
@@ -13,10 +13,7 @@ import { throwIfValidationErrors, validateRequired } from '../utils/validation';
 export class Refunds {
   constructor(private httpClient: HttpClient) {}
 
-  async create(
-    request: CreateRefundRequest,
-    options: RequestOptions = {}
-  ): Promise<RefundResponse> {
+  async create(request: CreateRefundRequest, options: RequestOptions = {}): Promise<Refund> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, [
       'line_items',
       'order_id',
@@ -24,35 +21,32 @@ export class Refunds {
     ]);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<RefundResponse>('/refunds/create', request, {
+    return this.httpClient.postResource<Refund>('/refunds/create', 'refund', request, {
       headers: idempotencyHeaders(options.idempotencyKey),
     });
   }
 
-  async cancel(
-    request: CancelRefundRequest,
-    options: RequestOptions = {}
-  ): Promise<RefundResponse> {
+  async cancel(request: CancelRefundRequest, options: RequestOptions = {}): Promise<Refund> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['refund_id']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<RefundResponse>('/refunds/cancel', request, {
+    return this.httpClient.postResource<Refund>('/refunds/cancel', 'refund', request, {
       headers: idempotencyHeaders(options.idempotencyKey),
     });
   }
 
-  async lookup(request: LookupRefundRequest): Promise<RefundResponse> {
+  async lookup(request: LookupRefundRequest): Promise<Refund> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['refund_id']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<RefundResponse>('/refunds/lookup', request);
+    return this.httpClient.postResource<Refund>('/refunds/lookup', 'refund', request);
   }
 
-  async page(request: PageRefundsRequest): Promise<RefundPageResponse> {
+  async page(request: PageRefundsRequest): Promise<RefundPage> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['page_number']);
     throwIfValidationErrors(errors);
 
-    return this.httpClient.post<RefundPageResponse>('/refunds/page', request);
+    return this.httpClient.postResource<RefundPage>('/refunds/page', 'page', request);
   }
 }
 
