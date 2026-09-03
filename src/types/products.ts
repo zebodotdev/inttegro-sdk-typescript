@@ -1,8 +1,33 @@
 import type { CustomData } from './custom-data';
-import type { ProductShipmentInputType, ProductShipmentType } from './api-enums';
 import type { Amount, AmountParams } from './money';
 
-export type ProductType = 'physical' | 'digital' | 'service' | 'voucher' | 'custom' | 'cause';
+export const ProductTypes = {
+  Physical: 'physical',
+  Digital: 'digital',
+  Service: 'service',
+  Voucher: 'voucher',
+  Custom: 'custom',
+  Cause: 'cause',
+} as const;
+export type ProductType = (typeof ProductTypes)[keyof typeof ProductTypes];
+
+export const ProductShipmentTypes = {
+  Delivery: 'delivery',
+  Download: 'download',
+  Render: 'render',
+  Service: 'service',
+  Stream: 'stream',
+} as const;
+export type ProductShipmentType = (typeof ProductShipmentTypes)[keyof typeof ProductShipmentTypes];
+
+export const ProductShipmentInputTypes = {
+  Delivery: 'delivery',
+  Download: 'download',
+  Render: 'render',
+  Stream: 'stream',
+} as const;
+export type ProductShipmentInputType =
+  (typeof ProductShipmentInputTypes)[keyof typeof ProductShipmentInputTypes];
 
 export interface ProductDefaultUnitPrice {
   id: string;

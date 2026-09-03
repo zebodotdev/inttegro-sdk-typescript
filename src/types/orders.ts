@@ -9,7 +9,28 @@ import { BankAccountConfig, FinancialAccountType, WalletType } from './financial
 import type { Payment, PaymentStatus } from './payments';
 import type { CreateRefundRequest, Refund } from './refunds';
 
-export type LineItemType = 'product' | 'fee' | 'shipping';
+export const LineItemTypes = { Product: 'product', Fee: 'fee', Shipping: 'shipping' } as const;
+export type LineItemType = (typeof LineItemTypes)[keyof typeof LineItemTypes];
+
+export const OrderDocumentKinds = { Invoice: 'invoice', Receipt: 'receipt' } as const;
+export type OrderDocumentKind = (typeof OrderDocumentKinds)[keyof typeof OrderDocumentKinds];
+
+export const DeliveryChannels = { Email: 'email', Sms: 'sms' } as const;
+export type DeliveryChannel = (typeof DeliveryChannels)[keyof typeof DeliveryChannels];
+
+export const CheckoutOrderStatuses = {
+  Preparing: 'preparing',
+  RequiresPayment: 'requires_payment',
+  Completed: 'completed',
+  Canceled: 'canceled',
+  Expired: 'expired',
+} as const;
+export type CheckoutOrderStatus =
+  (typeof CheckoutOrderStatuses)[keyof typeof CheckoutOrderStatuses];
+
+export const OrderCreatedFromResourceTypes = { PurchaseIntent: 'purchase_intent' } as const;
+export type OrderCreatedFromResourceType =
+  (typeof OrderCreatedFromResourceTypes)[keyof typeof OrderCreatedFromResourceTypes];
 
 /**
  * Product line item
@@ -382,14 +403,16 @@ export type RefundOrderRequest = CreateRefundRequest;
 /**
  * Order status
  */
-export type OrderStatus =
-  | 'preparing'
-  | 'requires_payment'
-  | 'paid'
-  | 'completed'
-  | 'canceled'
-  | 'expired'
-  | 'unknown';
+export const OrderStatuses = {
+  Preparing: 'preparing',
+  RequiresPayment: 'requires_payment',
+  Paid: 'paid',
+  Completed: 'completed',
+  Canceled: 'canceled',
+  Expired: 'expired',
+  Unknown: 'unknown',
+} as const;
+export type OrderStatus = (typeof OrderStatuses)[keyof typeof OrderStatuses];
 
 /**
  * Checkout settings

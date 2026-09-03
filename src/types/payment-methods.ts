@@ -1,8 +1,20 @@
 import type { RequestMeta } from './requests';
 
-export type PaymentMethodType = 'mobile_money' | 'bank_account' | 'card' | 'motito';
+export const PaymentMethodTypes = {
+  MobileMoney: 'mobile_money',
+  BankAccount: 'bank_account',
+  Card: 'card',
+  Motito: 'motito',
+} as const;
+export type PaymentMethodType = (typeof PaymentMethodTypes)[keyof typeof PaymentMethodTypes];
 
-export type MobileMoneyNetwork = 'airtel' | 'mtn' | 'telecel' | 'vodafone';
+export const MobileMoneyNetworks = {
+  Airtel: 'airtel',
+  MTN: 'mtn',
+  Telecel: 'telecel',
+  Vodafone: 'vodafone',
+} as const;
+export type MobileMoneyNetwork = (typeof MobileMoneyNetworks)[keyof typeof MobileMoneyNetworks];
 /** @deprecated Prefer `MobileMoneyNetwork`. */
 export type MobileMoneyIssuer = MobileMoneyNetwork;
 

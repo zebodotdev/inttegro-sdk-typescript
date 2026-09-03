@@ -1,5 +1,15 @@
 import type { Amount } from './money';
-import type { PayoutStatus } from './api-enums';
+
+export const PayoutStatuses = {
+  Initialized: 'initialized',
+  Scheduled: 'scheduled',
+  Processing: 'processing',
+  Executing: 'executing',
+  Succeeded: 'succeeded',
+  Invalid: 'invalid',
+  Canceled: 'canceled',
+} as const;
+export type PayoutStatus = (typeof PayoutStatuses)[keyof typeof PayoutStatuses];
 
 export interface PayoutScheduleSpec {
   t_plus?: string;

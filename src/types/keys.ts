@@ -1,6 +1,15 @@
-export type SecretKeyTokenType = 'bearer';
-export type SecretKeyStatus = 'active' | 'revoked' | 'expired';
-export type SecretKeyAuthResult = 'succeeded' | 'failed';
+export const SecretKeyTokenTypes = { Bearer: 'bearer' } as const;
+export type SecretKeyTokenType = (typeof SecretKeyTokenTypes)[keyof typeof SecretKeyTokenTypes];
+
+export const SecretKeyStatuses = {
+  Active: 'active',
+  Revoked: 'revoked',
+  Expired: 'expired',
+} as const;
+export type SecretKeyStatus = (typeof SecretKeyStatuses)[keyof typeof SecretKeyStatuses];
+
+export const SecretKeyAuthResults = { Succeeded: 'succeeded', Failed: 'failed' } as const;
+export type SecretKeyAuthResult = (typeof SecretKeyAuthResults)[keyof typeof SecretKeyAuthResults];
 
 export interface GenerateSecretKeyRequest {
   label?: string;

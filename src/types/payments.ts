@@ -1,9 +1,55 @@
 import type { BalanceTransaction } from './balance-transactions';
 import type { Amount } from './money';
 import type { PaymentMethod } from './payment-methods';
-import type { PaymentAttemptStatus, PaymentConfirmationChannel, PaymentStatus } from './api-enums';
 
-export type { PaymentStatus } from './api-enums';
+export const PaymentStatuses = {
+  Initiated: 'initiated',
+  RequiresAction: 'requires_action',
+  Overdue: 'overdue',
+  Executed: 'executed',
+  Paid: 'paid',
+  Canceled: 'canceled',
+  Expired: 'expired',
+  Failed: 'failed',
+  Unknown: 'unknown',
+} as const;
+export type PaymentStatus = (typeof PaymentStatuses)[keyof typeof PaymentStatuses];
+
+export const PaymentAttemptStatuses = {
+  Initiated: 'initiated',
+  Executed: 'executed',
+  Succeeded: 'succeeded',
+  Canceled: 'canceled',
+  Expired: 'expired',
+  Failed: 'failed',
+  Unknown: 'unknown',
+} as const;
+export type PaymentAttemptStatus =
+  (typeof PaymentAttemptStatuses)[keyof typeof PaymentAttemptStatuses];
+
+export const PaymentConfirmationChannels = { Sms: 'sms', Email: 'email', Push: 'push' } as const;
+export type PaymentConfirmationChannel =
+  (typeof PaymentConfirmationChannels)[keyof typeof PaymentConfirmationChannels];
+
+export const CheckoutPaymentStatuses = {
+  RequiresAction: 'requires_action',
+  Processing: 'processing',
+  Succeeded: 'succeeded',
+  Failed: 'failed',
+  Cancelled: 'cancelled',
+} as const;
+export type CheckoutPaymentStatus =
+  (typeof CheckoutPaymentStatuses)[keyof typeof CheckoutPaymentStatuses];
+
+export const PaymentResultStatuses = {
+  Pending: 'pending',
+  RequiresConfirmation: 'requires_confirmation',
+  Processing: 'processing',
+  Succeeded: 'succeeded',
+  Failed: 'failed',
+} as const;
+export type PaymentResultStatus =
+  (typeof PaymentResultStatuses)[keyof typeof PaymentResultStatuses];
 
 /** Payout configuration attached to a payment. */
 export interface PaymentPayoutConfiguration {
@@ -40,12 +86,15 @@ export interface Payment {
   failed_at?: string;
 }
 
+export const PaymentNextActionTypes = {
+  ConfirmPayment: 'confirm_payment',
+  Execute: 'execute',
+  Redirect: 'redirect',
+  Authorize: 'authorize',
+  None: 'none',
+} as const;
 export type PaymentNextActionType =
-  | 'confirm_payment'
-  | 'execute'
-  | 'redirect'
-  | 'authorize'
-  | 'none';
+  (typeof PaymentNextActionTypes)[keyof typeof PaymentNextActionTypes];
 
 export interface PaymentNextAction {
   type: PaymentNextActionType;

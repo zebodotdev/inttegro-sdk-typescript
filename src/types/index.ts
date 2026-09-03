@@ -6,7 +6,6 @@
 export * from './custom-data';
 export * from './money';
 export * from './requests';
-export * from './api-enums';
 
 // Customer types
 export * from './customer';
@@ -14,7 +13,20 @@ export * from './products';
 export * from './prices';
 
 // Order types
+export {
+  LineItemTypes,
+  OrderDocumentKinds,
+  DeliveryChannels,
+  CheckoutOrderStatuses,
+  OrderStatuses,
+  OrderCreatedFromResourceTypes,
+} from './orders';
 export type {
+  LineItemType,
+  OrderDocumentKind,
+  DeliveryChannel,
+  CheckoutOrderStatus,
+  OrderCreatedFromResourceType,
   ProductLineItemParams,
   ProductLineItem as OrderLineItemProduct,
   FeeLineItemParams,

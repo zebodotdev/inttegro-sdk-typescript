@@ -42,6 +42,7 @@ export interface CatalogPrice {
   about?: string | null;
   active: boolean;
   nominal: Amount;
+  product_id?: string;
   product?: Product | null;
   created_at: string;
   updated_at?: string | null;

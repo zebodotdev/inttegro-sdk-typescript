@@ -1,6 +1,27 @@
-import type { RefundReason, RefundStatus } from './api-enums';
 import type { Amount, AmountParams } from './money';
 import type { RequestMeta } from './requests';
+
+export const RefundReasons = {
+  RequestedByCustomer: 'requested_by_customer',
+  Duplicate: 'duplicate',
+  Fraudulent: 'fraudulent',
+  OrderCanceled: 'order_canceled',
+  ItemReturned: 'item_returned',
+  ItemDamaged: 'item_damaged',
+  ItemNotReceived: 'item_not_received',
+  ItemNotAsDescribed: 'item_not_as_described',
+  Custom: 'custom',
+} as const;
+export type RefundReason = (typeof RefundReasons)[keyof typeof RefundReasons];
+
+export const RefundStatuses = {
+  Canceled: 'canceled',
+  Failed: 'failed',
+  Pending: 'pending',
+  Processing: 'processing',
+  Succeeded: 'succeeded',
+} as const;
+export type RefundStatus = (typeof RefundStatuses)[keyof typeof RefundStatuses];
 
 export interface CreateRefundLineItem {
   order_line_item_id: string;

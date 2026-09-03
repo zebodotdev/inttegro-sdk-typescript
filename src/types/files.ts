@@ -1,3 +1,73 @@
+export const FileStatuses = {
+  Uploading: 'uploading',
+  Processing: 'processing',
+  Available: 'available',
+  Failed: 'failed',
+  Deleted: 'deleted',
+} as const;
+export type FileStatus = (typeof FileStatuses)[keyof typeof FileStatuses];
+
+export const FileDispositions = { Attachment: 'attachment', Inline: 'inline' } as const;
+export type FileDisposition = (typeof FileDispositions)[keyof typeof FileDispositions];
+
+export const FileDeliveries = { Stream: 'stream', Redirect: 'redirect' } as const;
+export type FileDelivery = (typeof FileDeliveries)[keyof typeof FileDeliveries];
+
+export const FileScanStatuses = {
+  Pending: 'pending',
+  Passed: 'passed',
+  Failed: 'failed',
+  Skipped: 'skipped',
+} as const;
+export type FileScanStatus = (typeof FileScanStatuses)[keyof typeof FileScanStatuses];
+
+export const FileSourceTypes = {
+  Direct: 'direct',
+  UploadRequest: 'upload_request',
+  Service: 'service',
+} as const;
+export type FileSourceType = (typeof FileSourceTypes)[keyof typeof FileSourceTypes];
+
+export const FileStorageEncodings = { Identity: 'identity', Brotli: 'br' } as const;
+export type FileStorageEncoding = (typeof FileStorageEncodings)[keyof typeof FileStorageEncodings];
+
+export const FileLinkStatuses = {
+  Active: 'active',
+  Revoked: 'revoked',
+  Expired: 'expired',
+  Disabled: 'disabled',
+} as const;
+export type FileLinkStatus = (typeof FileLinkStatuses)[keyof typeof FileLinkStatuses];
+
+export const FileLinkKinds = { Public: 'public' } as const;
+export type FileLinkKind = (typeof FileLinkKinds)[keyof typeof FileLinkKinds];
+
+export const FileLinkDeliveryModes = {
+  Redirect: 'redirect',
+  Download: 'download',
+  Inline: 'inline',
+} as const;
+export type FileLinkDeliveryMode =
+  (typeof FileLinkDeliveryModes)[keyof typeof FileLinkDeliveryModes];
+
+export const UploadRequestStatuses = {
+  Pending: 'pending',
+  Uploading: 'uploading',
+  Fulfilled: 'fulfilled',
+  Expired: 'expired',
+  Canceled: 'canceled',
+  Failed: 'failed',
+} as const;
+export type UploadRequestStatus =
+  (typeof UploadRequestStatuses)[keyof typeof UploadRequestStatuses];
+
+export const UploadReviewDecisions = { Approved: 'approved', Rejected: 'rejected' } as const;
+export type UploadReviewDecision =
+  (typeof UploadReviewDecisions)[keyof typeof UploadReviewDecisions];
+
+export const UploadReviewTypes = { Automatic: 'automatic', Manual: 'manual' } as const;
+export type UploadReviewType = (typeof UploadReviewTypes)[keyof typeof UploadReviewTypes];
+
 export interface RequestOptions {
   idempotencyKey?: string;
 }
@@ -214,10 +284,3 @@ export interface UploadFulfillment {
   upload_request: UploadRequest;
   file: File;
 }
-import type {
-  FileDisposition,
-  FileLinkStatus,
-  FileStatus,
-  UploadRequestStatus,
-  UploadReviewDecision,
-} from './api-enums';

@@ -1,9 +1,20 @@
-import type {
-  AppCredentialOwner,
-  AppManagementRole,
-  AppRelationshipKind,
-  AppRelationshipStatus,
-} from './api-enums';
+export const AppManagementRoles = { Parent: 'parent', Child: 'child' } as const;
+export type AppManagementRole = (typeof AppManagementRoles)[keyof typeof AppManagementRoles];
+
+export const AppCredentialOwners = { Child: 'child', Parent: 'parent' } as const;
+export type AppCredentialOwner = (typeof AppCredentialOwners)[keyof typeof AppCredentialOwners];
+
+export const AppRelationshipKinds = { Placement: 'placement' } as const;
+export type AppRelationshipKind = (typeof AppRelationshipKinds)[keyof typeof AppRelationshipKinds];
+
+export const AppRelationshipStatuses = {
+  Active: 'active',
+  Inactive: 'inactive',
+  Suspended: 'suspended',
+  Revoked: 'revoked',
+} as const;
+export type AppRelationshipStatus =
+  (typeof AppRelationshipStatuses)[keyof typeof AppRelationshipStatuses];
 
 export interface AppRelationshipPolicy {
   child_standing?: string;

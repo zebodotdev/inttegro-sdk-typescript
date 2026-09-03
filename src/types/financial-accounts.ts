@@ -1,6 +1,16 @@
-export type FinancialAccountType = 'wallet' | 'bank_account' | 'dosh_account';
-export type WalletType = 'mobile_money';
-export type BankAccountType = 'ghana_bank_account';
+export const FinancialAccountTypes = {
+  Wallet: 'wallet',
+  BankAccount: 'bank_account',
+  DoshAccount: 'dosh_account',
+} as const;
+export type FinancialAccountType =
+  (typeof FinancialAccountTypes)[keyof typeof FinancialAccountTypes];
+
+export const WalletTypes = { MobileMoney: 'mobile_money' } as const;
+export type WalletType = (typeof WalletTypes)[keyof typeof WalletTypes];
+
+export const BankAccountTypes = { GhanaBankAccount: 'ghana_bank_account' } as const;
+export type BankAccountType = (typeof BankAccountTypes)[keyof typeof BankAccountTypes];
 
 export interface WalletConfig {
   type: WalletType;

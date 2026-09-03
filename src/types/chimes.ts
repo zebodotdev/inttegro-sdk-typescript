@@ -2,8 +2,20 @@ import type { CustomData } from './custom-data';
 import type { MessageTemplateReference } from './message-templates';
 import type { RequestMeta } from './requests';
 
-export type ChimeTransport = 'sms' | 'email';
-export type ChimeRecipientType = 'phone' | 'email';
+export const ChimeTransports = { Sms: 'sms', Email: 'email' } as const;
+export type ChimeTransport = (typeof ChimeTransports)[keyof typeof ChimeTransports];
+
+export const ChimeRecipientTypes = { Phone: 'phone', Email: 'email' } as const;
+export type ChimeRecipientType = (typeof ChimeRecipientTypes)[keyof typeof ChimeRecipientTypes];
+
+export const ChimeEmailSchemaKinds = {
+  GmailViewAction: 'gmail_view_action',
+  SchemaOrgOrder: 'schema_org_order',
+  SchemaOrgInvoice: 'schema_org_invoice',
+} as const;
+export type ChimeEmailSchemaKind =
+  (typeof ChimeEmailSchemaKinds)[keyof typeof ChimeEmailSchemaKinds];
+
 export type ChimeRecipientTransport = 'sms' | 'email';
 
 export interface ChimeRecipientPhone {

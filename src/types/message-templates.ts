@@ -1,16 +1,51 @@
-export type MessageTemplateChannel = 'sms' | 'email';
-export type MessageTemplateStatus = 'draft' | 'published' | 'archived';
+export const MessageTemplateChannels = { Sms: 'sms', Email: 'email' } as const;
+export type MessageTemplateChannel =
+  (typeof MessageTemplateChannels)[keyof typeof MessageTemplateChannels];
+
+export const MessageTemplateStatuses = {
+  Draft: 'draft',
+  Published: 'published',
+  Archived: 'archived',
+} as const;
+export type MessageTemplateStatus =
+  (typeof MessageTemplateStatuses)[keyof typeof MessageTemplateStatuses];
+
+export const MessageTemplateVariableTypes = {
+  String: 'string',
+  Number: 'number',
+  Integer: 'integer',
+  Boolean: 'boolean',
+  Url: 'url',
+  Email: 'email',
+  Phone: 'phone',
+  Date: 'date',
+  Datetime: 'datetime',
+  Array: 'array',
+} as const;
 export type MessageTemplateVariableType =
-  | 'array'
-  | 'boolean'
-  | 'date'
-  | 'datetime'
-  | 'email'
-  | 'integer'
-  | 'number'
-  | 'phone'
-  | 'string'
-  | 'url';
+  (typeof MessageTemplateVariableTypes)[keyof typeof MessageTemplateVariableTypes];
+
+export const MessageTemplateVariableItemTypes = {
+  String: 'string',
+  Number: 'number',
+  Integer: 'integer',
+  Boolean: 'boolean',
+  Url: 'url',
+  Email: 'email',
+  Phone: 'phone',
+  Date: 'date',
+  Datetime: 'datetime',
+} as const;
+export type MessageTemplateVariableItemType =
+  (typeof MessageTemplateVariableItemTypes)[keyof typeof MessageTemplateVariableItemTypes];
+
+export const ContentSafetyStatuses = {
+  Allowed: 'allowed',
+  Rejected: 'rejected',
+  Quarantined: 'quarantined',
+} as const;
+export type ContentSafetyStatus =
+  (typeof ContentSafetyStatuses)[keyof typeof ContentSafetyStatuses];
 
 export interface MessageTemplateVariable {
   name: string;

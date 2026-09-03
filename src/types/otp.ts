@@ -1,5 +1,33 @@
 import type { RequestMeta } from './requests';
-import type { OTPAlphabetType, OTPStatus, OTPTransmissionStatus } from './api-enums';
+
+export const OtpAlphabetTypes = {
+  Numeric: 'numeric',
+  Alpha: 'alpha',
+  Alphanumeric: 'alphanumeric',
+} as const;
+export type OTPAlphabetType = (typeof OtpAlphabetTypes)[keyof typeof OtpAlphabetTypes];
+
+export const OtpStatuses = {
+  Canceled: 'canceled',
+  Expired: 'expired',
+  Pending: 'pending',
+  PendingDelivery: 'pending_delivery',
+  PendingVerification: 'pending_verification',
+  Verified: 'verified',
+} as const;
+export type OTPStatus = (typeof OtpStatuses)[keyof typeof OtpStatuses];
+
+export const OtpTransmissionStatuses = {
+  Delivered: 'delivered',
+  Failed: 'failed',
+  Submitted: 'submitted',
+} as const;
+export type OTPTransmissionStatus =
+  (typeof OtpTransmissionStatuses)[keyof typeof OtpTransmissionStatuses];
+
+export const OtpVerificationVerdicts = { Fail: 'fail', Pass: 'pass' } as const;
+export type OTPVerificationVerdict =
+  (typeof OtpVerificationVerdicts)[keyof typeof OtpVerificationVerdicts];
 
 export interface InitiateOtpRequest {
   recipient: string;

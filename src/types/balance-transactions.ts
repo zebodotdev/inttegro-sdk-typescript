@@ -16,7 +16,9 @@ export interface PayoutConfiguration {
   };
 }
 
-export type BalanceTransactionType = 'payment' | 'refund';
+export const BalanceTransactionTypes = { Payment: 'payment', Refund: 'refund' } as const;
+export type BalanceTransactionType =
+  (typeof BalanceTransactionTypes)[keyof typeof BalanceTransactionTypes];
 
 interface BalanceTransactionBase {
   id: string;

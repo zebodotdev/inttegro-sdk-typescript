@@ -9,10 +9,10 @@ import {
   RefundReasons,
   UploadRequestStatuses,
 } from '../index';
-import type { CatalogPriceParams, PriceParams } from '../index';
+import type { CatalogPrice, CatalogPriceParams, PriceParams } from '../index';
 
-describe('API enum constants', () => {
-  it('exposes the exact wire values through the public package', () => {
+describe('domain constants', () => {
+  it('exposes exact wire values through the public package', () => {
     expect(ProductTypes.Digital).toBe('digital');
     expect(Currencies.GHS).toBe('ghs');
     expect(MobileMoneyNetworks.MTN).toBe('mtn');
@@ -30,5 +30,14 @@ describe('API enum constants', () => {
 
     expect(JSON.stringify(price)).toBe('{"currency":"ghs","value":3005}');
     expect(catalogPrice).toEqual({ amount: price, label: 'Retail' });
+
+    const returned: CatalogPrice = {
+      id: 'pr_123',
+      active: true,
+      nominal: price,
+      product_id: 'prod_123',
+      created_at: '2026-09-02T12:00:00Z',
+    };
+    expect(returned.product_id).toBe('prod_123');
   });
 });

@@ -29,9 +29,9 @@ This TypeScript SDK for the Inttegro API has been successfully built with produc
      - `requestConfirmation()` - Resend confirmation codes
 
 4. **Type Definitions** (`src/types/`)
-   - `common.ts` - Currency, MoneyAmount, ProductType, etc.
-   - `customer.ts` - CustomerData, Address
-   - `orders.ts` - All order-related types with union types
+   - `money.ts` - Typed request and response amounts and currencies
+   - `customer.ts` - Customer data and addresses
+   - `chimes.ts`, `payments.ts`, and the remaining resource modules - domain-owned types and constants
    - Full TypeScript IntelliSense support
 
 5. **Error Handling** (`src/errors.ts`)

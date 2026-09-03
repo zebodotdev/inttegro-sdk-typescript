@@ -2,13 +2,24 @@ import type { Amount } from './money';
 import type { PriceParams } from './prices';
 import type { Product } from './products';
 
-export type PurchaseIntentStatus = 'active' | 'expired' | 'inactive' | 'used';
+export const PurchaseIntentStatuses = {
+  Active: 'active',
+  Expired: 'expired',
+  Inactive: 'inactive',
+  Used: 'used',
+} as const;
+export type PurchaseIntentStatus =
+  (typeof PurchaseIntentStatuses)[keyof typeof PurchaseIntentStatuses];
+
+export const PurchaseIntentActivityTypes = {
+  ExpiredViewed: 'expired_viewed',
+  OrderCreated: 'order_created',
+  PaymentFailed: 'payment_failed',
+  PaymentStarted: 'payment_started',
+  Viewed: 'viewed',
+} as const;
 export type PurchaseIntentActivityType =
-  | 'viewed'
-  | 'expired_viewed'
-  | 'payment_started'
-  | 'order_created'
-  | 'payment_failed';
+  (typeof PurchaseIntentActivityTypes)[keyof typeof PurchaseIntentActivityTypes];
 
 export interface PurchaseIntentProductSelector {
   id: string;
