@@ -1,10 +1,10 @@
 import { writeFile } from 'node:fs/promises';
 
 export class FileDownload {
-  constructor(private readonly body: Response) {}
+  constructor(private readonly readBody: () => Promise<ArrayBuffer>) {}
 
   async arrayBuffer(): Promise<ArrayBuffer> {
-    return this.body.arrayBuffer();
+    return this.readBody();
   }
 
   async writeToFile(path: string): Promise<void> {

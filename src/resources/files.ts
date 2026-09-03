@@ -50,7 +50,7 @@ export class Files {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(request),
     });
-    return new FileDownload(response);
+    return new FileDownload(() => response.arrayBuffer());
   }
 
   async delete(request: FileDeleteRequest): Promise<File> {
