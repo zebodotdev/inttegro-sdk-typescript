@@ -11,11 +11,7 @@ import {
   UploadRequestStatuses,
   wallets,
 } from '../index';
-import type {
-  CatalogPrice,
-  CatalogPriceParams,
-  PriceParams,
-} from '../index';
+import type { CatalogPrice, CatalogPriceParams, PriceParams } from '../index';
 
 describe('domain constants', () => {
   it('exposes exact wire values through the public package', () => {
