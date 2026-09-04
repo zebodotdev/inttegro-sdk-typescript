@@ -33,16 +33,17 @@ function isRetryableStatusCode(statusCode: number): boolean {
  * Retry a function with exponential backoff
  */
 export async function withRetry<T>(
-  fn: () => Promise<T>,
+  fn: (resendCount: number) => Promise<T>,
   config: Required<RetryConfig>,
   logger: Logger,
-  isRetryable: (error: unknown) => boolean = () => true
+  isRetryable: (error: unknown) => boolean = () => true,
+  onRetry?: (event: { resendCount: number; delayMs: number; error: unknown }) => void
 ): Promise<T> {
   let lastError: unknown;
 
   for (let attempt = 0; attempt <= config.maxRetries; attempt++) {
     try {
-      return await fn();
+      return await fn(attempt);
     } catch (error) {
       lastError = error;
 
@@ -65,6 +66,7 @@ export async function withRetry<T>(
       );
 
       logger.debug(`Retry attempt ${attempt + 1} after ${delay}ms`, error);
+      onRetry?.({ resendCount: attempt + 1, delayMs: delay, error });
       await sleep(delay);
     }
   }

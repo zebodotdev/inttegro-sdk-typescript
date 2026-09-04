@@ -1,3 +1,5 @@
+import type { TracerProvider } from '@opentelemetry/api';
+
 /**
  * Configuration options for the Inttegro SDK
  */
@@ -29,6 +31,14 @@ export type RequestInterceptor = (
  */
 export type ResponseInterceptor = (response: Response) => Promise<Response> | Response;
 
+/** OpenTelemetry integration. The SDK never configures an exporter. */
+export interface TelemetryConfig {
+  /** Emit SDK spans to the application's tracer provider (default: true). */
+  enabled?: boolean;
+  /** Optional provider override. The global OpenTelemetry provider is used by default. */
+  tracerProvider?: TracerProvider;
+}
+
 /**
  * SDK Configuration
  */
@@ -43,6 +53,8 @@ export interface InttegroConfig {
   retry?: RetryConfig;
   /** Enable debug logging (default: false) */
   debug?: boolean;
+  /** Vendor-neutral SDK tracing. No telemetry is exported unless the application configures it. */
+  telemetry?: TelemetryConfig;
   /** Request interceptors */
   requestInterceptors?: RequestInterceptor[];
   /** Response interceptors */
@@ -52,7 +64,9 @@ export interface InttegroConfig {
 /**
  * Default configuration values
  */
-export const DEFAULT_CONFIG: Required<Omit<InttegroConfig, 'apiKey'>> = {
+export const DEFAULT_CONFIG: Required<Omit<InttegroConfig, 'apiKey' | 'telemetry'>> & {
+  telemetry: TelemetryConfig & { enabled: boolean };
+} = {
   baseUrl: 'https://api.inttegro.com',
   timeout: 30000,
   retry: {
@@ -62,6 +76,7 @@ export const DEFAULT_CONFIG: Required<Omit<InttegroConfig, 'apiKey'>> = {
     backoffMultiplier: 2,
   },
   debug: false,
+  telemetry: { enabled: true },
   requestInterceptors: [],
   responseInterceptors: [],
 };

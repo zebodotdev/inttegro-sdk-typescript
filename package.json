@@ -1,6 +1,6 @@
 {
   "name": "@inttegro/inttegro-sdk",
-  "version": "8.0.0",
+  "version": "8.1.0",
   "description": "Official TypeScript SDK for the Inttegro API",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -51,6 +51,9 @@
     "url": "https://github.com/zebodotdev/inttegro-sdk-typescript/issues"
   },
   "homepage": "https://github.com/zebodotdev/inttegro-sdk-typescript#readme",
+  "dependencies": {
+    "@opentelemetry/api": "^1.9.0"
+  },
   "devDependencies": {
     "@types/node": "^20.10.0",
     "@typescript-eslint/eslint-plugin": "^8.69.0",

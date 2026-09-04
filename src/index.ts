@@ -11,6 +11,7 @@ export { InttegroClient } from './client';
 export type {
   InttegroConfig,
   RetryConfig,
+  TelemetryConfig,
   RequestInterceptor,
   ResponseInterceptor,
 } from './config';

@@ -39,7 +39,12 @@ export class FileLinks {
   }
 
   async open(request: FileLinkOpenRequest): Promise<FileDownload> {
-    const response = await this.httpClient.raw(request.url, { method: 'GET' }, false);
+    const response = await this.httpClient.raw(
+      request.url,
+      { method: 'GET' },
+      false,
+      'file_links.download'
+    );
     const download = new FileDownload(() => response.arrayBuffer());
     if (request.saveTo) {
       await download.saveTo(request.saveTo);

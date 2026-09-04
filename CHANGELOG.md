@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.1.0] - 2026-09-04
+
+- Added vendor-neutral OpenTelemetry spans for logical SDK operations, HTTP attempts, retries, response receipt, decoding, and safe failure categories.
+- Added W3C trace-context propagation with explicit-header preservation and configurable tracer providers.
+- Kept request bodies, credentials, resource identifiers, dynamic URLs, and exception details out of telemetry.
+
 ## [8.0.0] - 2026-09-04
 
 - **Breaking:** renamed every public request and domain property from API wire-format snake case to idiomatic TypeScript camel case.
@@ -98,6 +104,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 🧪 Thoroughly tested
 - 📝 JSDoc documentation throughout
 
+[8.1.0]: https://github.com/zebodotdev/inttegro-sdk-typescript/releases/tag/v8.1.0
 [7.0.0]: https://github.com/zebodotdev/inttegro-sdk-typescript/releases/tag/v7.0.0
 [8.0.0]: https://github.com/zebodotdev/inttegro-sdk-typescript/releases/tag/v8.0.0
 [6.1.0]: https://github.com/zebodotdev/inttegro-sdk-typescript/releases/tag/v6.1.0

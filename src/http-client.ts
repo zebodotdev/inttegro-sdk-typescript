@@ -20,6 +20,9 @@ import { Logger } from './utils/logger';
 import { withRetry, isRetryableHttpError } from './utils/retry';
 import { generateIdempotencyKey } from './utils/idempotency';
 import { serializeRequestBody, toCamelCase, toPublicValue } from './utils/casing';
+import type { Span } from '@opentelemetry/api';
+import { Telemetry } from './telemetry';
+import { SDK_VERSION } from './version';
 
 /**
  * HTTP client for making requests to the Inttegro API
@@ -27,6 +30,7 @@ import { serializeRequestBody, toCamelCase, toPublicValue } from './utils/casing
 export class HttpClient {
   private config: Required<InttegroConfig>;
   private logger: Logger;
+  private telemetry: Telemetry;
 
   constructor(config: InttegroConfig) {
     this.config = {
@@ -38,6 +42,7 @@ export class HttpClient {
       },
     };
     this.logger = new Logger(this.config.debug);
+    this.telemetry = new Telemetry(this.config.telemetry, SDK_VERSION);
   }
 
   /**
@@ -53,6 +58,7 @@ export class HttpClient {
       },
     };
     this.logger.setEnabled(this.config.debug);
+    this.telemetry = new Telemetry(this.config.telemetry, SDK_VERSION);
   }
 
   /**
@@ -195,96 +201,139 @@ export class HttpClient {
    * Make an API request
    */
   async request<T>(path: string, options: RequestInit = {}, skipRetry = false): Promise<T> {
-    const url = `${this.config.baseUrl}${path}`;
-    const requestOptionsWithIdempotency = this.withIdempotency(path, options);
+    const method = (options.method || 'GET').toUpperCase();
+    return this.telemetry.request(path, method, this.config.baseUrl, SDK_VERSION, async (span) => {
+      const url = `${this.config.baseUrl}${path}`;
+      const requestOptionsWithIdempotency = this.withIdempotency(path, options);
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.config.apiKey}`,
+        'User-Agent': `inttegro-sdk-typescript/${SDK_VERSION}`,
+        ...normalizeHeaders(requestOptionsWithIdempotency.headers),
+      };
 
-    // Prepare headers
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${this.config.apiKey}`,
-      'User-Agent': 'inttegro-sdk-typescript/8.0.0',
-      ...(requestOptionsWithIdempotency.headers as Record<string, string>),
-    };
+      let requestOptions: RequestInit = { ...requestOptionsWithIdempotency, headers };
+      const interceptedRequest = await this.applyRequestInterceptors(url, requestOptions);
+      const finalUrl = interceptedRequest.url;
+      requestOptions = interceptedRequest.options;
+      const propagatedHeaders = normalizeHeaders(requestOptions.headers);
+      this.telemetry.inject(propagatedHeaders);
+      requestOptions = { ...requestOptions, headers: propagatedHeaders };
+      span?.addEvent('inttegro.request.prepared');
 
-    // Prepare request options
-    let requestOptions: RequestInit = {
-      ...requestOptionsWithIdempotency,
-      headers,
-    };
+      this.logger.debug(`Making ${requestOptions.method || 'GET'} request to ${finalUrl}`);
 
-    // Apply request interceptors
-    const interceptedRequest = await this.applyRequestInterceptors(url, requestOptions);
-    const finalUrl = interceptedRequest.url;
-    requestOptions = interceptedRequest.options;
+      const makeRequest = async (resendCount: number): Promise<T> => {
+        span?.addEvent('inttegro.http.attempt.started', {
+          'http.request.resend_count': resendCount,
+        });
+        const response = await this.fetchWithTimeout(finalUrl, requestOptions);
+        const interceptedResponse = await this.applyResponseInterceptors(response);
+        span?.setAttribute('http.response.status_code', interceptedResponse.status);
+        const requestId = interceptedResponse.headers.get('x-request-id');
+        if (requestId) span?.setAttribute('inttegro.request.id', requestId);
+        span?.addEvent('inttegro.response.received', {
+          'http.response.status_code': interceptedResponse.status,
+          'http.request.resend_count': resendCount,
+        });
 
-    this.logger.debug(`Making ${requestOptions.method || 'GET'} request to ${finalUrl}`);
+        if (!interceptedResponse.ok) await this.handleErrorResponse(interceptedResponse);
 
-    // Make request with retry logic
-    const makeRequest = async (): Promise<T> => {
-      const response = await this.fetchWithTimeout(finalUrl, requestOptions);
+        const contentType = interceptedResponse.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          const value = toPublicValue(await interceptedResponse.json()) as T;
+          span?.addEvent('inttegro.response.decoded');
+          return value;
+        }
+        span?.addEvent('inttegro.response.decoded');
+        return {} as T;
+      };
 
-      // Apply response interceptors
-      const interceptedResponse = await this.applyResponseInterceptors(response);
-
-      if (!interceptedResponse.ok) {
-        await this.handleErrorResponse(interceptedResponse);
-      }
-
-      // Parse successful response
-      const contentType = interceptedResponse.headers.get('content-type');
-      if (contentType && contentType.includes('application/json')) {
-        return toPublicValue(await interceptedResponse.json()) as T;
-      }
-
-      // Return empty object for non-JSON responses
-      return {} as T;
-    };
-
-    // Apply retry logic if not skipped
-    if (!skipRetry) {
-      return await withRetry(
+      if (skipRetry) return makeRequest(0);
+      return withRetry(
         makeRequest,
         this.config.retry as Required<RetryConfig>,
         this.logger,
-        isRetryableHttpError
+        isRetryableHttpError,
+        ({ resendCount, delayMs, error }) => {
+          span?.addEvent('inttegro.retry.scheduled', {
+            'http.request.resend_count': resendCount,
+            'inttegro.retry.delay_ms': delayMs,
+            'error.type': retryErrorType(error),
+          });
+        }
       );
-    }
-
-    return await makeRequest();
+    });
   }
 
   /**
    * Make a raw request and return the Response for binary or multipart flows.
    */
-  async raw(pathOrUrl: string, options: RequestInit = {}, authenticated = true): Promise<Response> {
-    const url = pathOrUrl.startsWith('http') ? pathOrUrl : `${this.config.baseUrl}${pathOrUrl}`;
-    const requestOptionsWithIdempotency = authenticated
-      ? this.withIdempotency(pathOrUrl, options, { body: false, header: true })
-      : options;
-    const headers: Record<string, string> = {
-      Accept: 'application/json',
-      'User-Agent': 'inttegro-sdk-typescript/8.0.0',
-      ...(authenticated ? { Authorization: `Bearer ${this.config.apiKey}` } : {}),
-      ...(requestOptionsWithIdempotency.headers as Record<string, string>),
-    };
+  async raw(
+    pathOrUrl: string,
+    options: RequestInit = {},
+    authenticated = true,
+    operationOverride?: string
+  ): Promise<Response> {
+    return this.rawWithTransform(
+      pathOrUrl,
+      options,
+      authenticated,
+      operationOverride,
+      async (response) => response
+    );
+  }
 
-    let requestOptions: RequestInit = {
-      ...requestOptionsWithIdempotency,
-      headers,
-    };
+  private async rawWithTransform<T>(
+    pathOrUrl: string,
+    options: RequestInit,
+    authenticated: boolean,
+    operationOverride: string | undefined,
+    transform: (response: Response, span: Span | undefined) => Promise<T>
+  ): Promise<T> {
+    const method = (options.method || 'GET').toUpperCase();
+    return this.telemetry.request(
+      pathOrUrl,
+      method,
+      this.config.baseUrl,
+      SDK_VERSION,
+      async (span) => {
+        const url = pathOrUrl.startsWith('http') ? pathOrUrl : `${this.config.baseUrl}${pathOrUrl}`;
+        const requestOptionsWithIdempotency = authenticated
+          ? this.withIdempotency(pathOrUrl, options, { body: false, header: true })
+          : options;
+        const headers: Record<string, string> = {
+          Accept: 'application/json',
+          'User-Agent': `inttegro-sdk-typescript/${SDK_VERSION}`,
+          ...(authenticated ? { Authorization: `Bearer ${this.config.apiKey}` } : {}),
+          ...normalizeHeaders(requestOptionsWithIdempotency.headers),
+        };
 
-    const interceptedRequest = await this.applyRequestInterceptors(url, requestOptions);
-    const finalUrl = interceptedRequest.url;
-    requestOptions = interceptedRequest.options;
+        let requestOptions: RequestInit = { ...requestOptionsWithIdempotency, headers };
+        const interceptedRequest = await this.applyRequestInterceptors(url, requestOptions);
+        const finalUrl = interceptedRequest.url;
+        requestOptions = interceptedRequest.options;
+        const propagatedHeaders = normalizeHeaders(requestOptions.headers);
+        this.telemetry.inject(propagatedHeaders);
+        requestOptions = { ...requestOptions, headers: propagatedHeaders };
+        span?.addEvent('inttegro.request.prepared');
+        span?.addEvent('inttegro.http.attempt.started', { 'http.request.resend_count': 0 });
 
-    const response = await this.fetchWithTimeout(finalUrl, requestOptions);
-    const interceptedResponse = await this.applyResponseInterceptors(response);
+        const response = await this.fetchWithTimeout(finalUrl, requestOptions);
+        const interceptedResponse = await this.applyResponseInterceptors(response);
+        span?.setAttribute('http.response.status_code', interceptedResponse.status);
+        const requestId = interceptedResponse.headers.get('x-request-id');
+        if (requestId) span?.setAttribute('inttegro.request.id', requestId);
+        span?.addEvent('inttegro.response.received', {
+          'http.response.status_code': interceptedResponse.status,
+          'http.request.resend_count': 0,
+        });
 
-    if (!interceptedResponse.ok) {
-      await this.handleErrorResponse(interceptedResponse);
-    }
-
-    return interceptedResponse;
+        if (!interceptedResponse.ok) await this.handleErrorResponse(interceptedResponse);
+        return transform(interceptedResponse, span);
+      },
+      operationOverride
+    );
   }
 
   /**
@@ -294,19 +343,24 @@ export class HttpClient {
     pathOrUrl: string,
     form: FormData,
     options: RequestInit = {},
-    authenticated = true
+    authenticated = true,
+    operationOverride?: string
   ): Promise<T> {
-    const response = await this.raw(
+    return this.rawWithTransform(
       pathOrUrl,
       {
         ...options,
         method: 'POST',
         body: form,
       },
-      authenticated
+      authenticated,
+      operationOverride,
+      async (response, span) => {
+        const value = toPublicValue(await response.json()) as T;
+        span?.addEvent('inttegro.response.decoded');
+        return value;
+      }
     );
-
-    return toPublicValue(await response.json()) as T;
   }
 
   /**
@@ -438,6 +492,13 @@ function resourceFromEnvelope<T>(
     throw new TypeError(`Inttegro returned an invalid ${field} value for ${path}`);
   }
   return resource as T;
+}
+
+function retryErrorType(error: unknown): string {
+  if (error instanceof InttegroNetworkError) return error.isTimeout ? 'timeout' : 'network_error';
+  if (error instanceof InttegroAPIError && error.statusCode) return `http_${error.statusCode}`;
+  if (error instanceof SyntaxError) return 'decode_error';
+  return 'unknown_error';
 }
 
 function stripTopLevelIdempotencyKey(body: string): string {

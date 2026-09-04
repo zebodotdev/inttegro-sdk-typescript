@@ -74,6 +74,19 @@ try {
 
 Amounts use integer minor units: `5000` GHS is GHS 50.00. Reuse the same idempotency key when retrying the same logical write. If you omit one, the SDK generates a UUIDv7 key for mutating calls.
 
+## Observe SDK operations
+
+The SDK emits vendor-neutral OpenTelemetry spans through your application's provider. It never configures an exporter or sends telemetry by itself. Configure OpenTelemetry at application startup; the global provider is used automatically, or you can pass a provider explicitly:
+
+```ts
+const inttegro = new InttegroClient({
+  apiKey: process.env.INTTEGRO_API_KEY!,
+  telemetry: { tracerProvider },
+});
+```
+
+Spans are named after logical operations such as `inttegro.orders.create`. HTTP attempts, retries, response receipt, and decoding are span events. API keys, bodies, resource IDs, dynamic URLs, and exception messages are never recorded. See [SDK observability](https://studio.inttegro.com/sdk-observability) for the complete contract and disable tracing with `telemetry: { enabled: false }` when needed.
+
 ## Work with the API
 
 The SDK covers orders and checkout, customers, products and prices, purchase intents, payment methods, balances, payouts and refunds, notifications, files, application settings, keys, and country specifications. Resources use camelCase properties such as `purchaseIntents` and `paymentMethods`.
@@ -83,7 +96,7 @@ TypeScript-specific features:
 - Typed request and domain objects, plus exported constants for public enum values.
 - Idiomatic camelCase fields throughout; the SDK translates to and from the API's snake_case JSON at the HTTP boundary.
 - Promise-based resource methods with ESM and CommonJS builds.
-- No runtime dependencies; the client uses the platform `fetch` implementation.
+- Platform `fetch` transport with the lightweight OpenTelemetry API for application-owned tracing.
 - Configurable timeouts, exponential retries, debug logging, and request/response interceptors.
 - Injectable configuration and interceptors for tests and observability.
 
@@ -95,7 +108,7 @@ The GitHub release for each version is the canonical record. It contains the exa
 
 ```bash
 sha256sum --check SHA256SUMS
-gh attestation verify inttegro-inttegro-sdk-8.0.0.tgz \
+gh attestation verify inttegro-inttegro-sdk-8.1.0.tgz \
   --repo zebodotdev/inttegro-sdk-typescript
 ```
 
