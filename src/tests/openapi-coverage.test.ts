@@ -9,6 +9,12 @@ const EXTERNALLY_SUPPLIED_CAPABILITY_URL_PATHS = new Set([
   '/file_links/open',
   '/upload_requests/upload',
 ]);
+const CLIENT_CHECKOUT_PATHS = new Set([
+  '/checkout/lookup',
+  '/checkout/pay',
+  '/checkout/request_confirmation',
+  '/checkout/confirm_payment',
+]);
 const PLATFORM_MANAGED_PATHS = new Set(['/sessions/new']);
 
 interface OpenAPIDocument {
@@ -35,6 +41,7 @@ describe('OpenAPI coverage', () => {
       (path) =>
         !sdkPaths.has(path) &&
         !EXTERNALLY_SUPPLIED_CAPABILITY_URL_PATHS.has(path) &&
+        !CLIENT_CHECKOUT_PATHS.has(path) &&
         !PLATFORM_MANAGED_PATHS.has(path)
     );
 
