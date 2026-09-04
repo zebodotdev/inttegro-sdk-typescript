@@ -83,7 +83,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          cp "${{ steps.attest.outputs.bundle-path }}" artifacts/ATTESTATION.sigstore.jsonl
+          cp "${{ steps.attest.outputs.bundle-path }}" artifacts/ATTESTATIONS.sigstore
           {
             echo "repository=https://github.com/${GITHUB_REPOSITORY}"
             echo "tag=${GITHUB_REF_NAME}"
@@ -92,7 +92,7 @@ jobs:
           } > artifacts/PROVENANCE.txt
           (
             cd artifacts
-            sha256sum ./*.tgz ./ATTESTATION.sigstore.jsonl ./PACKAGE-CONTENTS.txt ./PROVENANCE.txt > SHA256SUMS
+            sha256sum ./*.tgz ./ATTESTATIONS.sigstore ./PACKAGE-CONTENTS.txt ./PROVENANCE.txt > SHA256SUMS
           )
 
       - name: Create the draft GitHub release
