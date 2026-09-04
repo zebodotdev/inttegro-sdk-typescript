@@ -2,6 +2,8 @@
  * Validation utilities for request parameters
  */
 
+import { toCamelCase } from './casing';
+
 /**
  * Validation error details
  */
@@ -20,11 +22,12 @@ export function validateRequired(
   const errors: ValidationError[] = [];
 
   for (const field of fields) {
-    const value = obj[field];
+    const publicField = toCamelCase(field);
+    const value = obj[publicField];
     if (value === undefined || value === null || value === '') {
       errors.push({
-        field,
-        message: `Field '${field}' is required`,
+        field: publicField,
+        message: `Field '${publicField}' is required`,
       });
     }
   }

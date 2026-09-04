@@ -23,10 +23,10 @@ describe('Customers', () => {
   it('should lookup a customer', async () => {
     const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue({ customer: { id: 'cu_123' } });
 
-    const result = await customers.lookup({ customer_id: 'cu_123' });
+    const result = await customers.lookup({ customerId: 'cu_123' });
 
     expect(result).toEqual({ id: 'cu_123' });
-    expect(postSpy).toHaveBeenCalledWith('/customers/lookup', { customer_id: 'cu_123' });
+    expect(postSpy).toHaveBeenCalledWith('/customers/lookup', { customerId: 'cu_123' });
   });
 
   it('should page customers', async () => {
@@ -34,10 +34,10 @@ describe('Customers', () => {
       .spyOn(httpClient, 'post')
       .mockResolvedValue({ page: { number: 1, size: 1 } });
 
-    const result = await customers.page({ page_number: 1, page_size: 50 });
+    const result = await customers.page({ pageNumber: 1, pageSize: 50 });
 
     expect(result).toEqual({ number: 1, size: 1 });
-    expect(postSpy).toHaveBeenCalledWith('/customers/page', { page_number: 1, page_size: 50 });
+    expect(postSpy).toHaveBeenCalledWith('/customers/page', { pageNumber: 1, pageSize: 50 });
   });
 
   it('should update a customer with an idempotency key', async () => {
@@ -45,14 +45,14 @@ describe('Customers', () => {
     const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(response);
 
     const result = await customers.update(
-      { customer_id: 'cu_123', name: 'Jane Updated' },
+      { customerId: 'cu_123', name: 'Jane Updated' },
       { idempotencyKey: 'idem_customer_update' }
     );
 
     expect(result).toEqual(response.customer);
     expect(postSpy).toHaveBeenCalledWith(
       '/customers/update',
-      { customer_id: 'cu_123', name: 'Jane Updated' },
+      { customerId: 'cu_123', name: 'Jane Updated' },
       { headers: { 'Idempotency-Key': 'idem_customer_update' } }
     );
   });

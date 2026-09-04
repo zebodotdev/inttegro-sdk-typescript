@@ -31,15 +31,15 @@ describe('domain constants', () => {
   it('organizes financial-account variants into wallet and bank-account modules', () => {
     const wallet: wallets.WalletConfig = {
       type: wallets.WalletTypes.MobileMoney,
-      mobile_money: { account_number: '233200000000', network: 'mtn' },
+      mobileMoney: { accountNumber: '233200000000', network: 'mtn' },
     };
     const bankAccount: bankAccounts.BankAccountConfig = {
       type: bankAccounts.BankAccountTypes.GhanaBankAccount,
-      ghana_bank_account: { number: '0123456789' },
+      ghanaBankAccount: { number: '0123456789' },
     };
 
-    expect(wallet.mobile_money?.network).toBe('mtn');
-    expect(bankAccount.ghana_bank_account?.number).toBe('0123456789');
+    expect(wallet.mobileMoney?.network).toBe('mtn');
+    expect(bankAccount.ghanaBankAccount?.number).toBe('0123456789');
   });
 
   it('keeps inline prices flat and catalog price amounts nested', () => {
@@ -53,9 +53,9 @@ describe('domain constants', () => {
       id: 'pr_123',
       active: true,
       nominal: price,
-      product_id: 'prod_123',
-      created_at: '2026-09-02T12:00:00Z',
+      productId: 'prod_123',
+      createdAt: '2026-09-02T12:00:00Z',
     };
-    expect(returned.product_id).toBe('prod_123');
+    expect(returned.productId).toBe('prod_123');
   });
 });

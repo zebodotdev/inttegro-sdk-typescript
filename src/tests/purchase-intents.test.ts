@@ -13,32 +13,32 @@ describe('PurchaseIntents', () => {
   });
 
   it('should create a purchase intent', async () => {
-    const mockResponse = { purchase_intent: { id: 'sale_123' } };
+    const mockResponse = { purchaseIntent: { id: 'sale_123' } };
     const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockResponse);
 
     const request = {
-      product_id: 'prod_123',
-      price_id: 'pr_123',
+      productId: 'prod_123',
+      priceId: 'pr_123',
       quantity: { min: 1 },
     };
 
     const result = await purchaseIntents.create(request);
 
-    expect(result).toEqual(mockResponse.purchase_intent);
+    expect(result).toEqual(mockResponse.purchaseIntent);
     expect(postSpy).toHaveBeenCalledWith('/purchase_intents/create', request);
   });
 
   it('should update, cancel, lookup, and page purchase intents', async () => {
     const mockResponse = {
-      purchase_intent: { id: 'sale_123' },
-      page: { number: 1, size: 20, purchase_intents: [] },
+      purchaseIntent: { id: 'sale_123' },
+      page: { number: 1, size: 20, purchaseIntents: [] },
     };
     const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockResponse);
 
     await purchaseIntents.update({ id: 'sale_123', quantity: { min: 1, max: 3 } });
     await purchaseIntents.cancel({ id: 'sale_123' });
     await purchaseIntents.lookup({ id: 'sale_123' });
-    const result = await purchaseIntents.page({ page_number: 1, page_size: 20 });
+    const result = await purchaseIntents.page({ pageNumber: 1, pageSize: 20 });
 
     expect(result).toEqual(mockResponse.page);
     expect(postSpy).toHaveBeenCalledWith('/purchase_intents/update', {
@@ -48,8 +48,8 @@ describe('PurchaseIntents', () => {
     expect(postSpy).toHaveBeenCalledWith('/purchase_intents/cancel', { id: 'sale_123' });
     expect(postSpy).toHaveBeenCalledWith('/purchase_intents/lookup', { id: 'sale_123' });
     expect(postSpy).toHaveBeenCalledWith('/purchase_intents/page', {
-      page_number: 1,
-      page_size: 20,
+      pageNumber: 1,
+      pageSize: 20,
     });
   });
 

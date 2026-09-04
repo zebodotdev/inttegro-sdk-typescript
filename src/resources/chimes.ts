@@ -21,7 +21,7 @@ export class Chimes {
 
   async send(request: SendChimeRequest): Promise<Chime> {
     const errors = validateRequired(request as unknown as Record<string, unknown>, ['recipient']);
-    errors.push(...validateExclusiveChimeContent(request, 'full_message'));
+    errors.push(...validateExclusiveChimeContent(request, 'fullMessage'));
     throwIfValidationErrors(errors);
 
     return this.httpClient.postResource<Chime>('/chimes/send', 'chime', request);
@@ -56,7 +56,7 @@ export class Chimes {
     if (!request.recipients || request.recipients.length === 0) {
       errors.push({ field: 'recipients', message: 'recipients is required' });
     }
-    errors.push(...validateExclusiveChimeContent(request, 'full_message'));
+    errors.push(...validateExclusiveChimeContent(request, 'fullMessage'));
     throwIfValidationErrors(errors);
 
     return this.httpClient.postResource<ScheduledChime>(
@@ -68,8 +68,8 @@ export class Chimes {
 }
 
 function validateExclusiveChimeContent(
-  request: { full_message?: string; email?: unknown },
-  smsField: 'full_message'
+  request: { fullMessage?: string; email?: unknown },
+  smsField: 'fullMessage'
 ): ValidationError[] {
   const smsContent = request[smsField];
   const hasSMSContent = typeof smsContent === 'string' && smsContent.trim().length > 0;

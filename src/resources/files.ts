@@ -14,6 +14,7 @@ import {
 } from '../types';
 import { throwIfValidationErrors, validateRequired } from '../utils/validation';
 import { FileDownload } from './file-download';
+import { serializeRequestBody } from '../utils/casing';
 
 export class Files {
   constructor(private httpClient: HttpClient) {}
@@ -28,7 +29,7 @@ export class Files {
     const form = new FormData();
     form.append('purpose', request.purpose);
     if (request.title) form.append('title', request.title);
-    if (request.custom_data) form.append('custom_data', JSON.stringify(request.custom_data));
+    if (request.customData) form.append('custom_data', JSON.stringify(request.customData));
     await appendFile(form, request.file, request.filename);
 
     return this.httpClient.postFormResource<File>('/files/create', 'file', form, {
@@ -48,7 +49,7 @@ export class Files {
     const response = await this.httpClient.raw('/files/contents', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(request),
+      body: serializeRequestBody(request),
     });
     return new FileDownload(() => response.arrayBuffer());
   }

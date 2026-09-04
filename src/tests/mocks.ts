@@ -11,9 +11,9 @@ export const mockOrder: Order = {
   id: 'or_test_123456789',
   number: 'ORD-001',
   status: OrderStatuses.Preparing,
-  payment_status: PaymentStatuses.Initiated,
-  customer_id: 'cu_test_123',
-  line_items: [
+  paymentStatus: PaymentStatuses.Initiated,
+  customerId: 'cu_test_123',
+  lineItems: [
     {
       type: 'product',
       product: {
@@ -27,13 +27,13 @@ export const mockOrder: Order = {
       },
     },
   ],
-  billing_details: {
-    email_address: 'test@example.com',
-    phone_number: '0559714200',
+  billingDetails: {
+    emailAddress: 'test@example.com',
+    phoneNumber: '0559714200',
     name: 'Test User',
     address: {
       name: 'Test User',
-      phone_number: '0559714200',
+      phoneNumber: '0559714200',
       line1: '123 Test St',
       town: 'Accra',
       region: 'Greater Accra',
@@ -43,7 +43,7 @@ export const mockOrder: Order = {
   shipping: {
     address: {
       name: 'Test User',
-      phone_number: '0559714200',
+      phoneNumber: '0559714200',
       line1: '123 Test St',
       town: 'Accra',
       region: 'Greater Accra',
@@ -59,8 +59,8 @@ export const mockOrder: Order = {
     value: 20000,
   },
   currency: 'ghs',
-  created_at: '2024-01-01T00:00:00Z',
-  updated_at: '2024-01-01T00:00:00Z',
+  createdAt: '2024-01-01T00:00:00Z',
+  updatedAt: '2024-01-01T00:00:00Z',
 };
 
 /**
@@ -68,7 +68,7 @@ export const mockOrder: Order = {
  */
 export const mockCreateOrderResponse = {
   order: mockOrder,
-  redirect_url: 'https://payment.inttegro.com/checkout/test_123',
+  redirectUrl: 'https://payment.inttegro.com/checkout/test_123',
 };
 
 /**
@@ -77,8 +77,8 @@ export const mockCreateOrderResponse = {
 export const mockLookupOrderResponse = {
   order: {
     ...mockOrder,
-    payment_status: PaymentStatuses.Paid,
-    paid_at: '2024-01-01T00:05:00Z',
+    paymentStatus: PaymentStatuses.Paid,
+    paidAt: '2024-01-01T00:05:00Z',
   },
 };
 
@@ -88,7 +88,7 @@ export const mockLookupOrderResponse = {
 export const mockPayOrderResponse = {
   order: {
     ...mockOrder,
-    payment_status: PaymentStatuses.RequiresAction,
+    paymentStatus: PaymentStatuses.RequiresAction,
   },
 };
 
@@ -98,8 +98,8 @@ export const mockPayOrderResponse = {
 export const mockConfirmPaymentResponse = {
   order: {
     ...mockOrder,
-    payment_status: PaymentStatuses.Paid,
-    paid_at: '2024-01-01T00:05:00Z',
+    paymentStatus: PaymentStatuses.Paid,
+    paidAt: '2024-01-01T00:05:00Z',
   },
 };
 
@@ -113,43 +113,43 @@ export const mockRequestConfirmationResponse = {
 export const mockChimeResponse = {
   chime: {
     id: 'ch_123',
-    full_message: 'hello there',
-    sender_id: 'YourBrand',
+    fullMessage: 'hello there',
+    senderId: 'YourBrand',
     transmission: {
-      sent_via: 'sms',
+      sentVia: 'sms',
       status: 'sent',
-      created_at: '2025-12-10T10:30:00Z',
-      sent_at: '2025-12-10T10:30:05Z',
-      delivered_at: null,
-      failed_at: null,
+      createdAt: '2025-12-10T10:30:00Z',
+      sentAt: '2025-12-10T10:30:05Z',
+      deliveredAt: null,
+      failedAt: null,
     },
   },
 } satisfies { chime: Chime };
 
 export const mockScheduleResponse = {
-  scheduled_chime: {
+  scheduledChime: {
     id: 'sch_123',
     recipients: ['+233244123456'],
-    full_message: 'Hello! This is your scheduled reminder.',
-    sender_id: 'YourBrand',
-    send_after: '2026-01-18T10:00:00Z',
-    created_at: '2026-01-17T15:30:00Z',
-    executed_at: null,
+    fullMessage: 'Hello! This is your scheduled reminder.',
+    senderId: 'YourBrand',
+    sendAfter: '2026-01-18T10:00:00Z',
+    createdAt: '2026-01-17T15:30:00Z',
+    executedAt: null,
   },
 };
 
 export const mockScheduleLookupResponse = {
-  scheduled_chime: {
+  scheduledChime: {
     id: 'sch_123',
     recipients: ['+233244123456'],
     content: 'Hello! This is your scheduled reminder.',
-    sender_id: 'YourBrand',
-    send_after: '2026-01-18T10:00:00Z',
-    created_at: '2026-01-17T15:30:00Z',
-    executed_at: null,
-    canceled_at: null,
+    senderId: 'YourBrand',
+    sendAfter: '2026-01-18T10:00:00Z',
+    createdAt: '2026-01-17T15:30:00Z',
+    executedAt: null,
+    canceledAt: null,
     errors: [],
-    chime_ids: [],
+    chimeIds: [],
   },
 };
 
@@ -158,13 +158,13 @@ export const mockBroadcastResponse = {
     id: 'brc_123',
     recipients: ['+233244123456'],
     content: 'Hello! This is your broadcast notification.',
-    sender_id: 'YourBrand',
-    send_after: '2026-01-18T10:00:00Z',
-    created_at: '2026-01-18T10:00:00Z',
-    executed_at: null,
-    canceled_at: null,
+    senderId: 'YourBrand',
+    sendAfter: '2026-01-18T10:00:00Z',
+    createdAt: '2026-01-18T10:00:00Z',
+    executedAt: null,
+    canceledAt: null,
     errors: [],
-    chime_ids: [],
+    chimeIds: [],
   },
 };
 
@@ -188,7 +188,7 @@ export const mockErrorResponse = {
     type: 'invalid_request_parameter',
     url: 'https://studio.inttegro.com/e/invalid_payment_method',
     detail: 'Payment method not supported for this currency.',
-    fix_code: 'change_request_parameters',
+    fixCode: 'change_request_parameters',
     cause: 'validation_failure',
   },
 };

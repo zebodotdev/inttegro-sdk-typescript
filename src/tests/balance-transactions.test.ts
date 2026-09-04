@@ -19,25 +19,25 @@ describe('BalanceTransactions', () => {
       transaction: {
         id: 'bt_123',
         type: 'payment',
-        payment_id: 'py_123',
-        order_id: 'or_123',
+        paymentId: 'py_123',
+        orderId: 'or_123',
         amount: { currency: 'GHS', value: 2500 },
-        created_at: '2026-08-31T12:00:00Z',
+        createdAt: '2026-08-31T12:00:00Z',
       },
     };
     const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockResponse);
 
-    const result = await balanceTransactions.lookup({ transaction_id: 'bt_123' });
+    const result = await balanceTransactions.lookup({ transactionId: 'bt_123' });
 
     expect(result).toEqual(mockResponse.transaction);
     expect(postSpy).toHaveBeenCalledWith('/balance_transactions/lookup', {
-      transaction_id: 'bt_123',
+      transactionId: 'bt_123',
     });
 
     const transaction = result;
     if (transaction.type === 'payment') {
-      expect(transaction.payment_id).toBe('py_123');
-      expect(transaction.refund_id).toBeUndefined();
+      expect(transaction.paymentId).toBe('py_123');
+      expect(transaction.refundId).toBeUndefined();
     }
   });
 
@@ -45,43 +45,43 @@ describe('BalanceTransactions', () => {
     const transaction: BalanceTransaction = {
       id: 'bt_refund',
       type: 'refund',
-      refund_id: 'rf_123',
-      order_id: 'or_123',
+      refundId: 'rf_123',
+      orderId: 'or_123',
       amount: { currency: 'GHS', value: 500 },
-      created_at: '2026-08-31T12:00:00Z',
+      createdAt: '2026-08-31T12:00:00Z',
     };
 
     if (transaction.type === 'refund') {
-      expect(transaction.refund_id).toBe('rf_123');
-      expect(transaction.payment_id).toBeUndefined();
+      expect(transaction.refundId).toBe('rf_123');
+      expect(transaction.paymentId).toBeUndefined();
     }
   });
 
   it('reuses the canonical model for order-embedded balance transactions', () => {
     const payment: Payment = {
-      balance_transaction: {
+      balanceTransaction: {
         id: 'bt_payment',
         type: 'payment',
-        payment_id: 'py_123',
-        order_id: 'or_123',
+        paymentId: 'py_123',
+        orderId: 'or_123',
         amount: { currency: 'GHS', value: 2500 },
-        created_at: '2026-08-31T12:00:00Z',
+        createdAt: '2026-08-31T12:00:00Z',
       },
     };
 
-    expect(payment.balance_transaction?.type).toBe('payment');
+    expect(payment.balanceTransaction?.type).toBe('payment');
   });
 
   it('should page balance transactions', async () => {
     const mockResponse = { page: { number: 1, size: 20, transactions: [] } };
     const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockResponse);
 
-    const result = await balanceTransactions.page({ page_number: 1, page_size: 20 });
+    const result = await balanceTransactions.page({ pageNumber: 1, pageSize: 20 });
 
     expect(result).toEqual(mockResponse.page);
     expect(postSpy).toHaveBeenCalledWith('/balance_transactions/page', {
-      page_number: 1,
-      page_size: 20,
+      pageNumber: 1,
+      pageSize: 20,
     });
   });
 

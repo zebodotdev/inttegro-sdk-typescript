@@ -19,66 +19,64 @@ export type MobileMoneyNetwork = (typeof MobileMoneyNetworks)[keyof typeof Mobil
 export type MobileMoneyIssuer = MobileMoneyNetwork;
 
 export interface MobileMoneyDetails {
-  account_number: string;
+  accountNumber: string;
   network: MobileMoneyNetwork;
 }
 
 export interface PaymentMethodMobileMoney {
-  account_number?: string;
+  accountNumber?: string;
   network?: MobileMoneyNetwork;
 }
 
 export interface PaymentMethodBankAccount {
   type?: string;
-  ghana_bank_account?: {
+  ghanaBankAccount?: {
     branch?: string;
     name?: string;
-    account_number?: string;
-    sort_code?: string;
-    swift_code?: string;
+    accountNumber?: string;
+    sortCode?: string;
+    swiftCode?: string;
   } | null;
 }
 
 export interface PaymentMethodCard {
   brand?: string;
-  expires_on?: string;
+  expiresOn?: string;
   issuer?: {
-    email_address?: string;
+    emailAddress?: string;
     name?: string;
-    phone_number?: string;
+    phoneNumber?: string;
     type?: string;
   };
   owner?: {
-    email_address?: string;
+    emailAddress?: string;
     name?: string;
-    phone_number?: string;
+    phoneNumber?: string;
   };
   type?: string;
 }
 
 export interface PaymentMethodVerification {
-  completed_at?: string | null;
-  initiated_at?: string;
+  completedAt?: string | null;
+  initiatedAt?: string;
   mechanism?: string;
-  request_id?: string;
+  requestId?: string;
   type?: string;
 }
 
 export interface PaymentMethodData {
   type: 'mobile_money';
-  mobile_money: MobileMoneyDetails;
+  mobileMoney: MobileMoneyDetails;
 }
 
 export interface PaymentMethodOwnerAddress {
   city?: string | null;
   country?: string;
-  line_1?: string | null;
   line1?: string | null;
-  line_2?: string | null;
   line2?: string | null;
   name?: string | null;
-  phone_number?: string | null;
-  post_code?: string | null;
+  phoneNumber?: string | null;
+  postCode?: string | null;
   region?: string | null;
 }
 
@@ -90,93 +88,93 @@ export interface PaymentMethodOwner {
 export interface PaymentMethod {
   id: string;
   active?: boolean;
-  archived_at?: string | null;
-  customer_id: string;
+  archivedAt?: string | null;
+  customerId: string;
   type: PaymentMethodType;
-  mobile_money?: PaymentMethodMobileMoney | null;
-  bank_account?: PaymentMethodBankAccount | null;
+  mobileMoney?: PaymentMethodMobileMoney | null;
+  bankAccount?: PaymentMethodBankAccount | null;
   card?: PaymentMethodCard | null;
   owner?: PaymentMethodOwner | null;
   verification?: PaymentMethodVerification | null;
-  custom_data?: Record<string, string>;
-  expires_on?: string | null;
-  created_at: string;
+  customData?: Record<string, string>;
+  expiresOn?: string | null;
+  createdAt: string;
   verified: boolean;
-  verified_at?: string | null;
+  verifiedAt?: string | null;
 }
 
 export interface TokenizePaymentMethodRequest {
   /** Request metadata such as idempotency controls */
-  request_meta?: RequestMeta;
-  customer_id: string;
+  requestMeta?: RequestMeta;
+  customerId: string;
   type: 'mobile_money';
-  mobile_money: MobileMoneyDetails;
+  mobileMoney: MobileMoneyDetails;
   owner: PaymentMethodOwner;
-  custom_data?: Record<string, string>;
+  customData?: Record<string, string>;
 }
 
 export interface VerifyPaymentMethodRequest {
   /** Request metadata such as idempotency controls */
-  request_meta?: RequestMeta;
-  payment_method_id: string;
+  requestMeta?: RequestMeta;
+  paymentMethodId: string;
 }
 
 export type VerificationStatus = 'pending' | 'verified' | 'failed' | string;
 
 export interface PaymentMethodVerificationSession {
-  payment_method_id?: string;
+  paymentMethodId?: string;
   status?: VerificationStatus;
-  token_sent_at?: string;
-  expires_at?: string;
+  tokenSentAt?: string;
+  expiresAt?: string;
   delivery?: {
     recipient?: string;
     channel?: 'sms' | 'email' | string;
-    sender_id?: string;
+    senderId?: string;
   };
 }
 
 export interface ConfirmPaymentMethodVerificationRequest {
-  payment_method_id: string;
+  paymentMethodId: string;
   token: string;
 }
 
 export interface LookupPaymentMethodRequest {
-  payment_method_id: string;
+  paymentMethodId: string;
 }
 
 export interface PagePaymentMethodsRequest {
-  customer_id?: string;
-  page_number?: number;
-  page_size?: number;
+  customerId?: string;
+  pageNumber?: number;
+  pageSize?: number;
 }
 
 export interface PaymentMethodPage {
   number?: number;
   size?: number;
-  payment_methods?: PaymentMethod[];
+  paymentMethods?: PaymentMethod[];
 }
 
 export interface UpdatePaymentMethodRequest {
-  payment_method_id: string;
-  custom_data?: Record<string, string | null>;
+  paymentMethodId: string;
+  customData?: Record<string, string | null>;
   active?: boolean;
   archived?: boolean;
   owner?: PaymentMethodOwner;
 }
 
 export interface PaymentMethodActionRequest {
-  payment_method_id: string;
+  paymentMethodId: string;
 }
 
 export interface DeletePaymentMethodRequest {
   /** Request metadata such as idempotency controls */
-  request_meta?: RequestMeta;
-  payment_method_id: string;
+  requestMeta?: RequestMeta;
+  paymentMethodId: string;
 }
 
 export interface PaymentMethodDeletion {
   deleted?: boolean;
-  payment_method_id?: string;
+  paymentMethodId?: string;
 }
 
 export interface PaymentMethodTypeSetting {
@@ -184,12 +182,12 @@ export interface PaymentMethodTypeSetting {
   name?: string;
   description?: string;
   enabled?: boolean;
-  confirms_use?: boolean;
+  confirmsUse?: boolean;
 }
 
 export interface PaymentMethodSettings {
-  mobile_money?: PaymentMethodTypeSetting;
-  bank_account?: PaymentMethodTypeSetting;
+  mobileMoney?: PaymentMethodTypeSetting;
+  bankAccount?: PaymentMethodTypeSetting;
   card?: PaymentMethodTypeSetting;
   motito?: PaymentMethodTypeSetting;
 }

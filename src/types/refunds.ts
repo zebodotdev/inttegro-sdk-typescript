@@ -24,60 +24,60 @@ export const RefundStatuses = {
 export type RefundStatus = (typeof RefundStatuses)[keyof typeof RefundStatuses];
 
 export interface CreateRefundLineItem {
-  order_line_item_id: string;
-  refund_amount: AmountParams;
+  orderLineItemId: string;
+  refundAmount: AmountParams;
   reason?: RefundReason;
-  reason_details?: string;
+  reasonDetails?: string;
 }
 
 export interface CreateRefundRequest {
-  line_items: CreateRefundLineItem[];
-  order_id: string;
+  lineItems: CreateRefundLineItem[];
+  orderId: string;
   reason: RefundReason;
-  custom_data?: Record<string, string>;
-  reason_details?: string;
+  customData?: Record<string, string>;
+  reasonDetails?: string;
   reference?: string;
-  request_meta?: RequestMeta;
+  requestMeta?: RequestMeta;
 }
 
 export interface CancelRefundRequest {
-  refund_id: string;
-  request_meta?: RequestMeta;
+  refundId: string;
+  requestMeta?: RequestMeta;
 }
 
 export interface LookupRefundRequest {
-  refund_id: string;
+  refundId: string;
 }
 
 export interface PageRefundsRequest {
-  page_number: number;
-  page_size?: number;
+  pageNumber: number;
+  pageSize?: number;
 }
 
 export interface RefundLineItem {
   id: string;
-  order_line_item_id: string;
-  original_amount_paid: Amount;
-  refund_amount: Amount;
+  orderLineItemId: string;
+  originalAmountPaid: Amount;
+  refundAmount: Amount;
   reason?: RefundReason;
-  reason_details?: string;
+  reasonDetails?: string;
 }
 
 export interface Refund {
-  created_at: string;
+  createdAt: string;
   id: string;
-  line_items: RefundLineItem[];
-  order_id: string;
+  lineItems: RefundLineItem[];
+  orderId: string;
   reason: RefundReason;
   status: RefundStatus;
   total: Amount;
-  canceled_at?: string;
-  custom_data?: Record<string, string>;
-  failed_at?: string;
-  processing_at?: string;
-  reason_details?: string;
+  canceledAt?: string;
+  customData?: Record<string, string>;
+  failedAt?: string;
+  processingAt?: string;
+  reasonDetails?: string;
   reference?: string;
-  succeeded_at?: string;
+  succeededAt?: string;
 }
 
 export interface RefundPage {

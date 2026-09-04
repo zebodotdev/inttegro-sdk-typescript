@@ -26,7 +26,7 @@ async function main() {
   try {
     await inttegro.orders.create({
       // Missing required fields - will throw validation error
-      line_items: [],
+      lineItems: [],
     } as any);
   } catch (error) {
     if (error instanceof InttegroValidationError) {
@@ -47,7 +47,7 @@ async function main() {
   console.log('\n\nExample 2: Authentication Error');
   try {
     await inttegro.orders.lookup({
-      order_id: 'or_123',
+      orderId: 'or_123',
     });
   } catch (error) {
     if (error instanceof InttegroAuthenticationError) {
@@ -67,7 +67,7 @@ async function main() {
   try {
     // Make multiple rapid requests to trigger rate limiting
     const requests = Array.from({ length: 100 }, (_, i) =>
-      inttegro.orders.lookup({ order_id: `or_${i}` })
+      inttegro.orders.lookup({ orderId: `or_${i}` })
     );
     await Promise.all(requests);
   } catch (error) {
@@ -98,7 +98,7 @@ async function main() {
 
   try {
     await slowInttegro.orders.lookup({
-      order_id: 'or_123',
+      orderId: 'or_123',
     });
   } catch (error) {
     if (error instanceof InttegroNetworkError) {
@@ -117,12 +117,12 @@ async function main() {
   async function safeOrderCreate() {
     try {
       return await inttegro.orders.create({
-        customer_data: {
+        customerData: {
           name: 'Test User',
-          email_address: 'test@example.com',
-          phone_number: '0559714200',
+          emailAddress: 'test@example.com',
+          phoneNumber: '0559714200',
         },
-        line_items: [
+        lineItems: [
           {
             type: 'product',
             product: {
@@ -133,13 +133,13 @@ async function main() {
             },
           },
         ],
-        billing_details: {
-          email_address: 'test@example.com',
-          phone_number: '0559714200',
+        billingDetails: {
+          emailAddress: 'test@example.com',
+          phoneNumber: '0559714200',
           name: 'Test User',
           address: {
             name: 'Test User',
-            phone_number: '0559714200',
+            phoneNumber: '0559714200',
             line1: '123 Test St',
             town: 'Accra',
             region: 'Greater Accra',

@@ -57,7 +57,7 @@ export interface MessageTemplateVariable {
 }
 
 export interface MessageTemplateSmsContent {
-  message_template: string;
+  messageTemplate: string;
 }
 
 export interface MessageTemplateMailbox {
@@ -69,28 +69,28 @@ export interface MessageTemplateEmailContent {
   from?: MessageTemplateMailbox | null;
   headers?: Record<string, string>;
   html: string;
-  reply_to?: MessageTemplateMailbox | null;
+  replyTo?: MessageTemplateMailbox | null;
   subject: string;
 }
 
 export interface MessageTemplate {
   id: string;
   about?: string | null;
-  archived_at?: string | null;
+  archivedAt?: string | null;
   attachments?: string[];
   channel: MessageTemplateChannel;
-  created_at: string;
-  draft_version: number;
+  createdAt: string;
+  draftVersion: number;
   email?: MessageTemplateEmailContent | null;
-  has_unpublished_changes: boolean;
+  hasUnpublishedChanges: boolean;
   locale: string;
   name: string;
-  published_at?: string | null;
-  published_version?: number | null;
+  publishedAt?: string | null;
+  publishedVersion?: number | null;
   purpose: string;
   sms?: MessageTemplateSmsContent | null;
   status: MessageTemplateStatus;
-  updated_at: string;
+  updatedAt: string;
   variables?: MessageTemplateVariable[];
   version: number;
 }
@@ -138,29 +138,29 @@ export interface MessageTemplatePageRequest {
 }
 
 export interface MessageTemplateReference {
-  template_id: string;
+  templateId: string;
   variables?: Record<string, unknown>;
 }
 
 export interface MessageTemplateRenderPreviewRequest {
-  message_template: MessageTemplateReference;
+  messageTemplate: MessageTemplateReference;
 }
 
 export interface MessageTemplatePage {
   number?: number;
   size?: number;
-  message_templates?: MessageTemplate[];
+  messageTemplates?: MessageTemplate[];
 }
 
 export interface MessageTemplateRenderedContent {
   channel: MessageTemplateChannel;
   email?: Record<string, unknown>;
   sms?: {
-    full_message?: string;
+    fullMessage?: string;
   };
 }
 
 export interface MessageTemplatePreview {
-  message_template: MessageTemplate;
+  messageTemplate: MessageTemplate;
   rendered: MessageTemplateRenderedContent;
 }

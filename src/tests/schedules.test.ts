@@ -15,19 +15,19 @@ describe('Schedules', () => {
   it('should lookup a schedule', async () => {
     const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockScheduleLookupResponse);
 
-    const result = await schedules.lookup({ schedule_id: 'sch_123' });
+    const result = await schedules.lookup({ scheduleId: 'sch_123' });
 
-    expect(result).toEqual(mockScheduleLookupResponse.scheduled_chime);
-    expect(postSpy).toHaveBeenCalledWith('/schedules/lookup', { schedule_id: 'sch_123' });
+    expect(result).toEqual(mockScheduleLookupResponse.scheduledChime);
+    expect(postSpy).toHaveBeenCalledWith('/schedules/lookup', { scheduleId: 'sch_123' });
   });
 
   it('should cancel a schedule', async () => {
     const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockScheduleLookupResponse);
 
-    const result = await schedules.cancel({ schedule_id: 'sch_123' });
+    const result = await schedules.cancel({ scheduleId: 'sch_123' });
 
-    expect(result).toEqual(mockScheduleLookupResponse.scheduled_chime);
-    expect(postSpy).toHaveBeenCalledWith('/schedules/cancel', { schedule_id: 'sch_123' });
+    expect(result).toEqual(mockScheduleLookupResponse.scheduledChime);
+    expect(postSpy).toHaveBeenCalledWith('/schedules/cancel', { scheduleId: 'sch_123' });
   });
 
   it('should validate missing fields', async () => {

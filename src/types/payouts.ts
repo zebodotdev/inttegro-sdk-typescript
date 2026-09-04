@@ -12,7 +12,7 @@ export const PayoutStatuses = {
 export type PayoutStatus = (typeof PayoutStatuses)[keyof typeof PayoutStatuses];
 
 export interface PayoutScheduleSpec {
-  t_plus?: string;
+  tPlus?: string;
   label?: string;
   abide?: string;
 }
@@ -22,15 +22,15 @@ export interface PayoutSchedule {
   name?: string;
   type?: string;
   interval?: string;
-  schedule_on?: string;
+  scheduleOn?: string;
   description?: string;
   spec?: PayoutScheduleSpec;
-  aging_spec?: PayoutScheduleSpec;
+  agingSpec?: PayoutScheduleSpec;
 }
 
 export interface PayoutSettings {
   id?: string;
-  fx_enabled?: boolean;
+  fxEnabled?: boolean;
   destinations?: Record<string, string>;
   schedule?: PayoutSchedule | null;
 }
@@ -40,56 +40,56 @@ export interface SetPayoutDestinationsRequest {
 }
 
 export interface SchedulePayoutRequest {
-  destination_id: string;
-  execute_after?: string;
-  max_amount: number;
+  destinationId: string;
+  executeAfter?: string;
+  maxAmount: number;
   reference: string;
 }
 
 export interface LookupPayoutRequest {
-  payout_id: string;
+  payoutId: string;
 }
 
 export interface PagePayoutsRequest {
-  page_number?: number;
-  page_size?: number;
+  pageNumber?: number;
+  pageSize?: number;
 }
 
 export interface PayoutError {
   type?: string;
   message?: string;
   cause?: string;
-  occurred_at?: string;
+  occurredAt?: string;
 }
 
 export interface Payout {
   id?: string;
-  application_id?: string;
-  destination_id?: string;
+  applicationId?: string;
+  destinationId?: string;
   amount?: Amount;
-  balance_transactions?: string[];
+  balanceTransactions?: string[];
   status?: PayoutStatus;
-  initiated_by?: string;
-  execute_after?: string;
-  scheduled_at?: string;
-  scheduled_by?: string;
-  canceled_at?: string;
-  custom_data?: Record<string, string>;
+  initiatedBy?: string;
+  executeAfter?: string;
+  scheduledAt?: string;
+  scheduledBy?: string;
+  canceledAt?: string;
+  customData?: Record<string, string>;
   error?: PayoutError | null;
-  executed_by?: string;
-  failed_at?: string | null;
-  max_amount?: Amount;
-  latest_attempt_id?: string;
-  latest_error?: PayoutError;
+  executedBy?: string;
+  failedAt?: string | null;
+  maxAmount?: Amount;
+  latestAttemptId?: string;
+  latestError?: PayoutError;
   reference?: string;
-  schedule_id?: string;
-  sent_at?: string | null;
-  source_id?: string;
-  initiated_at?: string;
-  executed_at?: string;
-  expected_at?: string;
-  succeeded_at?: string;
-  balance_transaction_ids?: string[];
+  scheduleId?: string;
+  sentAt?: string | null;
+  sourceId?: string;
+  initiatedAt?: string;
+  executedAt?: string;
+  expectedAt?: string;
+  succeededAt?: string;
+  balanceTransactionIds?: string[];
 }
 
 export interface PayoutPage {
@@ -99,5 +99,5 @@ export interface PayoutPage {
 }
 
 export interface CancelPayoutRequest {
-  payout_id: string;
+  payoutId: string;
 }

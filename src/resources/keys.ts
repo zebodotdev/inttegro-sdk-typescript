@@ -52,5 +52,5 @@ export class Keys {
 }
 
 function validateSecretKeyIdentifier(request: LookupSecretKeyRequest): ValidationError[] {
-  return validateRequired({ secret_key_id: request.secret_key_id }, ['secret_key_id']);
+  return validateRequired({ secretKeyId: request.secretKeyId }, ['secret_key_id']);
 }

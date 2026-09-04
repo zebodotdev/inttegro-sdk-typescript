@@ -14,50 +14,50 @@ describe('PaymentMethods', () => {
 
   it('should page and update payment methods', async () => {
     const mockResponse = {
-      payment_method: { id: 'pm_123', customer_id: 'cu_123' },
-      page: { number: 1, size: 20, payment_methods: [] },
+      paymentMethod: { id: 'pm_123', customerId: 'cu_123' },
+      page: { number: 1, size: 20, paymentMethods: [] },
     };
     const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockResponse);
 
-    await paymentMethods.page({ customer_id: 'cu_123', page_number: 1, page_size: 20 });
+    await paymentMethods.page({ customerId: 'cu_123', pageNumber: 1, pageSize: 20 });
     const result = await paymentMethods.update({
-      payment_method_id: 'pm_123',
-      custom_data: { segment: 'vip', internal_note: null },
+      paymentMethodId: 'pm_123',
+      customData: { segment: 'vip', internalNote: null },
     });
 
-    expect(result).toEqual(mockResponse.payment_method);
+    expect(result).toEqual(mockResponse.paymentMethod);
     expect(postSpy).toHaveBeenCalledWith('/payment_methods/page', {
-      customer_id: 'cu_123',
-      page_number: 1,
-      page_size: 20,
+      customerId: 'cu_123',
+      pageNumber: 1,
+      pageSize: 20,
     });
     expect(postSpy).toHaveBeenCalledWith('/payment_methods/update', {
-      payment_method_id: 'pm_123',
-      custom_data: { segment: 'vip', internal_note: null },
+      paymentMethodId: 'pm_123',
+      customData: { segment: 'vip', internalNote: null },
     });
   });
 
   it('should activate, disactivate, archive, and unarchive payment methods', async () => {
-    const mockResponse = { payment_method: { id: 'pm_123', customer_id: 'cu_123' } };
+    const mockResponse = { paymentMethod: { id: 'pm_123', customerId: 'cu_123' } };
     const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockResponse);
 
-    await paymentMethods.activate({ payment_method_id: 'pm_123' });
-    await paymentMethods.disactivate({ payment_method_id: 'pm_123' });
-    await paymentMethods.archive({ payment_method_id: 'pm_123' });
-    const result = await paymentMethods.unarchive({ payment_method_id: 'pm_123' });
+    await paymentMethods.activate({ paymentMethodId: 'pm_123' });
+    await paymentMethods.disactivate({ paymentMethodId: 'pm_123' });
+    await paymentMethods.archive({ paymentMethodId: 'pm_123' });
+    const result = await paymentMethods.unarchive({ paymentMethodId: 'pm_123' });
 
-    expect(result).toEqual(mockResponse.payment_method);
+    expect(result).toEqual(mockResponse.paymentMethod);
     expect(postSpy).toHaveBeenCalledWith('/payment_methods/activate', {
-      payment_method_id: 'pm_123',
+      paymentMethodId: 'pm_123',
     });
     expect(postSpy).toHaveBeenCalledWith('/payment_methods/disactivate', {
-      payment_method_id: 'pm_123',
+      paymentMethodId: 'pm_123',
     });
     expect(postSpy).toHaveBeenCalledWith('/payment_methods/archive', {
-      payment_method_id: 'pm_123',
+      paymentMethodId: 'pm_123',
     });
     expect(postSpy).toHaveBeenCalledWith('/payment_methods/unarchive', {
-      payment_method_id: 'pm_123',
+      paymentMethodId: 'pm_123',
     });
   });
 

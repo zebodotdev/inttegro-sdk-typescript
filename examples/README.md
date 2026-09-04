@@ -132,18 +132,18 @@ Use saved payment methods with existing customers:
 
 ```typescript
 const order = await inttegro.orders.create({
-  customer_id: 'cu_existing_123',
-  payment_method_id: 'pm_saved_456',
-  payout_settings: {
+  customerId: 'cu_existing_123',
+  paymentMethodId: 'pm_saved_456',
+  payoutSettings: {
     destination: {
-      financial_account_id: 'fa_1234567890abcdef',
+      financialAccountId: 'fa_1234567890abcdef',
     },
-    enable_fx: false,
+    enableFx: false,
   },
-  line_items: [
+  lineItems: [
     /* subscription items */
   ],
-  billing_details: {
+  billingDetails: {
     /* billing info */
   },
 });
@@ -156,7 +156,7 @@ Poll order status for real-time updates:
 ```typescript
 async function trackOrder(orderId: string) {
   const interval = setInterval(async () => {
-    const order = await inttegro.orders.lookup({ order_id: orderId });
+    const order = await inttegro.orders.lookup({ orderId: orderId });
 
     console.log('Status:', order.payment?.status);
 

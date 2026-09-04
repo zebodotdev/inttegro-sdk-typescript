@@ -19,6 +19,7 @@ import {
 import { Logger } from './utils/logger';
 import { withRetry, isRetryableHttpError } from './utils/retry';
 import { generateIdempotencyKey } from './utils/idempotency';
+import { serializeRequestBody, toCamelCase, toPublicValue } from './utils/casing';
 
 /**
  * HTTP client for making requests to the Inttegro API
@@ -139,7 +140,7 @@ export class HttpClient {
     try {
       const contentType = response.headers.get('content-type');
       if (contentType && contentType.includes('application/json')) {
-        return (await response.json()) as APIErrorDocument;
+        return toPublicValue(await response.json()) as APIErrorDocument;
       }
       return { message: await response.text() };
     } catch {
@@ -163,7 +164,7 @@ export class HttpClient {
         payload.type,
         payload.url,
         payload.detail,
-        payload.fix_code,
+        payload.fixCode,
         payload.cause,
         errorData
       );
@@ -180,7 +181,7 @@ export class HttpClient {
         payload.type,
         payload.url,
         payload.detail,
-        payload.fix_code,
+        payload.fixCode,
         payload.cause,
         errorData
       );
@@ -201,7 +202,7 @@ export class HttpClient {
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${this.config.apiKey}`,
-      'User-Agent': 'inttegro-sdk-typescript/5.0.0',
+      'User-Agent': 'inttegro-sdk-typescript/8.0.0',
       ...(requestOptionsWithIdempotency.headers as Record<string, string>),
     };
 
@@ -232,7 +233,7 @@ export class HttpClient {
       // Parse successful response
       const contentType = interceptedResponse.headers.get('content-type');
       if (contentType && contentType.includes('application/json')) {
-        return (await interceptedResponse.json()) as T;
+        return toPublicValue(await interceptedResponse.json()) as T;
       }
 
       // Return empty object for non-JSON responses
@@ -262,7 +263,7 @@ export class HttpClient {
       : options;
     const headers: Record<string, string> = {
       Accept: 'application/json',
-      'User-Agent': 'inttegro-sdk-typescript/5.0.0',
+      'User-Agent': 'inttegro-sdk-typescript/8.0.0',
       ...(authenticated ? { Authorization: `Bearer ${this.config.apiKey}` } : {}),
       ...(requestOptionsWithIdempotency.headers as Record<string, string>),
     };
@@ -305,7 +306,7 @@ export class HttpClient {
       authenticated
     );
 
-    return (await response.json()) as T;
+    return toPublicValue(await response.json()) as T;
   }
 
   /**
@@ -322,7 +323,7 @@ export class HttpClient {
     return this.request<T>(path, {
       ...options,
       method: 'POST',
-      body: body ? JSON.stringify(body) : undefined,
+      body: body === undefined ? undefined : serializeRequestBody(body),
     });
   }
 
@@ -366,7 +367,7 @@ export class HttpClient {
     return this.request<T>(path, {
       ...options,
       method: 'PUT',
-      body: body ? JSON.stringify(body) : undefined,
+      body: body === undefined ? undefined : serializeRequestBody(body),
     });
   }
 
@@ -377,7 +378,7 @@ export class HttpClient {
     return this.request<T>(path, {
       ...options,
       method: 'PATCH',
-      body: body ? JSON.stringify(body) : undefined,
+      body: body === undefined ? undefined : serializeRequestBody(body),
     });
   }
 
@@ -431,7 +432,8 @@ function resourceFromEnvelope<T>(
   field: string,
   path: string
 ): T {
-  const resource = envelope[field];
+  const publicField = toCamelCase(field);
+  const resource = envelope[publicField];
   if (resource === undefined || resource === null) {
     throw new TypeError(`Inttegro returned an invalid ${field} value for ${path}`);
   }

@@ -14,10 +14,10 @@ describe('Payouts', () => {
   it('should page payouts', async () => {
     const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue({ page: { payouts: [] } });
 
-    const result = await payouts.page({ page_number: 1, page_size: 20 });
+    const result = await payouts.page({ pageNumber: 1, pageSize: 20 });
 
     expect(result).toEqual({ payouts: [] });
-    expect(postSpy).toHaveBeenCalledWith('/payouts/page', { page_number: 1, page_size: 20 });
+    expect(postSpy).toHaveBeenCalledWith('/payouts/page', { pageNumber: 1, pageSize: 20 });
   });
 
   it('should schedule and lookup payouts', async () => {
@@ -25,19 +25,19 @@ describe('Payouts', () => {
     const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockResponse);
 
     await payouts.schedule({
-      destination_id: 'fa_123',
-      max_amount: 250000,
+      destinationId: 'fa_123',
+      maxAmount: 250000,
       reference: 'PAYOUT-APR-15',
     });
-    const result = await payouts.lookup({ payout_id: 'po_123' });
+    const result = await payouts.lookup({ payoutId: 'po_123' });
 
     expect(result).toEqual(mockResponse.payout);
     expect(postSpy).toHaveBeenCalledWith('/payouts/schedule', {
-      destination_id: 'fa_123',
-      max_amount: 250000,
+      destinationId: 'fa_123',
+      maxAmount: 250000,
       reference: 'PAYOUT-APR-15',
     });
-    expect(postSpy).toHaveBeenCalledWith('/payouts/lookup', { payout_id: 'po_123' });
+    expect(postSpy).toHaveBeenCalledWith('/payouts/lookup', { payoutId: 'po_123' });
   });
 
   it('should enable automatic payouts', async () => {
@@ -54,13 +54,13 @@ describe('Payouts', () => {
     const mockResponse = { payout: { id: 'po_123', status: 'canceled' } };
     const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockResponse);
 
-    const result = await payouts.cancel({ payout_id: 'po_123' });
+    const result = await payouts.cancel({ payoutId: 'po_123' });
 
     expect(result).toEqual(mockResponse.payout);
-    expect(postSpy).toHaveBeenCalledWith('/payouts/cancel', { payout_id: 'po_123' });
+    expect(postSpy).toHaveBeenCalledWith('/payouts/cancel', { payoutId: 'po_123' });
   });
 
   it('should validate payout_id for cancel', async () => {
-    await expect(payouts.cancel({ payout_id: '' })).rejects.toThrow('Validation failed');
+    await expect(payouts.cancel({ payoutId: '' })).rejects.toThrow('Validation failed');
   });
 });

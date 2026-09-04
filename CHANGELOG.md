@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.0.0] - 2026-09-04
+
+- **Breaking:** renamed every public request and domain property from API wire-format snake case to idiomatic TypeScript camel case.
+- Added recursive request serialization and response deserialization at the HTTP boundary while preserving user-defined keys in opaque maps such as `customData`.
+- Updated examples and validation errors to use the same camelCase public names.
+
 ## [7.0.0] - 2026-09-03
 
 - **Breaking:** moved financial-account wallet types into the `wallets` module.
@@ -93,6 +99,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 📝 JSDoc documentation throughout
 
 [7.0.0]: https://github.com/zebodotdev/inttegro-sdk-typescript/releases/tag/v7.0.0
+[8.0.0]: https://github.com/zebodotdev/inttegro-sdk-typescript/releases/tag/v8.0.0
 [6.1.0]: https://github.com/zebodotdev/inttegro-sdk-typescript/releases/tag/v6.1.0
 [6.0.1]: https://github.com/zebodotdev/inttegro-sdk-typescript/releases/tag/v6.0.1
 [6.0.0]: https://github.com/zebodotdev/inttegro-sdk-typescript/releases/tag/v6.0.0

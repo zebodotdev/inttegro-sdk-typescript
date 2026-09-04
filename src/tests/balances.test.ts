@@ -17,7 +17,7 @@ describe('Balances', () => {
       ghs: {
         available: { amount: 1000 },
         pending: { amount: 200 },
-        includes_transactions_before: '2024-01-01T00:00:00Z',
+        includesTransactionsBefore: '2024-01-01T00:00:00Z',
       },
     };
     const mockResponse = {

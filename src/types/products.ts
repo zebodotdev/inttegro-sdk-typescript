@@ -32,13 +32,13 @@ export type ProductShipmentInputType =
 export interface ProductDefaultUnitPrice {
   id: string;
   active: boolean;
-  product_id?: string | null;
+  productId?: string | null;
   label?: string | null;
   about?: string | null;
   nominal: Amount;
-  created_at: string;
-  updated_at?: string | null;
-  archived_at?: string | null;
+  createdAt: string;
+  updatedAt?: string | null;
+  archivedAt?: string | null;
 }
 
 export interface ProductPriceSummary {
@@ -49,10 +49,10 @@ export interface ProductPriceSummary {
 }
 
 export interface ProductPhysicalDimensions {
-  weight_unit?: string;
+  weightUnit?: string;
   weight?: number;
   size?: number;
-  volume_unit?: string;
+  volumeUnit?: string;
   volume?: number;
   length?: number;
   height?: number;
@@ -61,12 +61,12 @@ export interface ProductPhysicalDimensions {
 
 export interface ProductDigitalDimensions {
   bytes?: number;
-  size_unit?: string;
+  sizeUnit?: string;
   size?: number;
 }
 
 export interface ProductCustomDimensions {
-  size_unit?: string;
+  sizeUnit?: string;
   size?: number;
   details?: Record<string, string>;
 }
@@ -95,13 +95,13 @@ export interface ProductShipmentInput {
 }
 
 export interface ProductMedia {
-  hero_image?: string;
+  heroImage?: string;
   thumbnail?: string;
-  web_page_url?: string;
-  brand_logo?: string;
+  webPageUrl?: string;
+  brandLogo?: string;
   infographic?: string;
-  promo_video?: string;
-  demo_video?: string;
+  promoVideo?: string;
+  demoVideo?: string;
   gallery?: string[];
   downloads?: string[];
 }
@@ -112,81 +112,81 @@ export interface CreateProductRequest {
   reference?: string;
   description?: string;
   about?: string;
-  tax_code?: string;
+  taxCode?: string;
   category?: string;
   shipment?: ProductShipmentInput;
   dimensions?: ProductDimensions;
-  unit_dimension?: string;
+  unitDimension?: string;
   media?: ProductMedia;
   attributes?: ProductAttribute[];
   publish?: boolean;
-  custom_data?: CustomData;
+  customData?: CustomData;
 }
 
 export interface LookupProductRequest {
-  product_id: string;
+  productId: string;
 }
 
 export interface UpdateProductRequest {
-  product_id: string;
+  productId: string;
   type?: ProductType;
   name?: string;
   description?: string;
   about?: string;
-  tax_code?: string;
+  taxCode?: string;
   category?: string;
   shipment?: ProductShipmentInput;
   dimensions?: ProductDimensions;
-  unit_dimension?: string;
+  unitDimension?: string;
   media?: ProductMedia;
   images?: string[];
   attributes?: ProductAttribute[];
-  custom_data?: CustomData;
+  customData?: CustomData;
 }
 
 export interface ProductActionRequest {
-  product_id: string;
+  productId: string;
 }
 
 export interface AddProductPriceRequest {
-  product_id: string;
+  productId: string;
   amount: AmountParams;
   label?: string;
   about?: string;
 }
 
 export interface SetDefaultUnitPriceRequest {
-  product_id: string;
-  price_id: string;
+  productId: string;
+  priceId: string;
 }
 
 export interface PageProductsRequest {
-  page_number?: number;
-  page_size?: number;
+  pageNumber?: number;
+  pageSize?: number;
 }
 
 export interface Product {
   id: string;
-  application_id?: string;
+  applicationId?: string;
   type: ProductType;
   reference?: string | null;
   name: string;
   description?: string | null;
   about?: string | null;
-  tax_code?: string | null;
+  taxCode?: string | null;
   category?: string | null;
   prices?: ProductPriceSummary[] | null;
   shipment?: ProductShipment | null;
   media?: ProductMedia | null;
   attributes?: ProductAttribute[] | null;
   dimensions?: ProductDimensions | null;
-  custom_data?: CustomData | null;
+  customData?: CustomData | null;
   active: boolean;
-  created_at: string;
-  updated_at?: string | null;
-  archived_at?: string | null;
-  published_at?: string | null;
-  unit_dim?: string | null;
+  createdAt: string;
+  updatedAt?: string | null;
+  archivedAt?: string | null;
+  publishedAt?: string | null;
+  unitDim?: string | null;
 }
 
 export interface ProductPage {

@@ -11,7 +11,7 @@ export interface APIErrorPayload {
   url?: string;
   message?: string;
   detail?: string;
-  fix_code?: string;
+  fixCode?: string;
   cause?: string;
 }
 
@@ -22,7 +22,7 @@ export interface APIErrorDocument {
   type?: string;
   url?: string;
   detail?: string;
-  fix_code?: string;
+  fixCode?: string;
   cause?: string;
 }
 
@@ -88,7 +88,7 @@ export class InttegroAPIError extends Error {
     const type = payload.type || response.type;
     const url = payload.url || response.url;
     const detail = payload.detail || response.detail;
-    const fixCode = payload.fix_code || response.fix_code;
+    const fixCode = payload.fixCode || response.fixCode;
     const cause = payload.cause || response.cause;
 
     // Return specific error types based on status code
@@ -242,7 +242,7 @@ function resolveAPIErrorPayload(response: APIErrorDocument): APIErrorPayload {
     url: response.url,
     message: response.message,
     detail: response.detail,
-    fix_code: response.fix_code,
+    fixCode: response.fixCode,
     cause: response.cause,
   };
 }

@@ -10,7 +10,7 @@ describe('FinancialAccounts', () => {
     name: 'Akua Mensah',
     address: {
       name: 'Akua Mensah',
-      line_1: '1 Independence Avenue',
+      line1: '1 Independence Avenue',
       city: 'Accra',
       region: 'Greater Accra',
       country: 'GH',
@@ -33,7 +33,7 @@ describe('FinancialAccounts', () => {
       owner,
       wallet: {
         type: 'mobile_money',
-        mobile_money: { account_number: '0241234567', network: 'mtn' },
+        mobileMoney: { accountNumber: '0241234567', network: 'mtn' },
       },
     });
 
@@ -48,10 +48,10 @@ describe('FinancialAccounts', () => {
   it('should lookup a financial account', async () => {
     const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockFinancialAccountResponse);
 
-    const result = await fa.lookup({ account_id: 'fa_123' });
+    const result = await fa.lookup({ accountId: 'fa_123' });
 
     expect(result).toEqual(mockFinancialAccountResponse.account);
-    expect(postSpy).toHaveBeenCalledWith('/financial_accounts/lookup', { account_id: 'fa_123' });
+    expect(postSpy).toHaveBeenCalledWith('/financial_accounts/lookup', { accountId: 'fa_123' });
   });
 
   it('should call archive/page/verify/connect/reconnect', async () => {
@@ -60,12 +60,12 @@ describe('FinancialAccounts', () => {
       page: { number: 1, size: 20, accounts: [] },
     });
 
-    await fa.archive({ account_id: 'fa_123' });
+    await fa.archive({ accountId: 'fa_123' });
     await fa.page({});
-    await fa.verify({ account_id: 'fa_123' });
-    await fa.disablePush({ account_id: 'fa_123', unset_as_payout_destination: true });
-    await fa.disconnect({ account_id: 'fa_123', unset_as_payout_destination: true });
-    await fa.reconnect({ account_id: 'fa_123' });
+    await fa.verify({ accountId: 'fa_123' });
+    await fa.disablePush({ accountId: 'fa_123', unsetAsPayoutDestination: true });
+    await fa.disconnect({ accountId: 'fa_123', unsetAsPayoutDestination: true });
+    await fa.reconnect({ accountId: 'fa_123' });
     await fa.connect({
       label: 'My Wallet',
       type: 'wallet',
@@ -74,23 +74,23 @@ describe('FinancialAccounts', () => {
       owner,
       wallet: {
         type: 'mobile_money',
-        mobile_money: { account_number: '0241234567', network: 'mtn' },
+        mobileMoney: { accountNumber: '0241234567', network: 'mtn' },
       },
     });
 
-    expect(postSpy).toHaveBeenCalledWith('/financial_accounts/archive', { account_id: 'fa_123' });
+    expect(postSpy).toHaveBeenCalledWith('/financial_accounts/archive', { accountId: 'fa_123' });
     expect(postSpy).toHaveBeenCalledWith('/financial_accounts/page', {});
-    expect(postSpy).toHaveBeenCalledWith('/financial_accounts/verify', { account_id: 'fa_123' });
+    expect(postSpy).toHaveBeenCalledWith('/financial_accounts/verify', { accountId: 'fa_123' });
     expect(postSpy).toHaveBeenCalledWith('/financial_accounts/disable_push', {
-      account_id: 'fa_123',
-      unset_as_payout_destination: true,
+      accountId: 'fa_123',
+      unsetAsPayoutDestination: true,
     });
     expect(postSpy).toHaveBeenCalledWith('/financial_accounts/disconnect', {
-      account_id: 'fa_123',
-      unset_as_payout_destination: true,
+      accountId: 'fa_123',
+      unsetAsPayoutDestination: true,
     });
     expect(postSpy).toHaveBeenCalledWith('/financial_accounts/reconnect', {
-      account_id: 'fa_123',
+      accountId: 'fa_123',
     });
     expect(postSpy).toHaveBeenCalledWith('/financial_accounts/connect', expect.any(Object));
   });

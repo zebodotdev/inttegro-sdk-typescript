@@ -17,12 +17,14 @@ By participating in this project, you agree to maintain a respectful and inclusi
 
 1. Fork the repository on GitHub
 2. Clone your fork locally:
+
    ```bash
    git clone https://github.com/zebodotdev/inttegro-sdk-typescript.git
    cd inttegro-sdk-typescript
    ```
 
 3. Install dependencies:
+
    ```bash
    npm install
    ```
@@ -37,11 +39,13 @@ By participating in this project, you agree to maintain a respectful and inclusi
 ### Building
 
 Build the SDK:
+
 ```bash
 npm run build
 ```
 
 Watch mode for development:
+
 ```bash
 npm run dev
 ```
@@ -49,16 +53,19 @@ npm run dev
 ### Testing
 
 Run tests:
+
 ```bash
 npm test
 ```
 
 Run tests in watch mode:
+
 ```bash
 npm run test:watch
 ```
 
 Run tests with coverage:
+
 ```bash
 npm run test:coverage
 ```
@@ -66,21 +73,25 @@ npm run test:coverage
 ### Linting and Formatting
 
 Run linter:
+
 ```bash
 npm run lint
 ```
 
 Fix linting issues:
+
 ```bash
 npm run lint:fix
 ```
 
 Check formatting:
+
 ```bash
 npm run format:check
 ```
 
 Format code:
+
 ```bash
 npm run format
 ```
@@ -88,6 +99,7 @@ npm run format
 ### Type Checking
 
 Run TypeScript type checker:
+
 ```bash
 npm run typecheck
 ```
@@ -115,6 +127,7 @@ footer
 ```
 
 Types:
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation changes
@@ -124,6 +137,7 @@ Types:
 - `chore`: Maintenance tasks
 
 Examples:
+
 ```
 feat(orders): add support for bulk order creation
 
@@ -184,15 +198,17 @@ describe('FeatureName', () => {
   describe('methodName', () => {
     it('should do something when condition', () => {
       // Arrange
-      const input = { /* test data */ };
-      
+      const input = {
+        /* test data */
+      };
+
       // Act
       const result = methodName(input);
-      
+
       // Assert
       expect(result).toBe(expected);
     });
-    
+
     it('should throw error when invalid input', () => {
       expect(() => methodName(invalid)).toThrow();
     });
@@ -211,7 +227,8 @@ describe('FeatureName', () => {
 - Document thrown errors
 
 Example:
-```typescript
+
+````typescript
 /**
  * Create a new order
  *
@@ -222,17 +239,18 @@ Example:
  * @example
  * ```typescript
  * const order = await inttegro.orders.create({
- *   customer_data: { ... },
- *   line_items: [ ... ],
+ *   customerData: { ... },
+ *   lineItems: [ ... ],
  * });
  * ```
  */
 async create(request: CreateOrderRequest): Promise<Order>
-```
+````
 
 ### README Updates
 
 Update README.md when:
+
 - Adding new features
 - Changing APIs
 - Adding new configuration options
@@ -243,6 +261,7 @@ Update README.md when:
 ### Bug Reports
 
 Include:
+
 - Clear description of the bug
 - Steps to reproduce
 - Expected behavior
@@ -255,6 +274,7 @@ Include:
 ### Feature Requests
 
 Include:
+
 - Clear description of the feature
 - Use cases
 - Examples of how it would be used

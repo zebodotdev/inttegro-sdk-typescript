@@ -79,7 +79,7 @@ export class UploadRequests {
   async fulfill(request: UploadRequestFulfillRequest): Promise<UploadFulfillment> {
     const form = new FormData();
     await appendFile(form, request.file, request.filename);
-    return this.httpClient.postForm<UploadFulfillment>(request.upload_url, form, {}, false);
+    return this.httpClient.postForm<UploadFulfillment>(request.uploadUrl, form, {}, false);
   }
 }
 

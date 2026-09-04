@@ -53,37 +53,37 @@ export type PaymentResultStatus =
 
 /** Payout configuration attached to a payment. */
 export interface PaymentPayoutConfiguration {
-  enable_fx?: boolean;
+  enableFx?: boolean;
   destination?: {
-    financial_account_id?: string;
+    financialAccountId?: string;
   };
 }
 
 /** Latest attempt to execute a payment. */
 export interface PaymentAttempt {
-  payment_method_type?: PaymentMethod['type'];
-  payment_method_id?: string;
+  paymentMethodType?: PaymentMethod['type'];
+  paymentMethodId?: string;
   reference?: string;
   status?: PaymentAttemptStatus;
-  initiated_at?: string;
-  succeeded_at?: string;
+  initiatedAt?: string;
+  succeededAt?: string;
 }
 
 /** A payment collected for an order. */
 export interface Payment {
   id?: string;
   status?: PaymentStatus;
-  statement_descriptor?: string;
+  statementDescriptor?: string;
   amount?: Amount;
-  payment_method?: PaymentMethod;
-  latest_attempt?: PaymentAttempt;
-  next_action?: PaymentNextAction | null;
-  payout_configuration?: PaymentPayoutConfiguration | null;
-  balance_transaction?: BalanceTransaction | null;
-  initiated_at?: string;
-  executed_at?: string;
-  paid_at?: string;
-  failed_at?: string;
+  paymentMethod?: PaymentMethod;
+  latestAttempt?: PaymentAttempt;
+  nextAction?: PaymentNextAction | null;
+  payoutConfiguration?: PaymentPayoutConfiguration | null;
+  balanceTransaction?: BalanceTransaction | null;
+  initiatedAt?: string;
+  executedAt?: string;
+  paidAt?: string;
+  failedAt?: string;
 }
 
 export const PaymentNextActionTypes = {
@@ -98,15 +98,15 @@ export type PaymentNextActionType =
 
 export interface PaymentNextAction {
   type: PaymentNextActionType;
-  confirm_payment?: {
-    expires_at: string;
+  confirmPayment?: {
+    expiresAt: string;
     scheme?: string;
     request?: {
       id: string;
       recipient: string;
-      sent_via: PaymentConfirmationChannel;
-      token_size: number;
-      sender_id: string;
+      sentVia: PaymentConfirmationChannel;
+      tokenSize: number;
+      senderId: string;
     };
   };
   execute?: Record<string, unknown>;

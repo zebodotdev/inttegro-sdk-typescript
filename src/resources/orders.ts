@@ -10,12 +10,12 @@
  *
  * // Create order with new customer and payment method
  * const order = await inttegro.orders.create({
- *   customer_data: {
+ *   customerData: {
  *     name: 'Gloria Kesewaa',
- *     email_address: 'gloria@example.com',
- *     phone_number: '+233544998605',
+ *     emailAddress: 'gloria@example.com',
+ *     phoneNumber: '+233544998605',
  *   },
- *   line_items: [{
+ *   lineItems: [{
  *     type: 'product',
  *     product: {
  *       type: 'physical',
@@ -24,14 +24,14 @@
  *       price: { currency: 'ghs', value: 20000 },
  *     },
  *   }],
- *   payment_method_data: {
+ *   paymentMethodData: {
  *     type: 'mobile_money',
- *     mobile_money: {
+ *     mobileMoney: {
  *       network: 'mtn',
- *       account_number: '0544998605',
+ *       accountNumber: '0544998605',
  *     },
  *   },
- *   execute_payment: true,
+ *   executePayment: true,
  * });
  * ```
  *
@@ -82,26 +82,26 @@ export class Orders {
    * Create a new order with line items, customer, and optional payment details.
    *
    * Creates an order representing a purchase. Supports two flows:
-   * 1. New customer: Provide `customer_data` to create a new customer and order
-   * 2. Existing customer: Provide `customer_id` and optionally `payment_method_id` for known customers
+   * 1. New customer: Provide `customerData` to create a new customer and order
+   * 2. Existing customer: Provide `customerId` and optionally `paymentMethodId` for known customers
    *
-   * Set `execute_payment` to `true` to immediately charge the customer after order creation. The order can
+   * Set `executePayment` to `true` to immediately charge the customer after order creation. The order can
    * be configured with checkout redirect URLs for hosted payment flows.
    *
    * @param request - Order creation parameters
-   * @param request.customer_data - New customer information (required if `customer_id` not provided)
-   * @param request.customer_id - Existing customer ID (required if `customer_data` not provided)
-   * @param request.line_items - Array of products, fees, or shipping charges (required, minimum 1)
-   * @param request.payment_method_data - Inline payment method details (mobile money, card, etc.)
-   * @param request.payment_method_id - ID of saved payment method to use
-   * @param request.execute_payment - Whether to execute payment immediately (default: false)
+   * @param request.customerData - New customer information (required if `customerId` not provided)
+   * @param request.customerId - Existing customer ID (required if `customerData` not provided)
+   * @param request.lineItems - Array of products, fees, or shipping charges (required, minimum 1)
+   * @param request.paymentMethodData - Inline payment method details (mobile money, card, etc.)
+   * @param request.paymentMethodId - ID of saved payment method to use
+   * @param request.executePayment - Whether to execute payment immediately (default: false)
    * @param request.finalize - Whether to explicitly finalize the order regardless of payment state (default: false)
-   * @param request.request_meta - Request controls such as `idempotency_key`
+   * @param request.requestMeta - Request controls such as `idempotencyKey`
    * @param request.number - Optional order number for reference (e.g., "ORDER-123")
-   * @param request.statement_descriptor - Text that appears on customer's bank statement (max 22 characters)
-   * @param request.statement_descriptor_prefix - Static prefix, 2-10 characters, used to build `prefix*order_id`; mutually exclusive with `statement_descriptor`
-   * @param request.checkout_settings - Checkout flow configuration with `redirect_url` and `cancel_url`
-   * @param request.custom_data - Key-value custom data (max 25KB, keys and values must be strings)
+   * @param request.statementDescriptor - Text that appears on customer's bank statement (max 22 characters)
+   * @param request.statementDescriptorPrefix - Static prefix, 2-10 characters, used to build `prefix*order_id`; mutually exclusive with `statementDescriptor`
+   * @param request.checkoutSettings - Checkout flow configuration with `redirectUrl` and `cancelUrl`
+   * @param request.customData - Key-value custom data (max 25KB, keys and values must be strings)
    *
    * @returns Created order with customer, line items, payment intent (if applicable), and optional redirect URL
    *
@@ -112,23 +112,23 @@ export class Orders {
    * ```typescript
    * // Create order with new customer and execute payment
    * const order = await inttegro.orders.create({
-   *   request_meta: {
-   *     idempotency_key: 'order_2025_001',
+   *   requestMeta: {
+   *     idempotencyKey: 'order_2025_001',
    *   },
-   *   execute_payment: true,
-   *   customer_data: {
+   *   executePayment: true,
+   *   customerData: {
    *     name: 'Gloria Kesewaa',
-   *     email_address: 'gloria@example.com',
-   *     phone_number: '+233544998605',
+   *     emailAddress: 'gloria@example.com',
+   *     phoneNumber: '+233544998605',
    *   },
-   *   payment_method_data: {
+   *   paymentMethodData: {
    *     type: 'mobile_money',
-   *     mobile_money: {
+   *     mobileMoney: {
    *       network: 'mtn',
-   *       account_number: '0544998605',
+   *       accountNumber: '0544998605',
    *     },
    *   },
-   *   line_items: [{
+   *   lineItems: [{
    *     type: 'product',
    *     product: {
    *       type: 'physical',
@@ -137,9 +137,9 @@ export class Orders {
    *       price: { currency: 'ghs', value: 20000 },
    *     },
    *   }],
-   *   checkout_settings: {
-   *     redirect_url: 'https://example.com/order/complete',
-   *     cancel_url: 'https://example.com/order/cancelled',
+   *   checkoutSettings: {
+   *     redirectUrl: 'https://example.com/order/complete',
+   *     cancelUrl: 'https://example.com/order/cancelled',
    *   },
    * });
    *
@@ -150,8 +150,8 @@ export class Orders {
    * ```typescript
    * // Create order with existing customer for later payment
    * const order = await inttegro.orders.create({
-   *   customer_id: 'cu_abc123',
-   *   line_items: [{
+   *   customerId: 'cu_abc123',
+   *   lineItems: [{
    *     type: 'product',
    *     product: {
    *       type: 'digital',
@@ -196,7 +196,7 @@ export class Orders {
    * Use this to check order status, retrieve payment details, or display order confirmation to customers.
    *
    * @param request - Lookup parameters
-   * @param request.order_id - Unique identifier of the order to retrieve (required)
+   * @param request.orderId - Unique identifier of the order to retrieve (required)
    *
    * @returns Complete order object with all related data
    *
@@ -205,7 +205,7 @@ export class Orders {
    * @example
    * ```typescript
    * const order = await inttegro.orders.lookup({
-   *   order_id: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
+   *   orderId: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
    * });
    *
    * console.log(`Order status: ${order.status}`);
@@ -238,19 +238,19 @@ export class Orders {
    * Initiate payment for an existing order.
    *
    * Supports three payment flows:
-   * 1. Saved payment method: Provide only `order_id` to charge a previously saved payment method
-   * 2. New payment method: Include `payment_method_data` with inline payment details (mobile money, card, etc.)
-   * 3. Offline payment: Set `paid_out_of_band` to true for cash, bank transfer, or check payments
+   * 1. Saved payment method: Provide only `orderId` to charge a previously saved payment method
+   * 2. New payment method: Include `paymentMethodData` with inline payment details (mobile money, card, etc.)
+   * 3. Offline payment: Set `paidOutOfBand` to true for cash, bank transfer, or check payments
    *
-   * When payment requires customer confirmation (e.g., OTP), the returned order includes a `next_action` field
+   * When payment requires customer confirmation (e.g., OTP), the returned order includes a `nextAction` field
    * indicating what the customer needs to do. Call `confirmPayment()` once the customer provides the token.
    *
    * @param request - Payment parameters
-   * @param request.order_id - Unique identifier of the order to pay (required)
-   * @param request.payment_method_data - Inline payment method details (mobile money, card, bank, etc.)
-   * @param request.payment_method_id - ID of a saved payment method to use
-   * @param request.paid_out_of_band - Set to true if payment was received outside Inttegro (default: false)
-   * @param request.request_meta - Request controls such as `idempotency_key`
+   * @param request.orderId - Unique identifier of the order to pay (required)
+   * @param request.paymentMethodData - Inline payment method details (mobile money, card, bank, etc.)
+   * @param request.paymentMethodId - ID of a saved payment method to use
+   * @param request.paidOutOfBand - Set to true if payment was received outside Inttegro (default: false)
+   * @param request.requestMeta - Request controls such as `idempotencyKey`
    *
    * @returns Updated order with typed payment and next-action state
    *
@@ -260,21 +260,23 @@ export class Orders {
    * ```typescript
    * // Pay with inline mobile money
    * const order = await inttegro.orders.pay({
-   *   order_id: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
-   *   payment_method_data: {
+   *   orderId: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
+   *   paymentMethodData: {
    *     type: 'mobile_money',
-   *     mobile_money: {
+   *     mobileMoney: {
    *       network: 'mtn',
-   *       account_number: '0544998605',
+   *       accountNumber: '0544998605',
    *     },
    *   },
    * });
    *
-   * if (order.payment?.next_action?.type === 'confirm_payment') {
+   * if (order.payment?.nextAction?.type === 'confirm_payment') {
    *   // Customer needs to provide OTP sent to their phone
    *   const token = await promptCustomerForOTP();
    *   await inttegro.orders.confirmPayment({
-   *     order_id: order.id,
+   *     orderId: order.id,
+   *     paymentId: order.payment.id,
+   *     confirmationId: order.payment.nextAction.confirmPayment.request.id,
    *     token,
    *   });
    * }
@@ -284,10 +286,10 @@ export class Orders {
    * ```typescript
    * // Pay with saved payment method
    * const order = await inttegro.orders.pay({
-   *   order_id: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
-   *   payment_method_id: 'pm_xyz123abc456',
-   *   request_meta: {
-   *     idempotency_key: 'order_initial_charge_001',
+   *   orderId: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
+   *   paymentMethodId: 'pm_xyz123abc456',
+   *   requestMeta: {
+   *     idempotencyKey: 'order_initial_charge_001',
    *   },
    * });
    * ```
@@ -296,8 +298,8 @@ export class Orders {
    * ```typescript
    * // Mark as paid offline (cash, bank transfer, etc.)
    * const order = await inttegro.orders.pay({
-   *   order_id: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
-   *   paid_out_of_band: true,
+   *   orderId: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
+   *   paidOutOfBand: true,
    * });
    * ```
    *
@@ -320,9 +322,11 @@ export class Orders {
    * token from the customer. The token is typically a 6-digit OTP sent via SMS or email to the customer.
    *
    * @param request - Confirmation parameters
-   * @param request.order_id - Unique identifier of the order being paid (required)
+   * @param request.orderId - Unique identifier of the order being paid (required)
+   * @param request.paymentId - Unique identifier of the payment being confirmed (required)
+   * @param request.confirmationId - Unique identifier of the confirmation challenge (required)
    * @param request.token - Verification token provided by the customer (required, typically 6 digits)
-   * @param request.request_meta - Request controls such as `idempotency_key`
+   * @param request.requestMeta - Request controls such as `idempotencyKey`
    *
    * @returns Updated order with payment status
    *
@@ -332,7 +336,9 @@ export class Orders {
    * ```typescript
    * // After receiving OTP from customer
    * const order = await inttegro.orders.confirmPayment({
-   *   order_id: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
+   *   orderId: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
+   *   paymentId: 'py_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMN',
+   *   confirmationId: 'pc_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMN',
    *   token: '123456',
    * });
    *
@@ -347,6 +353,8 @@ export class Orders {
     // Validate required fields
     const errors = validateRequired(request as unknown as Record<string, unknown>, [
       'order_id',
+      'payment_id',
+      'confirmation_id',
       'token',
     ]);
     throwIfValidationErrors(errors);
@@ -362,8 +370,8 @@ export class Orders {
    * token will be sent via SMS or email to the customer's registered contact information.
    *
    * @param request - Request parameters
-   * @param request.order_id - Unique identifier of the order requiring confirmation (required)
-   * @param request.request_meta - Request controls such as `idempotency_key`
+   * @param request.orderId - Unique identifier of the order requiring confirmation (required)
+   * @param request.requestMeta - Request controls such as `idempotencyKey`
    *
    * @returns Updated order
    *
@@ -373,7 +381,7 @@ export class Orders {
    * ```typescript
    * // Resend OTP to customer
    * const order = await inttegro.orders.requestConfirmation({
-   *   order_id: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
+   *   orderId: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
    * });
    *
    * console.log('New OTP sent to customer');
@@ -401,8 +409,8 @@ export class Orders {
    * order if needed.
    *
    * @param request - Finalization parameters
-   * @param request.order_id - Unique identifier of the order to finalize (required)
-   * @param request.request_meta - Request controls such as `idempotency_key`
+   * @param request.orderId - Unique identifier of the order to finalize (required)
+   * @param request.requestMeta - Request controls such as `idempotencyKey`
    *
    * @returns Finalized order object
    *
@@ -411,10 +419,10 @@ export class Orders {
    * @example
    * ```typescript
    * const order = await inttegro.orders.finalize({
-   *   order_id: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
+   *   orderId: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
    * });
    *
-   * console.log(`Order finalized at: ${order.sealed_at}`);
+   * console.log(`Order finalized at: ${order.sealedAt}`);
    * ```
    *
    * @see https://studio.inttegro.com/order-lifecycle for order states
@@ -433,7 +441,7 @@ export class Orders {
    * Inttegro delivers the invoice link to every contact method available on the order customer.
    *
    * @param request - Send invoice parameters
-   * @param request.order_id - Unique identifier of the order whose invoice should be sent (required)
+   * @param request.orderId - Unique identifier of the order whose invoice should be sent (required)
    *
    * @returns The order and document delivery details
    *
@@ -452,7 +460,7 @@ export class Orders {
    * Inttegro delivers receipts only after the order has been paid.
    *
    * @param request - Send receipt parameters
-   * @param request.order_id - Unique identifier of the paid order whose receipt should be sent (required)
+   * @param request.orderId - Unique identifier of the paid order whose receipt should be sent (required)
    *
    * @returns The order and document delivery details
    *
@@ -470,11 +478,11 @@ export class Orders {
    *
    * Call this after you've shipped physical goods or delivered digital products to the customer.
    * Completing an order transitions it to its final state and can optionally mark payment as received
-   * offline (out-of-band) if `paid_out_of_band` is set to true.
+   * offline (out-of-band) if `paidOutOfBand` is set to true.
    *
    * @param request - Completion parameters
-   * @param request.order_id - Unique identifier of the order to complete (required)
-   * @param request.paid_out_of_band - Set to true if payment was received outside Inttegro (default: false)
+   * @param request.orderId - Unique identifier of the order to complete (required)
+   * @param request.paidOutOfBand - Set to true if payment was received outside Inttegro (default: false)
    *
    * @returns Completed order object
    *
@@ -484,18 +492,18 @@ export class Orders {
    * ```typescript
    * // Complete order after fulfillment
    * const order = await inttegro.orders.complete({
-   *   order_id: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
+   *   orderId: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
    * });
    *
-   * console.log(`Order completed at: ${order.completed_at}`);
+   * console.log(`Order completed at: ${order.completedAt}`);
    * ```
    *
    * @example
    * ```typescript
    * // Complete order with offline payment
    * const result = await inttegro.orders.complete({
-   *   order_id: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
-   *   paid_out_of_band: true,
+   *   orderId: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
+   *   paidOutOfBand: true,
    * });
    * ```
    *
@@ -516,8 +524,8 @@ export class Orders {
    * the order cannot be fulfilled. If payment was already captured, you'll need to refund it separately.
    *
    * @param request - Cancellation parameters
-   * @param request.order_id - Unique identifier of the order to cancel (required)
-   * @param request.request_meta - Request controls such as `idempotency_key`
+   * @param request.orderId - Unique identifier of the order to cancel (required)
+   * @param request.requestMeta - Request controls such as `idempotencyKey`
    *
    * @returns Cancelled order object
    *
@@ -526,7 +534,7 @@ export class Orders {
    * @example
    * ```typescript
    * const order = await inttegro.orders.cancel({
-   *   order_id: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
+   *   orderId: 'GKj7A8lM5wEGRUvbqpI4bkDFsQvpqVyh5fqePNnb',
    * });
    *
    * console.log(`Order ${order.id} has been cancelled`);
@@ -549,7 +557,7 @@ export class Orders {
    * `Refund` directly. New integrations should prefer `refunds.create`.
    *
    * @param request - Refund parameters
-   * @param request.order_id - Unique identifier of the order to refund (required)
+   * @param request.orderId - Unique identifier of the order to refund (required)
    * @param options - Optional transport controls, including an explicit idempotency key
    *
    * @returns The created refund
@@ -559,11 +567,11 @@ export class Orders {
    * @example
    * ```typescript
    * const refund = await inttegro.orders.refund({
-   *   order_id: 'or_0123456789abcdefghijklmnopqrstuvwxyzABCD',
+   *   orderId: 'or_0123456789abcdefghijklmnopqrstuvwxyzABCD',
    *   reason: 'requested_by_customer',
-   *   line_items: [{
-   *     order_line_item_id: 'oli_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMN',
-   *     refund_amount: { currency: 'ghs', value: 2500 },
+   *   lineItems: [{
+   *     orderLineItemId: 'oli_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMN',
+   *     refundAmount: { currency: 'ghs', value: 2500 },
    *   }],
    * });
    *
@@ -592,9 +600,9 @@ export class Orders {
    * Returns orders in reverse chronological order (most recent first).
    *
    * @param request - Pagination and filter parameters (optional)
-   * @param request.page_number - Zero-based page index to retrieve (0-10)
-   * @param request.page_size - Number of orders per page (1-256)
-   * @param request.customer_id - Optional customer whose orders should be returned
+   * @param request.pageNumber - Zero-based page index to retrieve (0-10)
+   * @param request.pageSize - Number of orders per page (1-256)
+   * @param request.customerId - Optional customer whose orders should be returned
    *
    * @returns Paginated list of orders with pagination details
    *
@@ -604,8 +612,8 @@ export class Orders {
    * ```typescript
    * // Get first page of orders
    * const page = await inttegro.orders.page({
-   *   page_size: 25,
-   *   page_number: 0,
+   *   pageSize: 25,
+   *   pageNumber: 0,
    * });
    *
    * console.log(`Retrieved ${page.orders?.length ?? 0} orders`);
@@ -615,8 +623,8 @@ export class Orders {
    * ```typescript
    * // Restrict the page to one customer
    * const customerOrders = await inttegro.orders.page({
-   *   customer_id: 'cu_123',
-   *   page_size: 50,
+   *   customerId: 'cu_123',
+   *   pageSize: 50,
    * });
    * ```
    *
@@ -632,10 +640,10 @@ export class Orders {
 function validateCreateOrderRequest(request: CreateOrderRequest): void {
   const errors = validateRequired(request as unknown as Record<string, unknown>, ['line_items']);
 
-  if (!request.customer_data && !('customer_id' in request && request.customer_id)) {
+  if (!request.customerData && !('customerId' in request && request.customerId)) {
     errors.push({
-      field: 'customer_data/customer_id',
-      message: 'Either customer_data or customer_id must be provided',
+      field: 'customerData/customerId',
+      message: 'Either customerData or customerId must be provided',
     });
   }
 

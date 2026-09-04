@@ -1,0 +1,63 @@
+/**
+ * Translate between the idiomatic TypeScript API and Inttegro's JSON wire format.
+ *
+ * The fields listed here contain user-defined or otherwise opaque maps. Their
+ * field names are translated, but their contents must be passed through exactly
+ * as supplied by the caller or returned by the API.
+ */
+const OPAQUE_FIELDS = new Set([
+  'customData',
+  'destinations',
+  'details',
+  'headers',
+  'mandate',
+  'metadata',
+  'variables',
+]);
+
+export function toCamelCase(value: string): string {
+  return value.replace(/_([a-z0-9])/g, (_, character: string) => character.toUpperCase());
+}
+
+export function toSnakeCase(value: string): string {
+  return value.replace(/([a-z0-9])([A-Z])/g, '$1_$2').toLowerCase();
+}
+
+export function toPublicValue<T>(value: T): T {
+  return transformObject(value, toCamelCase) as T;
+}
+
+export function toWireValue<T>(value: T): T {
+  return transformObject(value, toSnakeCase) as T;
+}
+
+export function serializeRequestBody(value: unknown): string {
+  return JSON.stringify(toWireValue(value));
+}
+
+function transformObject(value: unknown, transformKey: (key: string) => string): unknown {
+  if (Array.isArray(value)) {
+    return value.map((item) => transformObject(item, transformKey));
+  }
+
+  if (!isPlainObject(value)) {
+    return value;
+  }
+
+  return Object.fromEntries(
+    Object.entries(value).map(([key, child]) => {
+      const publicKey = toCamelCase(key);
+      const transformedKey = transformKey(key);
+      const transformedChild = OPAQUE_FIELDS.has(publicKey)
+        ? child
+        : transformObject(child, transformKey);
+      return [transformedKey, transformedChild];
+    })
+  );
+}
+
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  if (value === null || typeof value !== 'object') return false;
+  const prototype = Object.getPrototypeOf(value);
+  return prototype === Object.prototype || prototype === null;
+}

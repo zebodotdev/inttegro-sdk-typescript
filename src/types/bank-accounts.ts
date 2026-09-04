@@ -3,14 +3,14 @@ export type BankAccountType = (typeof BankAccountTypes)[keyof typeof BankAccount
 
 export interface BankAccountOwnerAddress {
   id?: string;
-  application_id?: string;
+  applicationId?: string;
   name: string;
   phone?: string;
-  line_1: string;
-  line_2?: string;
+  line1: string;
+  line2?: string;
   city: string;
   region: string;
-  post_code?: string;
+  postCode?: string;
   country: string;
 }
 
@@ -20,16 +20,16 @@ export interface BankAccountOwner {
 }
 
 export interface GhanaBankAccount {
-  bank_name?: string;
+  bankName?: string;
   branch?: string;
   number: string;
-  sort_code?: string;
-  swift_code?: string;
+  sortCode?: string;
+  swiftCode?: string;
   holder?: BankAccountOwner;
 }
 
 export interface BankAccountConfig {
   id?: string;
   type: BankAccountType;
-  ghana_bank_account?: GhanaBankAccount;
+  ghanaBankAccount?: GhanaBankAccount;
 }

@@ -14,8 +14,8 @@ describe('Keys', () => {
 
   it('should generate and page secret keys', async () => {
     const mockResponse = {
-      key: { id: 'sk_123', token_type: 'bearer' },
-      page: { number: 1, size: 20, count: 0, total: 0, has_more: false, keys: [] },
+      key: { id: 'sk_123', tokenType: 'bearer' },
+      page: { number: 1, size: 20, count: 0, total: 0, hasMore: false, keys: [] },
     };
     const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockResponse);
 
@@ -29,25 +29,25 @@ describe('Keys', () => {
 
   it('should lookup, update, destroy, and fetch usage for secret keys', async () => {
     const mockResponse = {
-      key: { id: 'sk_123', token_type: 'bearer' },
-      usage: { number: 1, size: 20, count: 0, total: 0, has_more: false, rows: [] },
+      key: { id: 'sk_123', tokenType: 'bearer' },
+      usage: { number: 1, size: 20, count: 0, total: 0, hasMore: false, rows: [] },
     };
     const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockResponse);
 
-    await keys.lookup({ secret_key_id: 'sk_123' });
-    await keys.update({ secret_key_id: 'sk_123', label: '' });
-    await keys.destroy({ secret_key_id: 'sk_123' });
-    const result = await keys.usage({ secret_key_id: 'sk_123', number: 1, size: 20 });
+    await keys.lookup({ secretKeyId: 'sk_123' });
+    await keys.update({ secretKeyId: 'sk_123', label: '' });
+    await keys.destroy({ secretKeyId: 'sk_123' });
+    const result = await keys.usage({ secretKeyId: 'sk_123', number: 1, size: 20 });
 
     expect(result).toEqual(mockResponse);
-    expect(postSpy).toHaveBeenCalledWith('/keys/lookup', { secret_key_id: 'sk_123' });
+    expect(postSpy).toHaveBeenCalledWith('/keys/lookup', { secretKeyId: 'sk_123' });
     expect(postSpy).toHaveBeenCalledWith('/keys/update', {
-      secret_key_id: 'sk_123',
+      secretKeyId: 'sk_123',
       label: '',
     });
-    expect(postSpy).toHaveBeenCalledWith('/keys/destroy', { secret_key_id: 'sk_123' });
+    expect(postSpy).toHaveBeenCalledWith('/keys/destroy', { secretKeyId: 'sk_123' });
     expect(postSpy).toHaveBeenCalledWith('/keys/usage', {
-      secret_key_id: 'sk_123',
+      secretKeyId: 'sk_123',
       number: 1,
       size: 20,
     });

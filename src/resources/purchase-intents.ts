@@ -79,12 +79,12 @@ function validatePurchaseIntentProductSelection(
   request: CreatePurchaseIntentRequest
 ): ValidationError[] {
   if ('product' in request && request.product) return [];
-  if ('product_id' in request && request.product_id) return [];
+  if ('productId' in request && request.productId) return [];
 
   return [
     {
-      field: 'product/product_id',
-      message: 'Either product or product_id must be provided',
+      field: 'product/productId',
+      message: 'Either product or productId must be provided',
     },
   ];
 }
@@ -93,12 +93,12 @@ function validatePurchaseIntentPriceSelection(
   request: CreatePurchaseIntentRequest
 ): ValidationError[] {
   if ('price' in request && request.price) return [];
-  if ('price_id' in request && request.price_id) return [];
+  if ('priceId' in request && request.priceId) return [];
 
   return [
     {
-      field: 'price/price_id',
-      message: 'Either price or price_id must be provided',
+      field: 'price/priceId',
+      message: 'Either price or priceId must be provided',
     },
   ];
 }

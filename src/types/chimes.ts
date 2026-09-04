@@ -32,7 +32,7 @@ export type ChimeRecipient =
       name?: string;
       phone: ChimeRecipientPhone;
       email?: never;
-      customer_id?: never;
+      customerId?: never;
       transport?: never;
     }
   | {
@@ -40,11 +40,11 @@ export type ChimeRecipient =
       name?: string;
       email: ChimeRecipientEmail;
       phone?: never;
-      customer_id?: never;
+      customerId?: never;
       transport?: never;
     }
   | {
-      customer_id: string;
+      customerId: string;
       transport: ChimeRecipientTransport;
       type?: never;
       name?: never;
@@ -62,7 +62,7 @@ export interface ChimeEmailMessageInput {
   text: string;
   html?: string;
   from: ChimeEmailAddress;
-  reply_to?: string;
+  replyTo?: string;
   headers?: Record<string, string>;
 }
 
@@ -71,82 +71,82 @@ export interface ChimeEmailMessage {
   text?: string;
   html?: string | null;
   from?: ChimeEmailAddress;
-  reply_to?: ChimeEmailAddress;
+  replyTo?: ChimeEmailAddress;
   headers?: Record<string, string>;
 }
 
 interface SendChimeRequestBase {
   recipient: ChimeRecipient;
-  sender_id?: string;
+  senderId?: string;
   purpose?: string;
-  custom_data?: CustomData;
-  request_meta?: RequestMeta;
+  customData?: CustomData;
+  requestMeta?: RequestMeta;
 }
 
 export type SendChimeRequest =
   | (SendChimeRequestBase & {
-      full_message: string;
+      fullMessage: string;
       email?: never;
-      message_template?: never;
+      messageTemplate?: never;
     })
   | (SendChimeRequestBase & {
-      full_message?: never;
+      fullMessage?: never;
       email: ChimeEmailMessageInput;
-      message_template?: never;
+      messageTemplate?: never;
     })
   | (SendChimeRequestBase & {
-      full_message?: never;
+      fullMessage?: never;
       email?: never;
-      message_template: MessageTemplateReference;
+      messageTemplate: MessageTemplateReference;
     });
 
 interface ScheduleChimeRequestBase {
   recipients: ChimeRecipient[];
-  send_after: string;
-  sender_id?: string;
+  sendAfter: string;
+  senderId?: string;
   purpose?: string | null;
-  request_meta?: RequestMeta;
+  requestMeta?: RequestMeta;
 }
 
 export type ScheduleChimeRequest =
   | (ScheduleChimeRequestBase & {
-      full_message: string;
+      fullMessage: string;
       email?: never;
-      message_template?: never;
+      messageTemplate?: never;
     })
   | (ScheduleChimeRequestBase & {
-      full_message?: never;
+      fullMessage?: never;
       email: ChimeEmailMessageInput;
-      message_template?: never;
+      messageTemplate?: never;
     })
   | (ScheduleChimeRequestBase & {
-      full_message?: never;
+      fullMessage?: never;
       email?: never;
-      message_template: MessageTemplateReference;
+      messageTemplate: MessageTemplateReference;
     });
 
 export interface LookupChimeRequest {
-  chime_id: string;
+  chimeId: string;
 }
 
 export interface ChimeTransmission {
-  created_at?: string;
-  delivered_at?: string | null;
-  failed_at?: string | null;
-  sent_at?: string | null;
-  sent_via?: ChimeTransport | null;
+  createdAt?: string;
+  deliveredAt?: string | null;
+  failedAt?: string | null;
+  sentAt?: string | null;
+  sentVia?: ChimeTransport | null;
   status?: string;
 }
 
 export interface Chime {
   id?: string;
-  created_at?: string;
-  full_message?: string;
+  createdAt?: string;
+  fullMessage?: string;
   email?: ChimeEmailMessage;
   recipient?: ChimeRecipient;
-  sender_id?: string;
+  senderId?: string;
   purpose?: string | null;
-  custom_data?: CustomData;
+  customData?: CustomData;
   delivery?: Record<string, unknown> | null;
   transmission?: ChimeTransmission | null;
 }
@@ -154,18 +154,18 @@ export interface Chime {
 export type BroadcastChimeMessageTemplate = string | MessageTemplateReference;
 
 export interface BroadcastChimeRequest {
-  message_template?: BroadcastChimeMessageTemplate;
+  messageTemplate?: BroadcastChimeMessageTemplate;
   email?: ChimeEmailMessageInput;
   purpose?: string;
   recipients: ChimeRecipient[];
   sender?: string;
-  request_meta?: RequestMeta;
+  requestMeta?: RequestMeta;
 }
 
 export interface PageChimesRequest {
-  customer_id?: string;
-  page_number?: number;
-  page_size?: number;
+  customerId?: string;
+  pageNumber?: number;
+  pageSize?: number;
   recipient?: string;
 }
 
@@ -176,16 +176,16 @@ export interface ChimePage {
 }
 
 export interface LookupBroadcastRequest {
-  broadcast_id: string;
+  broadcastId: string;
 }
 
 export interface CancelBroadcastRequest {
-  broadcast_id: string;
+  broadcastId: string;
 }
 
 export interface BroadcastError {
   recipient?: string;
-  fix_code?: string;
+  fixCode?: string;
   type?: string;
 }
 
@@ -193,29 +193,29 @@ export interface Broadcast {
   id?: string;
   recipients?: string[];
   content?: string;
-  sender_id?: string;
+  senderId?: string;
   purpose?: string | null;
-  send_after?: string;
-  created_at?: string;
-  executed_at?: string | null;
-  canceled_at?: string | null;
+  sendAfter?: string;
+  createdAt?: string;
+  executedAt?: string | null;
+  canceledAt?: string | null;
   errors?: BroadcastError[];
-  chime_ids?: string[];
-  customer_ids?: string[];
+  chimeIds?: string[];
+  customerIds?: string[];
   email?: Record<string, unknown>;
 }
 
 export interface LookupScheduleRequest {
-  schedule_id: string;
+  scheduleId: string;
 }
 
 export interface CancelScheduleRequest {
-  schedule_id: string;
+  scheduleId: string;
 }
 
 export interface ScheduleError {
   recipient?: string;
-  fix_code?: string;
+  fixCode?: string;
   type?: string;
 }
 
@@ -223,13 +223,13 @@ export interface ScheduledChime {
   id?: string;
   recipients?: string[];
   content?: string;
-  sender_id?: string;
+  senderId?: string;
   purpose?: string | null;
-  send_after?: string;
-  created_at?: string;
-  executed_at?: string | null;
-  canceled_at?: string | null;
+  sendAfter?: string;
+  createdAt?: string;
+  executedAt?: string | null;
+  canceledAt?: string | null;
   errors?: ScheduleError[];
-  chime_ids?: string[];
-  full_message?: string;
+  chimeIds?: string[];
+  fullMessage?: string;
 }

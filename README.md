@@ -37,18 +37,18 @@ const inttegro = new InttegroClient({
 
 try {
   const order = await inttegro.orders.create({
-    request_meta: { idempotency_key: 'checkout-cart-123' },
-    customer_data: {
+    requestMeta: { idempotencyKey: 'checkout-cart-123' },
+    customerData: {
       name: 'Akua Mensah',
-      email_address: 'akua@example.com',
-      phone_number: '+233544998605',
+      emailAddress: 'akua@example.com',
+      phoneNumber: '+233544998605',
     },
     finalize: true,
-    checkout_settings: {
-      redirect_url: 'https://example.com/orders/complete',
-      cancel_url: 'https://example.com/cart',
+    checkoutSettings: {
+      redirectUrl: 'https://example.com/orders/complete',
+      cancelUrl: 'https://example.com/cart',
     },
-    line_items: [
+    lineItems: [
       {
         type: 'product',
         product: {
@@ -76,11 +76,12 @@ Amounts use integer minor units: `5000` GHS is GHS 50.00. Reuse the same idempot
 
 ## Work with the API
 
-The SDK covers orders and checkout, customers, products and prices, purchase intents, payment methods, balances, payouts and refunds, notifications, files, application settings, keys, and country specifications. Resources use camel-case properties such as `purchaseIntents` and `paymentMethods`.
+The SDK covers orders and checkout, customers, products and prices, purchase intents, payment methods, balances, payouts and refunds, notifications, files, application settings, keys, and country specifications. Resources use camelCase properties such as `purchaseIntents` and `paymentMethods`.
 
 TypeScript-specific features:
 
 - Typed request and domain objects, plus exported constants for public enum values.
+- Idiomatic camelCase fields throughout; the SDK translates to and from the API's snake_case JSON at the HTTP boundary.
 - Promise-based resource methods with ESM and CommonJS builds.
 - No runtime dependencies; the client uses the platform `fetch` implementation.
 - Configurable timeouts, exponential retries, debug logging, and request/response interceptors.
@@ -94,7 +95,7 @@ The GitHub release for each version is the canonical record. It contains the exa
 
 ```bash
 sha256sum --check SHA256SUMS
-gh attestation verify inttegro-inttegro-sdk-7.0.0.tgz \
+gh attestation verify inttegro-inttegro-sdk-8.0.0.tgz \
   --repo zebodotdev/inttegro-sdk-typescript
 ```
 

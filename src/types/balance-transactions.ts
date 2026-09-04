@@ -1,18 +1,18 @@
 import type { Amount } from './money';
 
 export interface PageBalanceTransactionsRequest {
-  page_number?: number;
-  page_size?: number;
+  pageNumber?: number;
+  pageSize?: number;
 }
 
 export interface LookupBalanceTransactionRequest {
-  transaction_id: string;
+  transactionId: string;
 }
 
 export interface PayoutConfiguration {
-  enable_fx?: boolean;
+  enableFx?: boolean;
   destination?: {
-    financial_account_id?: string;
+    financialAccountId?: string;
   };
 }
 
@@ -23,32 +23,32 @@ export type BalanceTransactionType =
 interface BalanceTransactionBase {
   id: string;
   type: BalanceTransactionType;
-  payout_id?: string;
-  order_id: string;
+  payoutId?: string;
+  orderId: string;
   amount: Amount;
-  created_at: string;
-  available_at?: string;
-  claimed_at?: string;
-  paid_at?: string;
+  createdAt: string;
+  availableAt?: string;
+  claimedAt?: string;
+  paidAt?: string;
 
   /** @deprecated Not returned by the reviewed API. Use `amount`. */
-  amount_expected?: Amount;
+  amountExpected?: Amount;
   /** @deprecated Not returned by the reviewed API. Use `amount`. */
-  amount_available?: Amount;
+  amountAvailable?: Amount;
   /** @deprecated Not returned on balance transactions by the reviewed API. */
-  payout_configuration?: PayoutConfiguration | null;
+  payoutConfiguration?: PayoutConfiguration | null;
 }
 
 export interface PaymentBalanceTransaction extends BalanceTransactionBase {
   type: 'payment';
-  payment_id: string;
-  refund_id?: never;
+  paymentId: string;
+  refundId?: never;
 }
 
 export interface RefundBalanceTransaction extends BalanceTransactionBase {
   type: 'refund';
-  refund_id: string;
-  payment_id?: never;
+  refundId: string;
+  paymentId?: never;
 }
 
 export type BalanceTransaction = PaymentBalanceTransaction | RefundBalanceTransaction;

@@ -44,7 +44,7 @@ describe('Errors', () => {
           type: 'invalid_request_parameter',
           url: 'https://studio.inttegro.com/e/invalid_payment_method',
           detail: 'Payment method not supported for this currency.',
-          fix_code: 'change_request_parameters',
+          fixCode: 'change_request_parameters',
           cause: 'validation_failure',
         },
       });

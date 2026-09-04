@@ -17,7 +17,7 @@ describe('Chimes', () => {
 
     const result = await chimes.send({
       recipient: { type: 'phone', phone: { number: '+233544998605' } },
-      full_message: 'Hello',
+      fullMessage: 'Hello',
     });
 
     expect(result).toEqual(mockChimeResponse.chime);
@@ -46,14 +46,14 @@ describe('Chimes', () => {
     await expect(
       chimes.send({
         recipient: { type: 'email', email: { address: 'customer@example.com' } },
-        full_message: 'Hello',
+        fullMessage: 'Hello',
         email: {
           subject: 'Receipt ready',
           text: 'Your receipt is ready.',
           from: { address: 'notifications@example.com' },
         },
       } as any)
-    ).rejects.toThrow('full_message and email cannot be provided together');
+    ).rejects.toThrow('fullMessage and email cannot be provided together');
   });
 
   it('should validate missing fields on send', async () => {
@@ -63,22 +63,22 @@ describe('Chimes', () => {
   it('should lookup a chime', async () => {
     const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockChimeResponse);
 
-    const result = await chimes.lookup({ chime_id: 'ch_123' });
+    const result = await chimes.lookup({ chimeId: 'ch_123' });
 
     expect(result).toEqual(mockChimeResponse.chime);
-    expect(postSpy).toHaveBeenCalledWith('/chimes/lookup', { chime_id: 'ch_123' });
+    expect(postSpy).toHaveBeenCalledWith('/chimes/lookup', { chimeId: 'ch_123' });
   });
 
   it('should page chimes', async () => {
     const mockResponse = { page: { number: 1, size: 20, chimes: [] } };
     const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockResponse);
 
-    const result = await chimes.page({ page_number: 1, page_size: 20 });
+    const result = await chimes.page({ pageNumber: 1, pageSize: 20 });
 
     expect(result).toEqual(mockResponse.page);
     expect(postSpy).toHaveBeenCalledWith('/chimes/page', {
-      page_number: 1,
-      page_size: 20,
+      pageNumber: 1,
+      pageSize: 20,
     });
   });
 
@@ -89,7 +89,7 @@ describe('Chimes', () => {
     const request = {
       recipients: [{ transport: 'sms' as const, phone: { number: '+233544998605' } }],
       sender: 'YourBrand',
-      message_template: 'Hello',
+      messageTemplate: 'Hello',
     };
 
     const result = await chimes.broadcast(request);
@@ -109,11 +109,11 @@ describe('Chimes', () => {
 
     const result = await chimes.schedule({
       recipients: ['+233544998605'],
-      full_message: 'Hello',
-      send_after: '2026-01-18T10:00:00Z',
+      fullMessage: 'Hello',
+      sendAfter: '2026-01-18T10:00:00Z',
     });
 
-    expect(result).toEqual(mockScheduleResponse.scheduled_chime);
+    expect(result).toEqual(mockScheduleResponse.scheduledChime);
     expect(postSpy).toHaveBeenCalledWith('/chimes/schedule', expect.any(Object));
   });
 
@@ -127,12 +127,12 @@ describe('Chimes', () => {
         text: 'Your appointment is tomorrow.',
         from: { address: 'notifications@example.com' },
       },
-      send_after: '2026-01-18T10:00:00Z',
+      sendAfter: '2026-01-18T10:00:00Z',
     };
 
     const result = await chimes.schedule(request);
 
-    expect(result).toEqual(mockScheduleResponse.scheduled_chime);
+    expect(result).toEqual(mockScheduleResponse.scheduledChime);
     expect(postSpy).toHaveBeenCalledWith('/chimes/schedule', request);
   });
 
@@ -140,15 +140,15 @@ describe('Chimes', () => {
     await expect(
       chimes.schedule({
         recipients: ['customer@example.com'],
-        full_message: 'Hello',
+        fullMessage: 'Hello',
         email: {
           subject: 'Reminder',
           text: 'Your appointment is tomorrow.',
           from: { address: 'notifications@example.com' },
         },
-        send_after: '2026-01-18T10:00:00Z',
+        sendAfter: '2026-01-18T10:00:00Z',
       } as any)
-    ).rejects.toThrow('full_message and email cannot be provided together');
+    ).rejects.toThrow('fullMessage and email cannot be provided together');
   });
 
   it('should validate missing fields on schedule', async () => {

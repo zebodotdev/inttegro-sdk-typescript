@@ -13,18 +13,18 @@ describe('UploadRequests', () => {
   });
 
   it('should review an upload attempt with an idempotency key', async () => {
-    const response = { upload_request: { id: 'ur_123' } };
+    const response = { uploadRequest: { id: 'ur_123' } };
     const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(response);
 
     const result = await uploadRequests.review(
-      { id: 'ur_123', attempt_ordinal: 1, decision: 'approved' },
+      { id: 'ur_123', attemptOrdinal: 1, decision: 'approved' },
       { idempotencyKey: 'idem_upload_review' }
     );
 
-    expect(result).toEqual(response.upload_request);
+    expect(result).toEqual(response.uploadRequest);
     expect(postSpy).toHaveBeenCalledWith(
       '/upload_requests/review',
-      { id: 'ur_123', attempt_ordinal: 1, decision: 'approved' },
+      { id: 'ur_123', attemptOrdinal: 1, decision: 'approved' },
       { headers: { 'Idempotency-Key': 'idem_upload_review' } }
     );
   });

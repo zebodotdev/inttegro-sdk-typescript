@@ -51,11 +51,11 @@ export interface ProductLineItemParams {
   /** Product name */
   name: string;
   /** Tax code (optional) */
-  tax_code?: string;
+  taxCode?: string;
   /** Product price */
   price: PriceParams;
   /** Arbitrary custom data */
-  custom_data?: CustomData;
+  customData?: CustomData;
 }
 
 /**
@@ -71,11 +71,11 @@ export interface FeeLineItemParams {
   /** Fee description */
   description?: string;
   /** Tax classification code */
-  tax_code?: string;
+  taxCode?: string;
   /** Fee reference */
   reference?: string;
   /** Arbitrary custom data */
-  custom_data?: CustomData;
+  customData?: CustomData;
 }
 
 /**
@@ -85,8 +85,8 @@ export interface ShippingLineItemParams {
   id?: string;
   label?: string;
   fee: import('./money').AmountParams;
-  tax_code?: string;
-  custom_data?: CustomData;
+  taxCode?: string;
+  customData?: CustomData;
 }
 
 export type LineItemParams =
@@ -125,9 +125,9 @@ export type LineItem =
  */
 export interface BillingDetails {
   /** Billing email address */
-  email_address: string;
+  emailAddress: string;
   /** Billing phone number */
-  phone_number: string;
+  phoneNumber: string;
   /** Billing name */
   name: string;
   /** Billing address */
@@ -153,9 +153,9 @@ export interface ShippingDetails {
   /** Shipping fee */
   fee: Amount;
   /** Tax code */
-  tax_code?: string;
+  taxCode?: string;
   /** Arbitrary custom data */
-  custom_data?: CustomData;
+  customData?: CustomData;
 }
 
 /**
@@ -165,23 +165,23 @@ export interface OrderPayoutSettings {
   /** Payout destination for this order */
   destination?: {
     /** ID of an existing financial account to receive payout */
-    financial_account_id?: string;
+    financialAccountId?: string;
     /** Inline financial account details for payout destination */
-    financial_account_data?: {
+    financialAccountData?: {
       type: FinancialAccountType;
       wallet?: {
         type: WalletType;
-        mobile_money?: {
-          account_number: string;
+        mobileMoney?: {
+          accountNumber: string;
           network: MobileMoneyNetwork;
         };
       } | null;
-      bank_account?: BankAccountConfig | null;
-      dosh_account?: Record<string, unknown> | null;
+      bankAccount?: BankAccountConfig | null;
+      doshAccount?: Record<string, unknown> | null;
     };
   };
   /** Whether to enable foreign exchange conversion for this order's payout */
-  enable_fx?: boolean;
+  enableFx?: boolean;
 }
 
 /**
@@ -195,7 +195,7 @@ export interface InvoiceSettings {
   /** Optional invoice footer */
   footer?: string;
   /** Invoice-specific custom metadata */
-  custom_data?: CustomData;
+  customData?: CustomData;
 }
 
 /**
@@ -203,36 +203,36 @@ export interface InvoiceSettings {
  */
 interface BaseCreateOrderRequest {
   /** Line items (products or fees) */
-  line_items: LineItemParams[];
+  lineItems: LineItemParams[];
   /** Billing details */
-  billing_details?: BillingDetails;
+  billingDetails?: BillingDetails;
   /** Shipping information (required for physical products) */
   shipping?: Shipping;
   /** Custom order number */
   number?: string;
   /** Optional receipt number for downstream reconciliation */
-  receipt_number?: string;
+  receiptNumber?: string;
   /** Statement descriptor for payment */
-  statement_descriptor?: string;
+  statementDescriptor?: string;
   /** Static prefix, 2-10 characters, used to build statement descriptor as prefix*order_id. Mutually exclusive with statement_descriptor. */
-  statement_descriptor_prefix?: string;
+  statementDescriptorPrefix?: string;
   /** Whether to immediately execute payment */
-  execute_payment?: boolean;
+  executePayment?: boolean;
   /** Whether to explicitly finalize the order regardless of payment execution */
   finalize?: boolean;
   /** Request metadata such as idempotency controls */
-  request_meta?: RequestMeta;
+  requestMeta?: RequestMeta;
   /** Checkout redirect/cancel URLs */
-  checkout_settings?: {
-    redirect_url?: string;
-    cancel_url?: string;
+  checkoutSettings?: {
+    redirectUrl?: string;
+    cancelUrl?: string;
   };
   /** Invoice rendering metadata */
-  invoice_settings?: InvoiceSettings;
+  invoiceSettings?: InvoiceSettings;
   /** Order-level custom metadata */
-  custom_data?: CustomData;
+  customData?: CustomData;
   /** Order-specific payout settings */
-  payout_settings?: OrderPayoutSettings;
+  payoutSettings?: OrderPayoutSettings;
 }
 
 /**
@@ -240,13 +240,13 @@ interface BaseCreateOrderRequest {
  */
 export interface CreateOrderWithCustomerRequest extends BaseCreateOrderRequest {
   /** Customer data for new customer */
-  customer_data: CustomerData;
+  customerData: CustomerData;
   /** Customer ID should not be present when creating with customer data */
-  customer_id?: never;
+  customerId?: never;
   /** Payment method ID should not be present when creating with customer data */
-  payment_method_id?: never;
+  paymentMethodId?: never;
   /** Optional inline payment method details to tokenize and attach */
-  payment_method_data?: PaymentMethodData;
+  paymentMethodData?: PaymentMethodData;
 }
 
 /**
@@ -254,13 +254,13 @@ export interface CreateOrderWithCustomerRequest extends BaseCreateOrderRequest {
  */
 export interface CreateOrderWithCustomerIdRequest extends BaseCreateOrderRequest {
   /** Existing customer ID */
-  customer_id: string;
+  customerId: string;
   /** Optional pre-saved payment method ID */
-  payment_method_id?: string;
+  paymentMethodId?: string;
   /** Optional inline payment method details to tokenize and attach */
-  payment_method_data?: PaymentMethodData;
+  paymentMethodData?: PaymentMethodData;
   /** Customer data should not be present when using existing customer */
-  customer_data?: never;
+  customerData?: never;
 }
 
 /**
@@ -273,7 +273,7 @@ export type CreateOrderRequest = CreateOrderWithCustomerRequest | CreateOrderWit
  */
 export interface LookupOrderRequest {
   /** Order ID to lookup */
-  order_id: string;
+  orderId: string;
 }
 
 /**
@@ -281,29 +281,29 @@ export interface LookupOrderRequest {
  */
 export interface UpdateOrderRequest {
   /** Order ID to update */
-  order_id: string;
+  orderId: string;
   /** Clear the currently attached payment method */
-  clear_payment_method?: boolean;
+  clearPaymentMethod?: boolean;
   /** Replacement order-level custom metadata */
-  custom_data?: CustomData;
+  customData?: CustomData;
   /** Invoice rendering metadata */
-  invoice_settings?: InvoiceSettings;
+  invoiceSettings?: InvoiceSettings;
   /** Explicit seal decision */
   finalize?: boolean;
   /** Full replacement for the order's line items */
-  line_items?: LineItemParams[];
+  lineItems?: LineItemParams[];
   /** Replacement order number */
   number?: string;
   /** Replacement receipt number */
-  receipt_number?: string;
+  receiptNumber?: string;
   /** Inline payment method details to tokenize and attach */
-  payment_method_data?: PaymentMethodData;
+  paymentMethodData?: PaymentMethodData;
   /** Saved payment method ID to attach */
-  payment_method_id?: string;
+  paymentMethodId?: string;
   /** Replacement payment statement descriptor */
-  statement_descriptor?: string;
+  statementDescriptor?: string;
   /** Replacement payment statement descriptor prefix */
-  statement_descriptor_prefix?: string;
+  statementDescriptorPrefix?: string;
 }
 
 /**
@@ -311,15 +311,15 @@ export interface UpdateOrderRequest {
  */
 export interface PayOrderRequest {
   /** Order ID to pay for */
-  order_id: string;
+  orderId: string;
   /** Request metadata such as idempotency controls */
-  request_meta?: RequestMeta;
+  requestMeta?: RequestMeta;
   /** Optional saved payment method to use */
-  payment_method_id?: string;
+  paymentMethodId?: string;
   /** Whether payment was already collected offline */
-  paid_out_of_band?: boolean;
+  paidOutOfBand?: boolean;
   /** Payment method data should not be present when using saved method */
-  payment_method_data?: never;
+  paymentMethodData?: never;
 }
 
 /**
@@ -327,11 +327,11 @@ export interface PayOrderRequest {
  */
 export interface PayOrderWithMethodRequest {
   /** Order ID to pay for */
-  order_id: string;
+  orderId: string;
   /** Request metadata such as idempotency controls */
-  request_meta?: RequestMeta;
+  requestMeta?: RequestMeta;
   /** Payment method data */
-  payment_method_data: PaymentMethodData;
+  paymentMethodData: PaymentMethodData;
 }
 
 /**
@@ -344,13 +344,13 @@ export type PayOrder = PayOrderRequest | PayOrderWithMethodRequest;
  */
 export interface ConfirmPaymentRequest {
   /** Order ID */
-  order_id: string;
+  orderId: string;
   /** Request metadata such as idempotency controls */
-  request_meta?: RequestMeta;
+  requestMeta?: RequestMeta;
   /** Payment being confirmed */
-  payment_id: string;
+  paymentId: string;
   /** Confirmation challenge being answered */
-  confirmation_id: string;
+  confirmationId: string;
   /** Confirmation token (e.g., OTP) */
   token: string;
 }
@@ -360,9 +360,9 @@ export interface ConfirmPaymentRequest {
  */
 export interface RequestConfirmationRequest {
   /** Order ID */
-  order_id: string;
+  orderId: string;
   /** Request metadata such as idempotency controls */
-  request_meta?: RequestMeta;
+  requestMeta?: RequestMeta;
 }
 
 /**
@@ -370,9 +370,9 @@ export interface RequestConfirmationRequest {
  */
 export interface FinalizeOrderRequest {
   /** Order ID to finalize */
-  order_id: string;
+  orderId: string;
   /** Request metadata such as idempotency controls */
-  request_meta?: RequestMeta;
+  requestMeta?: RequestMeta;
 }
 
 /**
@@ -380,9 +380,9 @@ export interface FinalizeOrderRequest {
  */
 export interface CompleteOrderRequest {
   /** Order ID to complete */
-  order_id: string;
+  orderId: string;
   /** Whether payment was collected out of band */
-  paid_out_of_band?: boolean;
+  paidOutOfBand?: boolean;
 }
 
 /**
@@ -390,13 +390,13 @@ export interface CompleteOrderRequest {
  */
 export interface CancelOrderRequest {
   /** Order ID to cancel */
-  order_id: string;
+  orderId: string;
   /** Request metadata such as idempotency controls */
-  request_meta?: RequestMeta;
+  requestMeta?: RequestMeta;
   /** Optional cancellation reason */
   reason?: string;
   /** Record whether a refund was requested as part of the cancellation */
-  execute_refund?: boolean;
+  executeRefund?: boolean;
 }
 
 /** @deprecated Prefer `CreateRefundRequest` through `client.refunds.create`. */
@@ -420,15 +420,15 @@ export type OrderStatus = (typeof OrderStatuses)[keyof typeof OrderStatuses];
  * Checkout settings
  */
 export interface CheckoutSettings {
-  redirect_url?: string;
-  cancel_url?: string;
+  redirectUrl?: string;
+  cancelUrl?: string;
 }
 
 /**
  * Line item group summarizing items and totals
  */
 export interface LineItemGroup {
-  line_items: LineItem[];
+  lineItems: LineItem[];
   total: Amount;
 }
 
@@ -437,8 +437,8 @@ export interface LineItemGroup {
  */
 export interface InvoiceFormatDetails {
   url: string;
-  first_seen_at?: string;
-  last_seen_at?: string;
+  firstSeenAt?: string;
+  lastSeenAt?: string;
 }
 
 /**
@@ -450,10 +450,10 @@ export interface Invoice {
   deliveries?: {
     id?: string;
     format?: string;
-    sent_at?: string;
-    sender_id?: string;
-    sent_via?: string;
-    sent_to?: string;
+    sentAt?: string;
+    senderId?: string;
+    sentVia?: string;
+    sentTo?: string;
   }[];
   format?: {
     web?: InvoiceFormatDetails;
@@ -472,21 +472,21 @@ export interface Order {
   /** Order number */
   number?: string;
   /** Receipt number */
-  receipt_number?: string;
+  receiptNumber?: string;
   /** Invoice rendering metadata */
-  invoice_settings?: InvoiceSettings;
+  invoiceSettings?: InvoiceSettings;
   /** Customer summary */
   customer?: {
     id: string;
     name: string;
-    email_address: string;
-    phone_number: string;
-    created_at?: string;
+    emailAddress: string;
+    phoneNumber: string;
+    createdAt?: string;
   };
   /** Customer ID */
-  customer_id?: string;
+  customerId?: string;
   /** Billing details */
-  billing_details?: BillingDetails;
+  billingDetails?: BillingDetails;
   /** Shipping information */
   shipping?: Shipping;
   /** Totals */
@@ -495,32 +495,32 @@ export interface Order {
   tax?: Amount;
   currency?: Currency;
   /** Order-level custom metadata */
-  custom_data?: CustomData | null;
+  customData?: CustomData | null;
   /** Items (legacy) */
-  line_items?: LineItem[];
+  lineItems?: LineItem[];
   /** Grouped items (current spec) */
-  line_item_group?: LineItemGroup;
+  lineItemGroup?: LineItemGroup;
   /** Payment details */
   payment?: Payment;
   /** Legacy payment status */
-  payment_status?: PaymentStatus;
+  paymentStatus?: PaymentStatus;
   /** Payment method ID if saved */
-  payment_method_id?: string;
+  paymentMethodId?: string;
   /** Redirect URL */
-  redirect_url?: string;
+  redirectUrl?: string;
   /** Statement descriptor */
-  statement_descriptor?: string;
+  statementDescriptor?: string;
   /** Checkout settings */
-  checkout_settings?: CheckoutSettings;
+  checkoutSettings?: CheckoutSettings;
   /** Lifecycle timestamps */
-  initiated_at?: string;
-  sealed_at?: string;
-  completed_at?: string;
-  expires_at?: string;
-  created_at?: string;
-  updated_at?: string;
-  paid_at?: string;
-  cancelled_at?: string;
+  initiatedAt?: string;
+  sealedAt?: string;
+  completedAt?: string;
+  expiresAt?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  paidAt?: string;
+  cancelledAt?: string;
   /** Invoice info */
   invoice?: Invoice;
   /** Refunds issued for this order, newest first. Omitted when none exist. */
@@ -529,22 +529,22 @@ export interface Order {
 
 /** Send order document request */
 export interface OrderDocumentDeliveryRequest {
-  order_id: string;
+  orderId: string;
 }
 
 /** Order document delivery attempt */
 export interface OrderDocumentDeliveryAttempt {
   channel: string;
-  chime_id?: string;
+  chimeId?: string;
   error?: string;
 }
 
 /** Order document delivery details */
 export interface OrderDocumentDelivery {
-  document_kind: string;
-  document_url: string;
-  sent_channels: string[];
-  failed_channels?: string[];
+  documentKind: string;
+  documentUrl: string;
+  sentChannels: string[];
+  failedChannels?: string[];
   deliveries?: OrderDocumentDeliveryAttempt[];
   failures?: OrderDocumentDeliveryAttempt[];
 }
@@ -557,9 +557,9 @@ export interface OrderDocumentDeliveryResult {
 
 /** Page orders request */
 export interface PageOrdersRequest {
-  page_number?: number;
-  page_size?: number;
-  customer_id?: string;
+  pageNumber?: number;
+  pageSize?: number;
+  customerId?: string;
 }
 
 /** A page of orders returned by the Orders resource. */

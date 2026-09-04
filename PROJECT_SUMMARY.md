@@ -53,7 +53,7 @@ This TypeScript SDK for the Inttegro API has been successfully built with produc
   - Unit tests for all components
   - Mock data and responses
   - Error scenario testing
-  - >80% code coverage target
+  - > 80% code coverage target
   - Uses Vitest testing framework
 
 ### Documentation
@@ -189,23 +189,27 @@ All endpoints support both variants as specified in the requirements.
 ## 🔧 Next Steps
 
 1. **Testing**
+
    ```bash
    npm test
    npm run test:coverage
    ```
 
 2. **Linting**
+
    ```bash
    npm run lint
    npm run format:check
    ```
 
 3. **Local Development**
+
    ```bash
    npm run dev  # Watch mode
    ```
 
 4. **Before Publishing**
+
    ```bash
    npm run build
    npm run test

@@ -7,8 +7,8 @@ export interface CustomerAddressInput {
   line1?: string;
   line2?: string;
   name?: string;
-  phone_number?: string;
-  post_code?: string;
+  phoneNumber?: string;
+  postCode?: string;
   region?: string;
 }
 
@@ -19,13 +19,13 @@ export interface CustomerData {
   /** Customer full name */
   name: string;
   /** Customer email address */
-  email_address: string;
+  emailAddress: string;
   /** Customer phone number */
-  phone_number: string;
+  phoneNumber: string;
   /** External reference for the customer */
   reference?: string;
   /** Custom data for the customer */
-  custom_data?: CustomData;
+  customData?: CustomData;
 }
 
 /**
@@ -33,33 +33,33 @@ export interface CustomerData {
  */
 export interface CreateCustomerRequest {
   /** Request metadata such as idempotency controls */
-  request_meta?: RequestMeta;
+  requestMeta?: RequestMeta;
   name: string;
   title?: string;
   suffix?: string;
   reference?: string;
-  email_address?: string;
-  phone_number?: string;
-  custom_data?: CustomData;
-  billing_address?: CustomerAddressInput;
-  shipping_address?: CustomerAddressInput;
+  emailAddress?: string;
+  phoneNumber?: string;
+  customData?: CustomData;
+  billingAddress?: CustomerAddressInput;
+  shippingAddress?: CustomerAddressInput;
 }
 
 export interface UpdateCustomerRequest {
-  customer_id: string;
-  billing_address?: CustomerAddressInput;
-  custom_data?: Record<string, unknown>;
-  email_address?: string;
+  customerId: string;
+  billingAddress?: CustomerAddressInput;
+  customData?: Record<string, unknown>;
+  emailAddress?: string;
   name?: string;
-  phone_number?: string;
+  phoneNumber?: string;
   reference?: string;
-  shipping_address?: CustomerAddressInput;
+  shippingAddress?: CustomerAddressInput;
   suffix?: string;
   title?: string;
 }
 
 export interface LookupCustomerRequest {
-  customer_id: string;
+  customerId: string;
 }
 
 export interface Customer {
@@ -68,15 +68,15 @@ export interface Customer {
   title?: string | null;
   suffix?: string | null;
   reference?: string | null;
-  email_address?: string | null;
-  phone_number?: string | null;
-  custom_data?: CustomData;
-  created_at: string;
+  emailAddress?: string | null;
+  phoneNumber?: string | null;
+  customData?: CustomData;
+  createdAt: string;
 }
 
 export interface PageCustomersRequest {
-  page_number?: number;
-  page_size?: number;
+  pageNumber?: number;
+  pageSize?: number;
 }
 
 export interface CustomerPage {
@@ -92,7 +92,7 @@ export interface Address {
   /** Recipient name */
   name: string;
   /** Phone number */
-  phone_number: string;
+  phoneNumber: string;
   /** Address line 1 */
   line1: string;
   /** Address line 2 (optional) */
@@ -106,5 +106,5 @@ export interface Address {
   /** District (optional) */
   district?: string;
   /** Postal code (optional) */
-  post_code?: string;
+  postCode?: string;
 }

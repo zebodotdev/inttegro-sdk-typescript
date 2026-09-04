@@ -17,9 +17,9 @@ describe('FileReferences', () => {
     const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockResponse);
 
     const request = {
-      resource_type: 'product',
-      resource_id: 'prod_123',
-      references: [{ file_id: 'file_123', field: 'media.gallery[0]' }],
+      resourceType: 'product',
+      resourceId: 'prod_123',
+      references: [{ fileId: 'file_123', field: 'media.gallery[0]' }],
     };
 
     const result = await fileReferences.reconcile(request);

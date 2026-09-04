@@ -39,9 +39,15 @@ async function main() {
 
     // Step 1: Request confirmation code
     console.log('\nRequesting confirmation code...');
-    await inttegro.orders.requestConfirmation({
-      order_id: orderId,
+    const pendingOrder = await inttegro.orders.requestConfirmation({
+      orderId: orderId,
     });
+
+    const paymentId = pendingOrder.payment?.id;
+    const confirmationId = pendingOrder.payment?.nextAction?.confirmPayment?.request?.id;
+    if (!paymentId || !confirmationId) {
+      throw new Error('Order did not include a payment confirmation challenge');
+    }
 
     console.log('✅ New confirmation code requested');
 
@@ -52,7 +58,9 @@ async function main() {
     // Step 3: Confirm payment with OTP
     console.log('\nConfirming payment...');
     const order = await inttegro.orders.confirmPayment({
-      order_id: orderId,
+      orderId: orderId,
+      paymentId,
+      confirmationId,
       token: otp.trim(),
     });
 
@@ -60,7 +68,7 @@ async function main() {
       console.log('✅ Payment confirmed successfully!');
       console.log('Order Status:', order.status);
       console.log('Payment Status:', order.payment.status);
-      console.log('Paid At:', order.paid_at);
+      console.log('Paid At:', order.paidAt);
     } else {
       console.log('❌ Payment confirmation failed');
       console.log('Please verify the confirmation code and try again');
@@ -70,7 +78,7 @@ async function main() {
 
       if (resend.toLowerCase() === 'y') {
         await inttegro.orders.requestConfirmation({
-          order_id: orderId,
+          orderId: orderId,
         });
         console.log('✅ New confirmation code requested');
       }

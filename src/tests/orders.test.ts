@@ -29,12 +29,12 @@ describe('Orders', () => {
       const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockCreateOrderResponse);
 
       const result = await orders.create({
-        customer_data: {
+        customerData: {
           name: 'John Doe',
-          email_address: 'john@example.com',
-          phone_number: '0559714200',
+          emailAddress: 'john@example.com',
+          phoneNumber: '0559714200',
         },
-        line_items: [
+        lineItems: [
           {
             type: 'product',
             product: {
@@ -45,13 +45,13 @@ describe('Orders', () => {
             },
           },
         ],
-        billing_details: {
-          email_address: 'john@example.com',
-          phone_number: '0559714200',
+        billingDetails: {
+          emailAddress: 'john@example.com',
+          phoneNumber: '0559714200',
           name: 'John Doe',
           address: {
             name: 'John Doe',
-            phone_number: '0559714200',
+            phoneNumber: '0559714200',
             line1: '123 Main St',
             town: 'Accra',
             region: 'Greater Accra',
@@ -68,8 +68,8 @@ describe('Orders', () => {
       const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockCreateOrderResponse);
 
       const result = await orders.create({
-        customer_id: 'cu_123',
-        line_items: [
+        customerId: 'cu_123',
+        lineItems: [
           {
             type: 'product',
             product: {
@@ -80,13 +80,13 @@ describe('Orders', () => {
             },
           },
         ],
-        billing_details: {
-          email_address: 'john@example.com',
-          phone_number: '0559714200',
+        billingDetails: {
+          emailAddress: 'john@example.com',
+          phoneNumber: '0559714200',
           name: 'John Doe',
           address: {
             name: 'John Doe',
-            phone_number: '0559714200',
+            phoneNumber: '0559714200',
             line1: '123 Main St',
             town: 'Accra',
             region: 'Greater Accra',
@@ -103,8 +103,8 @@ describe('Orders', () => {
       const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockCreateOrderResponse);
 
       const result = await orders.new({
-        customer_id: 'cu_123',
-        line_items: [
+        customerId: 'cu_123',
+        lineItems: [
           {
             type: 'product',
             product: {
@@ -124,10 +124,10 @@ describe('Orders', () => {
     it('should throw validation error when required fields are missing', async () => {
       await expect(
         orders.create({
-          customer_data: {
+          customerData: {
             name: 'John Doe',
-            email_address: 'john@example.com',
-            phone_number: '0559714200',
+            emailAddress: 'john@example.com',
+            phoneNumber: '0559714200',
           },
         } as any)
       ).rejects.toThrow('Validation failed');
@@ -136,7 +136,7 @@ describe('Orders', () => {
     it('should throw validation error when neither customer_data nor customer_id provided', async () => {
       await expect(
         orders.create({
-          line_items: [
+          lineItems: [
             {
               type: 'product',
               product: {
@@ -147,13 +147,13 @@ describe('Orders', () => {
               },
             },
           ],
-          billing_details: {
-            email_address: 'john@example.com',
-            phone_number: '0559714200',
+          billingDetails: {
+            emailAddress: 'john@example.com',
+            phoneNumber: '0559714200',
             name: 'John Doe',
             address: {
               name: 'John Doe',
-              phone_number: '0559714200',
+              phoneNumber: '0559714200',
               line1: '123 Main St',
               town: 'Accra',
               region: 'Greater Accra',
@@ -170,11 +170,11 @@ describe('Orders', () => {
       const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockLookupOrderResponse);
 
       const result = await orders.lookup({
-        order_id: 'or_123',
+        orderId: 'or_123',
       });
 
       expect(result).toEqual(mockLookupOrderResponse.order);
-      expect(postSpy).toHaveBeenCalledWith('/orders/lookup', { order_id: 'or_123' });
+      expect(postSpy).toHaveBeenCalledWith('/orders/lookup', { orderId: 'or_123' });
     });
 
     it('should throw validation error when order_id is missing', async () => {
@@ -187,13 +187,13 @@ describe('Orders', () => {
       const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockLookupOrderResponse);
 
       const result = await orders.update({
-        order_id: 'or_123',
+        orderId: 'or_123',
         number: 'ORDER-123-REV2',
       });
 
       expect(result).toEqual(mockLookupOrderResponse.order);
       expect(postSpy).toHaveBeenCalledWith('/orders/update', {
-        order_id: 'or_123',
+        orderId: 'or_123',
         number: 'ORDER-123-REV2',
       });
     });
@@ -208,12 +208,12 @@ describe('Orders', () => {
       const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockPayOrderResponse);
 
       const result = await orders.pay({
-        order_id: 'or_123',
-        payment_method_data: {
+        orderId: 'or_123',
+        paymentMethodData: {
           type: 'mobile_money',
-          mobile_money: {
+          mobileMoney: {
             network: 'mtn',
-            account_number: '0544998605',
+            accountNumber: '0544998605',
           },
         },
       });
@@ -226,11 +226,11 @@ describe('Orders', () => {
       const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockPayOrderResponse);
 
       const result = await orders.pay({
-        order_id: 'or_123',
+        orderId: 'or_123',
       });
 
       expect(result).toEqual(mockPayOrderResponse.order);
-      expect(postSpy).toHaveBeenCalledWith('/orders/pay', { order_id: 'or_123' });
+      expect(postSpy).toHaveBeenCalledWith('/orders/pay', { orderId: 'or_123' });
     });
 
     it('should throw validation error when order_id is missing', async () => {
@@ -243,19 +243,23 @@ describe('Orders', () => {
       const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockConfirmPaymentResponse);
 
       const result = await orders.confirmPayment({
-        order_id: 'or_123',
+        orderId: 'or_123',
+        paymentId: 'py_123',
+        confirmationId: 'pc_123',
         token: '123456',
       });
 
       expect(result).toEqual(mockConfirmPaymentResponse.order);
       expect(postSpy).toHaveBeenCalledWith('/orders/confirm_payment', {
-        order_id: 'or_123',
+        orderId: 'or_123',
+        paymentId: 'py_123',
+        confirmationId: 'pc_123',
         token: '123456',
       });
     });
 
     it('should throw validation error when required fields are missing', async () => {
-      await expect(orders.confirmPayment({ order_id: 'or_123' } as any)).rejects.toThrow(
+      await expect(orders.confirmPayment({ orderId: 'or_123' } as any)).rejects.toThrow(
         'Validation failed'
       );
     });
@@ -268,12 +272,12 @@ describe('Orders', () => {
         .mockResolvedValue(mockRequestConfirmationResponse);
 
       const result = await orders.requestConfirmation({
-        order_id: 'or_123',
+        orderId: 'or_123',
       });
 
       expect(result).toEqual(mockRequestConfirmationResponse.order);
       expect(postSpy).toHaveBeenCalledWith('/orders/request_confirmation', {
-        order_id: 'or_123',
+        orderId: 'or_123',
       });
     });
 
@@ -286,9 +290,9 @@ describe('Orders', () => {
     it('should finalize an order', async () => {
       const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockLookupOrderResponse);
 
-      const result = await orders.finalize({ order_id: 'or_123' });
+      const result = await orders.finalize({ orderId: 'or_123' });
       expect(result).toEqual(mockLookupOrderResponse.order);
-      expect(postSpy).toHaveBeenCalledWith('/orders/finalize', { order_id: 'or_123' });
+      expect(postSpy).toHaveBeenCalledWith('/orders/finalize', { orderId: 'or_123' });
     });
   });
 
@@ -297,16 +301,16 @@ describe('Orders', () => {
       const response = {
         order: mockLookupOrderResponse.order,
         delivery: {
-          document_kind: 'invoice',
-          document_url: 'https://pages.inttegro.com/invoices/or_123',
-          sent_channels: ['sms'],
+          documentKind: 'invoice',
+          documentUrl: 'https://pages.inttegro.com/invoices/or_123',
+          sentChannels: ['sms'],
         },
       };
       const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(response);
 
-      const result = await orders.sendInvoice({ order_id: 'or_123' });
+      const result = await orders.sendInvoice({ orderId: 'or_123' });
       expect(result).toEqual(response);
-      expect(postSpy).toHaveBeenCalledWith('/orders/send_invoice', { order_id: 'or_123' });
+      expect(postSpy).toHaveBeenCalledWith('/orders/send_invoice', { orderId: 'or_123' });
     });
 
     it('should throw validation error when order_id is missing', async () => {
@@ -319,16 +323,16 @@ describe('Orders', () => {
       const response = {
         order: mockLookupOrderResponse.order,
         delivery: {
-          document_kind: 'receipt',
-          document_url: 'https://pages.inttegro.com/invoices/or_123/receipt',
-          sent_channels: ['email'],
+          documentKind: 'receipt',
+          documentUrl: 'https://pages.inttegro.com/invoices/or_123/receipt',
+          sentChannels: ['email'],
         },
       };
       const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(response);
 
-      const result = await orders.sendReceipt({ order_id: 'or_123' });
+      const result = await orders.sendReceipt({ orderId: 'or_123' });
       expect(result).toEqual(response);
-      expect(postSpy).toHaveBeenCalledWith('/orders/send_receipt', { order_id: 'or_123' });
+      expect(postSpy).toHaveBeenCalledWith('/orders/send_receipt', { orderId: 'or_123' });
     });
 
     it('should throw validation error when order_id is missing', async () => {
@@ -340,11 +344,11 @@ describe('Orders', () => {
     it('should complete an order', async () => {
       const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockLookupOrderResponse);
 
-      const result = await orders.complete({ order_id: 'or_123', paid_out_of_band: true });
+      const result = await orders.complete({ orderId: 'or_123', paidOutOfBand: true });
       expect(result).toEqual(mockLookupOrderResponse.order);
       expect(postSpy).toHaveBeenCalledWith('/orders/complete', {
-        order_id: 'or_123',
-        paid_out_of_band: true,
+        orderId: 'or_123',
+        paidOutOfBand: true,
       });
     });
   });
@@ -353,9 +357,9 @@ describe('Orders', () => {
     it('should cancel an order', async () => {
       const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockLookupOrderResponse);
 
-      const result = await orders.cancel({ order_id: 'or_123' });
+      const result = await orders.cancel({ orderId: 'or_123' });
       expect(result).toEqual(mockLookupOrderResponse.order);
-      expect(postSpy).toHaveBeenCalledWith('/orders/cancel', { order_id: 'or_123' });
+      expect(postSpy).toHaveBeenCalledWith('/orders/cancel', { orderId: 'or_123' });
     });
   });
 
@@ -364,13 +368,13 @@ describe('Orders', () => {
       const response = { refund: { id: 'rf_123' } };
       const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(response);
       const request = {
-        line_items: [
+        lineItems: [
           {
-            order_line_item_id: 'oli_123',
-            refund_amount: { currency: 'ghs', value: 2500 },
+            orderLineItemId: 'oli_123',
+            refundAmount: { currency: 'ghs', value: 2500 },
           },
         ],
-        order_id: 'or_123',
+        orderId: 'or_123',
         reason: 'requested_by_customer' as const,
       };
 

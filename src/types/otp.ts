@@ -32,65 +32,65 @@ export type OTPVerificationVerdict =
 export interface InitiateOtpRequest {
   recipient: string;
   sender: string;
-  service_name: string;
-  request_meta?: RequestMeta;
-  message_template?: string;
-  preferred_gateway?: 'twilio' | 'vonage' | 'africas-talking' | 'termii' | string;
+  serviceName: string;
+  requestMeta?: RequestMeta;
+  messageTemplate?: string;
+  preferredGateway?: 'twilio' | 'vonage' | 'africas-talking' | 'termii' | string;
   purpose?: string;
-  token_alphabet?: string;
-  token_alphabet_type?: OTPAlphabetType;
-  token_size?: number;
-  validity_duration_in_minutes?: number;
+  tokenAlphabet?: string;
+  tokenAlphabetType?: OTPAlphabetType;
+  tokenSize?: number;
+  validityDurationInMinutes?: number;
 }
 
 export interface VerifyOtpRequest {
-  transaction_id: string;
+  transactionId: string;
   recipient: string;
   token: string;
 }
 
 export interface LookupOtpRequest {
-  transaction_id: string;
-  debug_mode?: 0 | 1;
+  transactionId: string;
+  debugMode?: 0 | 1;
 }
 
 export interface CancelOtpRequest {
-  transaction_id: string;
+  transactionId: string;
   reason: string;
 }
 
 export interface OtpTransmission {
   recipient?: string;
-  sender_id?: string;
-  sent_via?: string;
+  senderId?: string;
+  sentVia?: string;
   status?: OTPTransmissionStatus;
-  sent_at?: string;
+  sentAt?: string;
 }
 
 export interface OtpTransaction {
   id?: string;
   status?: OTPStatus;
-  full_message?: string;
-  initiated_at?: string;
-  expires_at?: string;
-  canceled_at?: string | null;
-  cancel_reason?: string | null;
+  fullMessage?: string;
+  initiatedAt?: string;
+  expiresAt?: string;
+  canceledAt?: string | null;
+  cancelReason?: string | null;
   transmission?: OtpTransmission | null;
   recipient?: string;
   sender?: string;
   mechanism?: string;
   gateway?: string;
-  preferred_gateway?: string;
-  created_at?: string;
-  delivered_at?: string;
-  verifiable_until?: string;
+  preferredGateway?: string;
+  createdAt?: string;
+  deliveredAt?: string;
+  verifiableUntil?: string;
 }
 
 export interface OtpVerificationAttempt {
   id?: string;
   recipient?: string;
-  presented_token?: string;
-  attempted_at?: string;
+  presentedToken?: string;
+  attemptedAt?: string;
   result?: {
     detail?: string | null;
     verdict?: string;
@@ -99,5 +99,5 @@ export interface OtpVerificationAttempt {
 
 export interface OtpVerification {
   transaction: OtpTransaction;
-  verification_attempt: OtpVerificationAttempt;
+  verificationAttempt: OtpVerificationAttempt;
 }

@@ -17,12 +17,12 @@ async function main() {
     // Step 1: Create an order
     console.log('Creating order...');
     const order = await inttegro.orders.create({
-      customer_data: {
+      customerData: {
         name: 'Jane Smith',
-        email_address: 'jane@example.com',
-        phone_number: '0544998605',
+        emailAddress: 'jane@example.com',
+        phoneNumber: '0544998605',
       },
-      line_items: [
+      lineItems: [
         {
           type: 'product',
           product: {
@@ -36,13 +36,13 @@ async function main() {
           },
         },
       ],
-      billing_details: {
-        email_address: 'jane@example.com',
-        phone_number: '0544998605',
+      billingDetails: {
+        emailAddress: 'jane@example.com',
+        phoneNumber: '0544998605',
         name: 'Jane Smith',
         address: {
           name: 'Jane Smith',
-          phone_number: '0544998605',
+          phoneNumber: '0544998605',
           line1: '789 Tech Avenue',
           town: 'Kumasi',
           region: 'Ashanti',
@@ -56,12 +56,12 @@ async function main() {
     // Step 2: Pay with mobile money
     console.log('\nProcessing mobile money payment...');
     const paidOrder = await inttegro.orders.pay({
-      order_id: order.id,
-      payment_method_data: {
+      orderId: order.id,
+      paymentMethodData: {
         type: 'mobile_money',
-        mobile_money: {
+        mobileMoney: {
           network: 'mtn', // MTN Mobile Money
-          account_number: '0544998605',
+          accountNumber: '0544998605',
         },
       },
     });
@@ -69,7 +69,7 @@ async function main() {
     console.log('✅ Payment initiated');
     console.log('Payment Status:', paidOrder.payment?.status);
 
-    if (paidOrder.payment?.next_action?.type === 'confirm_payment') {
+    if (paidOrder.payment?.nextAction?.type === 'confirm_payment') {
       console.log('\n⚠️  Payment requires confirmation (OTP)');
       console.log('Please check your phone for the OTP');
 
@@ -81,7 +81,9 @@ async function main() {
       // Example (with mock OTP):
       // const otp = await promptUserForOTP();
       // const confirmation = await inttegro.orders.confirmPayment({
-      //   order_id: order.id,
+      //   orderId: order.id,
+      //   paymentId: paidOrder.payment.id,
+      //   confirmationId: paidOrder.payment.nextAction.confirmPayment.request.id,
       //   token: otp,
       // });
     } else {
@@ -90,13 +92,13 @@ async function main() {
 
     // Step 3: Check final order status
     const finalOrder = await inttegro.orders.lookup({
-      order_id: order.id,
+      orderId: order.id,
     });
 
     console.log('\n📊 Final Order Status:');
     console.log('Order Status:', finalOrder.status);
     console.log('Payment Status:', finalOrder.payment?.status);
-    console.log('Paid At:', finalOrder.paid_at || 'Not yet paid');
+    console.log('Paid At:', finalOrder.paidAt || 'Not yet paid');
   } catch (error) {
     console.error('❌ Error:', error);
     throw error;

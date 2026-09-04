@@ -9,31 +9,31 @@ export interface Price extends Amount {}
 
 /** Parameters for creating a stored catalog price. */
 export interface CatalogPriceParams {
-  product_id?: string;
+  productId?: string;
   label?: string;
   about?: string;
   amount: AmountParams;
 }
 
 export interface LookupPriceRequest {
-  price_id: string;
+  priceId: string;
 }
 
 export interface UpdatePriceRequest {
-  price_id: string;
-  product_id?: string;
+  priceId: string;
+  productId?: string;
   label?: string;
   about?: string;
 }
 
 export interface PriceActionRequest {
-  price_id: string;
+  priceId: string;
 }
 
 export interface PagePricesRequest {
-  page_number?: number;
-  page_size?: number;
-  product_id?: string;
+  pageNumber?: number;
+  pageSize?: number;
+  productId?: string;
 }
 
 export interface CatalogPrice {
@@ -42,11 +42,11 @@ export interface CatalogPrice {
   about?: string | null;
   active: boolean;
   nominal: Amount;
-  product_id?: string;
+  productId?: string;
   product?: Product | null;
-  created_at: string;
-  updated_at?: string | null;
-  archived_at?: string | null;
+  createdAt: string;
+  updatedAt?: string | null;
+  archivedAt?: string | null;
 }
 
 export interface PricePage {

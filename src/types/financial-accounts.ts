@@ -11,7 +11,7 @@ export type FinancialAccountType =
 
 export interface PullPushConfig {
   enabled?: boolean;
-  enabled_at?: string;
+  enabledAt?: string;
   mandate?: Record<string, unknown> | null;
 }
 
@@ -20,33 +20,33 @@ interface FinancialAccountRequestBase {
   reference: string;
   currency: string;
   description?: string;
-  pull_configuration?: PullPushConfig;
-  push_configuration?: PullPushConfig;
-  custom_data?: Record<string, unknown>;
+  pullConfiguration?: PullPushConfig;
+  pushConfiguration?: PullPushConfig;
+  customData?: Record<string, unknown>;
 }
 
 export interface FinancialAccountWalletRequest extends FinancialAccountRequestBase {
   type: 'wallet';
   owner: BankAccountOwner;
   wallet: WalletConfig;
-  bank_account?: never;
-  dosh_account?: never;
+  bankAccount?: never;
+  doshAccount?: never;
 }
 
 export type FinancialAccountBankRequest = FinancialAccountRequestBase & {
   type: 'bank_account';
-  bank_account: BankAccountConfig;
+  bankAccount: BankAccountConfig;
   wallet?: never;
-  dosh_account?: never;
+  doshAccount?: never;
   owner?: BankAccountOwner;
 };
 
 export interface FinancialAccountDoshRequest extends FinancialAccountRequestBase {
   type: 'dosh_account';
   owner: BankAccountOwner;
-  dosh_account: Record<string, never>;
+  doshAccount: Record<string, never>;
   wallet?: never;
-  bank_account?: never;
+  bankAccount?: never;
 }
 
 export type CreateFinancialAccountRequest =
@@ -61,28 +61,28 @@ export interface FinancialAccount {
   reference?: string;
   currency?: string;
   description?: string;
-  pull_configuration?: PullPushConfig;
-  push_configuration?: PullPushConfig;
+  pullConfiguration?: PullPushConfig;
+  pushConfiguration?: PullPushConfig;
   wallet?: WalletConfig;
-  bank_account?: BankAccountConfig;
-  dosh_account?: Record<string, unknown>;
-  custom_data?: Record<string, string>;
+  bankAccount?: BankAccountConfig;
+  doshAccount?: Record<string, unknown>;
+  customData?: Record<string, string>;
   owner?: BankAccountOwner;
-  disconnected_at?: string | null;
-  created_at?: string;
+  disconnectedAt?: string | null;
+  createdAt?: string;
 }
 
 export interface LookupFinancialAccountRequest {
-  account_id: string;
+  accountId: string;
 }
 
 export interface ArchiveFinancialAccountRequest {
-  account_id?: string;
+  accountId?: string;
 }
 
 export interface PageFinancialAccountsRequest {
-  page_number?: number;
-  page_size?: number;
+  pageNumber?: number;
+  pageSize?: number;
 }
 
 export interface FinancialAccountPage {
@@ -92,26 +92,26 @@ export interface FinancialAccountPage {
 }
 
 export interface VerifyFinancialAccountRequest {
-  account_id?: string;
+  accountId?: string;
   [key: string]: unknown;
 }
 
 export type ConnectFinancialAccountRequest = CreateFinancialAccountRequest;
 
 export interface UpdateFinancialAccountRequest {
-  account_id: string;
+  accountId: string;
   label?: string;
   description?: string;
   reference?: string;
-  custom_data?: Record<string, string | null>;
+  customData?: Record<string, string | null>;
   owner?: BankAccountOwner;
 }
 
 export interface ToggleFinancialAccountRequest {
-  account_id: string;
-  unset_as_payout_destination?: boolean;
+  accountId: string;
+  unsetAsPayoutDestination?: boolean;
 }
 
 export interface ReconnectFinancialAccountRequest {
-  account_id: string;
+  accountId: string;
 }

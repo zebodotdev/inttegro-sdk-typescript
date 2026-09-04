@@ -7,7 +7,7 @@ export interface BalanceBreakdown {
   pending?: BalanceAmount;
   reserved?: BalanceAmount;
   refund?: BalanceAmount;
-  includes_transactions_before?: string;
+  includesTransactionsBefore?: string;
 }
 
 export type BalanceSnapshot = Record<string, BalanceBreakdown>;

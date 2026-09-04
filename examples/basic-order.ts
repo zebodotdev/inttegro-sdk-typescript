@@ -16,17 +16,17 @@ async function main() {
   try {
     // Create a new order
     const order = await inttegro.orders.create({
-      customer_data: {
+      customerData: {
         name: 'John Doe',
-        email_address: 'john@example.com',
-        phone_number: '0559714200',
+        emailAddress: 'john@example.com',
+        phoneNumber: '0559714200',
         reference: 'customer-ref-123',
-        custom_data: {
+        customData: {
           source: 'web',
           campaign: 'summer-sale',
         },
       },
-      line_items: [
+      lineItems: [
         {
           type: 'product',
           product: {
@@ -39,7 +39,7 @@ async function main() {
               currency: 'ghs',
               value: 20000, // GHS 200.00
             },
-            custom_data: {
+            customData: {
               sku: 'WIDGET-001',
               category: 'electronics',
             },
@@ -56,25 +56,25 @@ async function main() {
           },
         },
       ],
-      billing_details: {
-        email_address: 'john@example.com',
-        phone_number: '0559714200',
+      billingDetails: {
+        emailAddress: 'john@example.com',
+        phoneNumber: '0559714200',
         name: 'John Doe',
         address: {
           name: 'John Doe',
-          phone_number: '0559714200',
+          phoneNumber: '0559714200',
           line1: '123 Main Street',
           line2: 'Apt 4B',
           town: 'Accra',
           region: 'Greater Accra',
           country: 'GH',
-          post_code: '00233',
+          postCode: '00233',
         },
       },
       shipping: {
         address: {
           name: 'John Doe',
-          phone_number: '0559714200',
+          phoneNumber: '0559714200',
           line1: '456 Delivery Street',
           town: 'Accra',
           region: 'Greater Accra',
@@ -82,21 +82,23 @@ async function main() {
         },
       },
       number: `ORD-${Date.now()}`, // Custom order number
-      statement_descriptor: 'MYSHOP*ORDER',
-      execute_payment: false, // Don't execute payment immediately
-      redirect_url: 'https://myapp.com/order-confirmation',
+      statementDescriptor: 'MYSHOP*ORDER',
+      executePayment: false, // Don't execute payment immediately
+      checkoutSettings: {
+        redirectUrl: 'https://myapp.com/order-confirmation',
+      },
     });
 
     console.log('✅ Order created successfully!');
     console.log('Order ID:', order.id);
     console.log('Order Number:', order.number);
     console.log('Status:', order.status);
-    console.log('Payment Status:', order.payment_status);
+    console.log('Payment Status:', order.paymentStatus);
     console.log('Total:', `GHS ${(order.total?.value ?? 0) / 100}`);
 
     // Lookup the order to verify
     const orderDetails = await inttegro.orders.lookup({
-      order_id: order.id,
+      orderId: order.id,
     });
 
     console.log('\n✅ Order lookup successful!');

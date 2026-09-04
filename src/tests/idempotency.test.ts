@@ -20,7 +20,7 @@ describe('HttpClient idempotency', () => {
     );
 
     const client = new HttpClient({ apiKey: 'sk_test', baseUrl: 'https://api.inttegro.com' });
-    await client.post('/orders/new', { number: 'ORDER-1', idempotency_key: 'legacy' });
+    await client.post('/orders/new', { number: 'ORDER-1', idempotencyKey: 'legacy' });
 
     const body = JSON.parse(calls[0].body as string);
     expect(body.idempotency_key).toBeUndefined();
@@ -38,7 +38,7 @@ describe('HttpClient idempotency', () => {
     );
 
     const client = new HttpClient({ apiKey: 'sk_test', baseUrl: 'https://api.inttegro.com' });
-    await client.post('/orders/lookup', { order_id: 'or_123', idempotency_key: 'legacy' });
+    await client.post('/orders/lookup', { orderId: 'or_123', idempotencyKey: 'legacy' });
 
     const body = JSON.parse(calls[0].body as string);
     expect(body.idempotency_key).toBeUndefined();
@@ -79,7 +79,7 @@ describe('HttpClient idempotency', () => {
       name: 'welcome_sms',
       channel: 'sms',
       purpose: 'marketing',
-      sms: { message_template: 'Welcome {{name}}' },
+      sms: { messageTemplate: 'Welcome {{name}}' },
     });
 
     const headers = calls[0].headers as Record<string, string>;

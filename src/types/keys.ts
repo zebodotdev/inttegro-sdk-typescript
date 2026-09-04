@@ -18,27 +18,27 @@ export interface GenerateSecretKeyRequest {
 export interface GeneratedSecretKey {
   id: string;
   label?: string;
-  token_type: SecretKeyTokenType;
-  issued_at: string;
+  tokenType: SecretKeyTokenType;
+  issuedAt: string;
   token: string;
 }
 
 export interface SecretKey {
   id: string;
   label?: string;
-  token_type: SecretKeyTokenType;
-  issued_at: string;
-  updated_at?: string;
-  expires_at?: string;
+  tokenType: SecretKeyTokenType;
+  issuedAt: string;
+  updatedAt?: string;
+  expiresAt?: string;
   status: SecretKeyStatus;
   active: boolean;
-  revoked_at?: string;
-  last_used_at?: string;
-  usage_count?: number;
+  revokedAt?: string;
+  lastUsedAt?: string;
+  usageCount?: number;
 }
 
 export interface LookupSecretKeyRequest {
-  secret_key_id: string;
+  secretKeyId: string;
 }
 
 export interface UpdateSecretKeyRequest extends LookupSecretKeyRequest {
@@ -58,7 +58,7 @@ export interface SecretKeyPage {
   size: number;
   count: number;
   total: number;
-  has_more: boolean;
+  hasMore: boolean;
   keys: SecretKey[];
 }
 
@@ -69,9 +69,9 @@ export interface SecretKeyUsageRequest extends LookupSecretKeyRequest {
 }
 
 export interface SecretKeyUsageRow {
-  secret_key_id: string;
-  occurred_at: string;
-  auth_result: SecretKeyAuthResult;
+  secretKeyId: string;
+  occurredAt: string;
+  authResult: SecretKeyAuthResult;
 }
 
 export interface SecretKeyUsagePage {
@@ -79,7 +79,7 @@ export interface SecretKeyUsagePage {
   size: number;
   count: number;
   total: number;
-  has_more: boolean;
+  hasMore: boolean;
   rows: SecretKeyUsageRow[];
 }
 

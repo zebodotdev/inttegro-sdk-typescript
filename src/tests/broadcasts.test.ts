@@ -15,19 +15,19 @@ describe('Broadcasts', () => {
   it('should lookup a broadcast', async () => {
     const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockBroadcastResponse);
 
-    const result = await broadcasts.lookup({ broadcast_id: 'brc_123' });
+    const result = await broadcasts.lookup({ broadcastId: 'brc_123' });
 
     expect(result).toEqual(mockBroadcastResponse.broadcast);
-    expect(postSpy).toHaveBeenCalledWith('/broadcasts/lookup', { broadcast_id: 'brc_123' });
+    expect(postSpy).toHaveBeenCalledWith('/broadcasts/lookup', { broadcastId: 'brc_123' });
   });
 
   it('should cancel a broadcast', async () => {
     const postSpy = vi.spyOn(httpClient, 'post').mockResolvedValue(mockBroadcastResponse);
 
-    const result = await broadcasts.cancel({ broadcast_id: 'brc_123' });
+    const result = await broadcasts.cancel({ broadcastId: 'brc_123' });
 
     expect(result).toEqual(mockBroadcastResponse.broadcast);
-    expect(postSpy).toHaveBeenCalledWith('/broadcasts/cancel', { broadcast_id: 'brc_123' });
+    expect(postSpy).toHaveBeenCalledWith('/broadcasts/cancel', { broadcastId: 'brc_123' });
   });
 
   it('should validate missing fields', async () => {

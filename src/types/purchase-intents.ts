@@ -23,7 +23,7 @@ export type PurchaseIntentActivityType =
 
 export interface PurchaseIntentProductSelector {
   id: string;
-  variant_set_id?: string;
+  variantSetId?: string;
 }
 
 export interface PurchaseIntentPriceSelector {
@@ -33,7 +33,7 @@ export interface PurchaseIntentPriceSelector {
     id?: string;
     nominal?: PriceParams;
   };
-  original_id?: string;
+  originalId?: string;
 }
 
 export interface PurchaseIntentOriginalPrice {
@@ -57,33 +57,33 @@ export interface PurchaseIntentQuantity {
 }
 
 export interface PurchaseIntentUsage {
-  single_use?: boolean;
-  multi_use?: boolean;
+  singleUse?: boolean;
+  multiUse?: boolean;
 }
 
 interface CreatePurchaseIntentBase {
   quantity: PurchaseIntentQuantity;
   usage?: PurchaseIntentUsage;
-  expires_at?: string;
+  expiresAt?: string;
 }
 
 type PurchaseIntentProductSelection =
   | {
       product: PurchaseIntentProductSelector;
-      product_id?: never;
+      productId?: never;
     }
   | {
-      product_id: string;
+      productId: string;
       product?: never;
     };
 
 type PurchaseIntentPriceSelection =
   | {
       price: PurchaseIntentPriceSelector;
-      price_id?: never;
+      priceId?: never;
     }
   | {
-      price_id: string;
+      priceId: string;
       price?: never;
     };
 
@@ -94,7 +94,7 @@ export type CreatePurchaseIntentRequest = CreatePurchaseIntentBase &
 export interface UpdatePurchaseIntentRequest {
   id: string;
   quantity?: PurchaseIntentQuantity;
-  expires_at?: string | null;
+  expiresAt?: string | null;
   reactivate?: boolean;
 }
 
@@ -107,14 +107,14 @@ export interface LookupPurchaseIntentRequest {
 }
 
 export interface PagePurchaseIntentsRequest {
-  page_number: number;
-  page_size: number;
+  pageNumber: number;
+  pageSize: number;
 }
 
 export interface PurchaseIntentActivityAttribution {
-  landing_url?: string;
+  landingUrl?: string;
   referrer?: string;
-  referrer_host?: string;
+  referrerHost?: string;
   source?: string;
   medium?: string;
   campaign?: string;
@@ -124,9 +124,9 @@ export interface PurchaseIntentActivityAttribution {
 }
 
 export interface PurchaseIntentActivityVisitor {
-  session_id?: string;
-  visitor_id?: string;
-  user_agent?: string;
+  sessionId?: string;
+  visitorId?: string;
+  userAgent?: string;
   device?: string;
   browser?: string;
   os?: string;
@@ -138,19 +138,19 @@ export interface PurchaseIntentActivityVisitor {
 
 export interface PurchaseIntentActivity {
   id?: string;
-  purchase_intent_id?: string;
+  purchaseIntentId?: string;
   type?: PurchaseIntentActivityType;
   source?: string;
   attribution?: PurchaseIntentActivityAttribution;
   visitor?: PurchaseIntentActivityVisitor;
-  product_id?: string;
-  variant_product_id?: string;
+  productId?: string;
+  variantProductId?: string;
   quantity?: number;
   amount?: Amount;
-  order_id?: string;
-  payment_id?: string;
-  error_code?: string;
-  created_at?: string;
+  orderId?: string;
+  paymentId?: string;
+  errorCode?: string;
+  createdAt?: string;
 }
 
 export interface PurchaseIntentActivityLog {
@@ -159,15 +159,15 @@ export interface PurchaseIntentActivityLog {
 
 export interface PurchaseIntent {
   id: string;
-  application_id: string;
-  product_id: string;
-  price_id: string;
+  applicationId: string;
+  productId: string;
+  priceId: string;
   quantity: PurchaseIntentQuantity;
-  adjustable_quantity: boolean;
-  allow_variants: boolean;
+  adjustableQuantity: boolean;
+  allowVariants: boolean;
   status: PurchaseIntentStatus;
-  created_at: string;
-  updated_at?: string | null;
+  createdAt: string;
+  updatedAt?: string | null;
   activity?: PurchaseIntentActivityLog;
   product?: Product;
   price?: PurchaseIntentPrice;
@@ -176,5 +176,5 @@ export interface PurchaseIntent {
 export interface PurchaseIntentPage {
   number?: number;
   size?: number;
-  purchase_intents?: PurchaseIntent[];
+  purchaseIntents?: PurchaseIntent[];
 }
